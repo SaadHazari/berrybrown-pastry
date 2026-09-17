@@ -1,123 +1,95 @@
-# BerryBrown Pâtisserie Atelier by Chef Safa 🍰✨
-### *Haute Pâtisserie & Artisanal Cakes Handcrafted in Dubai*
+# Berry Brown
 
-![BerryBrown Banner](public/images/hero_signature_cake.jpg)
+The website for Berry Brown, Chef Safa's home bakery in Dubai: *"Made with heart, not haste."*
 
-BerryBrown is a luxury portfolio and e-commerce shopping website created for **Chef Safa**, an artisanal pastry chef based in Dubai, United Arab Emirates. With a professional **Diploma in Pastry & Culinary Arts** and rigorous experience in a prestigious **5-star hotel pastry brigade**, Chef Safa crafts haute French entremets, bespoke tiered celebration cakes, and seasonal fruit tarts.
+It is a single marketing page (hero video, favourite cakes, kitchen gallery, story, custom cake builder, reviews and FAQ). The shop opens as overlays on top of it: menu, product details, bag and a 3-step checkout. Customers can **pay online with Stripe** or **send the order on WhatsApp**.
 
----
+## Stack
 
-## 🌟 Key Features
+- React 19, TypeScript and Vite
+- Tailwind CSS v4 (design tokens in `src/index.css`)
+- `motion` (Framer Motion) for animation and `lenis` for smooth scrolling
+- Cloudflare Workers with static assets for hosting (`wrangler.jsonc`). A small Worker (`worker/`) handles `/api/checkout` and creates Stripe Checkout sessions.
+- Vitest for tests
 
-- **Artisanal E-Commerce Catalog**:
-  - Filterable by *Haute Entremets*, *Celebration & Bespoke*, and *Artisan Tarts*.
-  - Dynamic size variations (4" Petite, 6" Classic, 8" Grand, 10" Luxe) with real-time price updates in **AED**.
-  - Interactive customizer for base flavors and complimentary hand-piped chocolate plaque inscriptions (with live visual preview).
-  - Allergen notices, dietary tags (100% Halal, Gelatin-Free, Pure French AOP Butter, Valrhona Grand Cru), and fresh baking lead time notices.
+## Getting started
 
-- **Dubai-Centric Refrigerated Delivery & Checkout**:
-  - Multi-step checkout dialog built with accessible native `<dialog>` controls.
-  - Delivery mode selection: Temperature-controlled van delivery (3°C–5°C) across Dubai areas (*Downtown & DIFC, Palm Jumeirah & Marina, Business Bay, Jumeirah, Dubai Hills, Arabian Ranches, Mirdif, etc.*) or Free Studio Collection in Al Quoz.
-  - Delivery calendar enforcing minimum baking notice and 2-hour delivery time slots.
-  - Payment simulations: Credit / Debit Card (with 3D Secure badge), Apple Pay, Card / Cash on Delivery, and Direct WhatsApp Pay.
-  - Itemized order confirmation invoice receipt with unique Order Reference (e.g. `#BB-2026-8941`).
-  - One-click instant dispatch of formatted order details straight to Chef Safa's WhatsApp.
-
-- **Interactive Bespoke Cake Consultation Builder**:
-  - Step-by-step calculator for custom milestone celebrations and weddings.
-  - Live budget estimator in AED based on occasion, tiers (1 to 4 tiers), guest counts, artisanal finishes (24k Gold Leaf, Velvet Chocolate Spray, Fresh Garden Florals), and flavor pairings.
-  - Direct WhatsApp consultation link pre-populated with client specifications.
-
-- **Chef Safa's Atelier Story & Credentials**:
-  - Spotlight on Chef Safa’s pastry diploma and 5-star hotel background.
-  - Atelier standards: raw noble ingredients, zero artificial stabilizers, low-sugar balanced profile.
-  - Curated Dubai client testimonials and interactive FAQ accordion.
-
-- **Modern Web Architecture & Visuals**:
-  - Built with Vanilla CSS design system (curated Velvet Berry, Deep Ganache, Champagne Gold, and Whipped Cream Ivory palette).
-  - Editorial typography: *Playfair Display* / *Cormorant Garamond* & *Plus Jakarta Sans*.
-  - Fast, modular JavaScript bundled with **Vite**.
-  - Bespoke photorealistic high-resolution pastry imagery generated specifically for the atelier.
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- [npm](https://www.npmjs.com/)
-
-### Installation
 ```bash
-# Clone repository
-git clone https://github.com/SaadHazari/berrybrown-pastry.git
-cd berrybrown-pastry
-
-# Install dependencies
 npm install
-
-# Start local development server
-npm run dev
+npm run dev       # http://localhost:5173
+npm test          # pricing, cart, checkout validation and Stripe payload tests
+npm run build     # type-checks the app and the Worker, then builds to dist/
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-### Production Build
+`npm run dev` does not run the Worker, so **Pay online** falls back to WhatsApp locally. To test the full site with the API, put `STRIPE_SECRET_KEY=sk_test_...` in a `.dev.vars` file (it is git-ignored), then run:
+
 ```bash
-# Build optimized static assets for production
 npm run build
-
-# Preview production build locally
-npm run preview
+npx wrangler dev
 ```
 
----
+## Deploying (Cloudflare Workers)
 
-## 📁 Project Structure
+The `berrybrown-pastry` Worker is connected to this GitHub repo through Cloudflare Workers Builds:
 
-```
-BerryBrown Codebase/
-├── index.html                      # Semantic HTML5 entry page with SEO metadata
-├── package.json                    # Project scripts & dev dependencies
-├── public/
-│   ├── favicon.svg                 # Luxury gold & berry monogram favicon
-│   └── images/                     # Bespoke pastry atelier assets
-│       ├── hero_signature_cake.jpg
-│       ├── pistachio_kunafa_cake.jpg
-│       ├── valrhona_chocolate_entremet.jpg
-│       ├── berry_charlotte_cake.jpg
-│       ├── celebration_bespoke_cake.jpg
-│       ├── exotic_mango_tart.jpg
-│       └── chef_safa_portrait.jpg
-├── src/
-│   ├── main.js                     # Application entry point & coordination
-│   ├── style.css                   # Master stylesheet importing modular styles
-│   ├── components/
-│   │   ├── cartManager.js          # Cart state, AED calculations, localStorage sync
-│   │   ├── catalogRenderer.js      # Filterable cake grid & product detail modal
-│   │   ├── cakeCustomizer.js       # Bespoke quote estimator & WhatsApp dispatcher
-│   │   ├── checkoutModal.js        # Multi-step Dubai checkout & invoice receipt
-│   │   ├── navigation.js           # Header, mobile menu, and slide-over cart drawer
-│   │   └── toast.js                # Elegant notifications
-│   ├── data/
-│   │   ├── products.js             # Pâtisserie menu, sizes, flavors, allergens
-│   │   ├── dubaiZones.js           # Dubai delivery zones, lead times, fees
-│   │   └── testimonials.js         # Dubai clientele reviews & FAQ content
-│   └── styles/
-│       ├── variables.css           # Luxury color tokens, shadows, transitions
-│       ├── base.css                # Typography & resets
-│       ├── components.css          # Buttons, badges, nav, forms, toasts
-│       ├── catalog.css             # Product cards & modal styling
-│       ├── cart.css                # Slide-over cart drawer
-│       ├── checkout.css            # Multi-step checkout wizard & receipt
-│       ├── customizer.css          # Bespoke builder & Chef Safa story
-│       └── responsive.css          # Mobile & tablet media queries
-└── README.md
+- Pushing to **`main`** runs `npm run build` and then `npx wrangler deploy`, which publishes to **https://berrybrown.me**.
+- Pushing to any other branch uploads a preview version.
+
+To turn on online payments, set the Stripe key once. Use a test key first.
+
+```bash
+npx wrangler secret put STRIPE_SECRET_KEY
 ```
 
----
+You can also add it in the Cloudflare dashboard under Workers → berrybrown-pastry → Settings → Variables and Secrets. Until the key is set, checkout tells customers that online payment is unavailable and switches them to WhatsApp.
 
-## 🇦🇪 Dubai Concierge & Atelier Details
-- **Location**: Al Quoz Pastry Studio & Boutique, Dubai, UAE
-- **Currency**: UAE Dirham (AED)
-- **Direct WhatsApp**: [+971 50 123 4567](https://wa.me/971501234567)
-- **Instagram**: `@berrybrown.pastry`
+### How online payment works
+
+1. The browser posts the bag, delivery details and an order reference to `/api/checkout`.
+2. The Worker **re-prices everything from `src/data/products.ts`**, so prices sent from the browser are never trusted. It then checks the date, area, phone number and so on, and creates a Stripe Checkout session in AED. Delivery is added as its own line item. All order details are saved in the session and payment metadata, so they appear in the Stripe dashboard.
+3. After paying, the customer returns to `/?order=success&ref=…`. The site shows a confirmation with confetti, clears the bag, and offers a button that sends the full order details to Safa on WhatsApp.
+4. If the customer cancels, they return to `/?order=cancelled` and checkout reopens with their bag still there.
+
+> Tip: turn on Stripe's email receipts, and add a webhook later if you want paid orders to reach Safa automatically.
+
+## Editing content
+
+| What | Where |
+| --- | --- |
+| Cakes, sizes, prices, flavours | `src/data/products.ts` |
+| Delivery areas, fees, free-delivery thresholds, time slots | `src/data/zones.ts` |
+| Contact details, reviews, FAQs, stats, marquee text, "oven notes" | `src/data/content.ts` |
+| Custom cake builder options and prices | `src/data/builder.ts` |
+| **Every photo and video** | `src/data/media.ts` |
+
+### ⚠️ Before launch
+
+- **Photos and videos:** anything marked `placeholder: true` in `src/data/media.ts` is free stock media (Unsplash and Mixkit licences) or an AI-generated image. Replace them with Safa's real photos: put the files in `public/images` or `public/videos`, update `src` and set `placeholder: false`. Use WebP images about 1400px on the long edge, and MP4 (H.264) videos at 720p under 6 MB.
+- **Reviews, rating and stats in `content.ts` are samples.** Replace them with real ones (and get customers' permission) before going live.
+- **Contact details:** check the WhatsApp number, email, Instagram handle and opening hours in `CONTACT`.
+
+## Project layout
+
+```
+worker/                     Cloudflare Worker: /api/checkout (Stripe); everything else is static assets
+wrangler.jsonc              Worker + assets config
+public/                     images, videos, favicon, _headers (cache rules)
+wrangler.jsonc              Worker and assets config
+src/
+  App.tsx                   page layout, smooth scroll, overlays
+  data/                     catalogue, zones, content, builder, media registry
+  lib/                      pricing, orders, checkout validation, motion tokens, helpers
+  store/                    cart (localStorage) and UI (overlays, toasts) state
+  components/
+    ui/                     Button, Sheet, Reveal, SplitWords, TiltCard, Marquee, …
+    layout/                 Navbar, Preloader, Footer, mobile bag bar, WhatsApp button
+    sections/               Hero, Favourites, Gallery, HowItWorks, Story, Builder, Reviews, Faq
+    shop/                   Menu, ProductSheet, CartDrawer, Checkout, SuccessOverlay, Lightbox
+docs/superpowers/           design spec and implementation plan
+```
+
+## Accessibility and motion
+
+- Every animation respects **reduced motion**: videos are replaced by still images, scrolling text stops, and smooth scrolling is turned off.
+- Overlays trap keyboard focus, close with Esc, return focus to where it was, and make the page behind them `inert`.
+- The hero video and the scrolling reviews each have a pause button.
