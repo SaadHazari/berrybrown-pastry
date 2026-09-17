@@ -77,9 +77,9 @@ export function Navbar() {
             aria-label="Berry Brown, back to top"
           >
             <span className="grid size-10 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-cocoa/10 md:size-11">
-              <img src={media.logo.src} alt="" className="size-[150%] max-w-none object-cover object-[50%_18%] transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110" />
+              <img src={media.logoMark.src} alt="" className="size-full object-cover transition-transform duration-500 group-hover:rotate-[-10deg] group-hover:scale-110" />
             </span>
-            <span className="font-display text-[1.35rem] italic leading-none tracking-tight">Berry Brown</span>
+            <span translate="no" className="font-display text-[1.35rem] italic leading-none tracking-tight">Berry Brown</span>
           </a>
 
           <ul className="mx-auto hidden items-center gap-1 lg:flex">

@@ -8,6 +8,7 @@ import { useUI } from '../../store/ui';
 import { Img } from '../ui/Img';
 import { Reveal } from '../ui/Reveal';
 import { SectionHeading } from '../ui/SectionHeading';
+import { LoopVideo } from '../ui/LoopVideo';
 import { TiltCard } from '../ui/TiltCard';
 
 export function Gallery() {
@@ -29,7 +30,7 @@ export function Gallery() {
 
           <Reveal delay={0.2} className="mt-8 hidden lg:block">
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px]">
-              <video src={media.craft.video.src} poster={media.craft.poster.src} autoPlay muted loop playsInline preload="none" className="size-full object-cover" aria-hidden />
+              <LoopVideo video={media.craft.video} poster={media.craft.poster} className="size-full object-cover" />
               <span className="absolute bottom-4 left-4 rounded-full bg-paper/90 px-3 py-1 font-hand text-lg text-cocoa">smoothing the buttercream…</span>
             </div>
           </Reveal>

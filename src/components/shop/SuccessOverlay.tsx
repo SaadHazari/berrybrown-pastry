@@ -59,7 +59,7 @@ export function SuccessOverlay() {
 
           <div className="mt-7 flex flex-col gap-2">
             {data.whatsappUrl && (
-              <ButtonLink href={data.whatsappUrl} target="_blank" rel="noopener noreferrer" size="lg" className="w-full bg-[#25D366] hover:bg-[#1ebe5b]">
+              <ButtonLink href={data.whatsappUrl} target="_blank" rel="noopener noreferrer" size="lg" className="w-full">
                 <WhatsAppIcon className="size-5" />
                 {data.paid ? 'Send order details to Safa' : 'Open WhatsApp again'}
               </ButtonLink>
@@ -68,7 +68,7 @@ export function SuccessOverlay() {
               Back to the kitchen
             </Button>
           </div>
-          <img src={media.logo.src} alt="" className="mx-auto mt-6 w-24 opacity-70 mix-blend-multiply" style={{ clipPath: 'inset(0 0 22% 0)' }} />
+          <img src={media.logo.src} alt="" className="mx-auto mt-6 w-24 opacity-70 mix-blend-multiply" style={{ clipPath: 'inset(0 0 27% 0)' }} />
         </div>
       )}
     </Sheet>

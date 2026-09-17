@@ -81,7 +81,7 @@ export function Favourites() {
       <div
         ref={ref}
         {...handlers}
-        className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-5 pb-6 md:cursor-grab md:px-[max(40px,calc((100vw-1280px)/2+40px))] md:active:cursor-grabbing"
+        className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-5 pb-6 md:cursor-grab scroll-px-5 md:px-[max(40px,calc((100vw_-_1280px)/2_+_40px))] md:scroll-px-[max(40px,calc((100vw_-_1280px)/2_+_40px))] md:active:cursor-grabbing"
         data-lenis-prevent-wheel
         role="list"
         aria-label="Favourite cakes"

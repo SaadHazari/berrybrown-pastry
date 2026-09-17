@@ -48,13 +48,13 @@ export function Preloader() {
             src={media.logo.src}
             alt=""
             className="w-[min(58vw,260px)] mix-blend-multiply"
-            style={{ clipPath: 'inset(0 0 22% 0)' }}
+            style={{ clipPath: 'inset(0 0 27% 0)' }}
             initial={{ opacity: 0, y: 24, scale: 0.92, filter: 'blur(8px)' }}
             animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
             transition={{ duration: short ? 0.5 : 1, ease: ease.out }}
           />
           <motion.p
-            className="mt-2 font-hand text-2xl text-milk md:text-3xl"
+            className="-mt-[12%] font-hand text-2xl text-milk md:text-3xl"
             initial={{ clipPath: 'inset(0 100% 0 0)' }}
             animate={{ clipPath: 'inset(0 0% 0 0)' }}
             transition={{ duration: short ? 0.5 : 1.1, delay: short ? 0.2 : 0.8, ease: ease.smooth }}

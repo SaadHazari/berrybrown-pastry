@@ -31,7 +31,7 @@ export function WhatsAppFab() {
       transition={{ type: 'spring', stiffness: 300, damping: 22, delay: 0.1 }}
       className="group fixed bottom-[max(16px,env(safe-area-inset-bottom))] right-4 z-40 grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-lift md:bottom-6 md:right-6"
     >
-      <span className="absolute inset-0 animate-ping rounded-full bg-[#25D366]/40 [animation-duration:2.6s] motion-reduce:hidden" aria-hidden />
+      <span className="absolute inset-0 animate-ping rounded-full bg-[#25D366]/25 [animation-duration:3s] [animation-iteration-count:3] motion-reduce:hidden" aria-hidden />
       <WhatsAppIcon className="relative size-7" />
       <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-cocoa px-3 py-1.5 text-sm text-cream opacity-0 transition-opacity group-hover:opacity-100 md:block">
         Chat with Safa

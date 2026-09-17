@@ -44,8 +44,13 @@ export function FreeDeliveryMeter({ subtotal }: { subtotal: number }) {
 }
 
 export function CartDrawer() {
-  const { overlay, close, open } = useUI();
-  const { lines, count, subtotal, setQty, remove } = useCart();
+  const { overlay, close, open, notify } = useUI();
+  const { lines, count, subtotal, setQty, remove, add } = useCart();
+
+  const removeWithUndo = (l: (typeof lines)[number], name: string, image: string) => {
+    remove(l.key);
+    notify(`${name} removed`, image, { label: 'Undo', run: () => add({ productId: l.productId, sizeId: l.sizeId, flavourId: l.flavourId, qty: l.qty, message: l.message }) });
+  };
 
   return (
     <Sheet
@@ -108,7 +113,7 @@ export function CartDrawer() {
                         <div className="min-w-0 flex-1">
                           <div className="flex items-start justify-between gap-2">
                             <p className="font-display text-lg leading-tight">{product.name}</p>
-                            <button type="button" onClick={() => remove(l.key)} className="-mr-1 -mt-1 grid size-8 shrink-0 place-items-center rounded-full text-milk hover:bg-blush hover:text-berry" aria-label={`Remove ${product.name}`}>
+                            <button type="button" onClick={() => removeWithUndo(l, product.name, product.image)} className="-mr-1 -mt-1 grid size-8 shrink-0 place-items-center rounded-full text-milk hover:bg-blush hover:text-berry" aria-label={`Remove ${product.name}`}>
                               <Trash2 className="size-4" />
                             </button>
                           </div>
@@ -117,7 +122,7 @@ export function CartDrawer() {
                           </p>
                           {l.message && <p className="mt-0.5 font-hand text-lg leading-tight text-berry">“{l.message}”</p>}
                           <div className="mt-2 flex items-center justify-between">
-                            <QtyStepper size="sm" min={0} value={l.qty} onChange={(q) => setQty(l.key, q)} label={`Quantity of ${product.name}`} />
+                            <QtyStepper size="sm" min={0} value={l.qty} onChange={(q) => (q === 0 ? removeWithUndo(l, product.name, product.image) : setQty(l.key, q))} label={`Quantity of ${product.name}`} />
                             <AnimatedAED value={size.price * l.qty} className="font-semibold" />
                           </div>
                         </div>

@@ -92,7 +92,7 @@ export function Builder() {
                     <span className="grid size-7 place-items-center rounded-full bg-cocoa text-xs font-sans font-semibold text-cream">5</span>
                     When's the party?
                   </span>
-                  <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-12 w-full rounded-2xl bg-paper/80 px-4 text-cocoa outline-none ring-berry focus:ring-2" />
+                  <input name="party-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-12 w-full rounded-2xl bg-paper/80 px-4 text-cocoa outline-none ring-berry focus:ring-2" />
                 </label>
               </Reveal>
             </div>

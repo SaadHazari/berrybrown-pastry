@@ -1,6 +1,6 @@
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { ArrowLeft, ArrowRight, Check, CreditCard, Home, Loader2, Lock, Truck } from 'lucide-react';
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useState, type ReactNode } from 'react';
 import { TIME_SLOTS, ZONES, PICKUP_ZONE_ID, getZone } from '../../data/zones';
 import { createCheckoutSession, CheckoutError } from '../../lib/api';
 import { EMPTY_FORM, loadForm, normalisePhone, saveForm, savePending, validateDetails, validateWhen, type CheckoutForm, type StepErrors } from '../../lib/checkoutState';
@@ -26,10 +26,12 @@ function addDays(iso: string, n: number) {
   return localIso(new Date(y, m - 1, d + n));
 }
 
-function Field({ label, error, children, hint }: { label: string; error?: string; hint?: string; children: ReactNode }) {
+function Field({ label, error, children, hint, group }: { label: string; error?: string; hint?: string; children: ReactNode; group?: boolean }) {
+  const id = useId();
+  const Wrapper = group ? 'div' : 'label';
   return (
-    <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold">
+    <Wrapper className="block" {...(group ? { role: 'group', 'aria-labelledby': id } : {})}>
+      <span id={id} className="mb-1.5 block text-sm font-semibold">
         {label} {hint && <span className="font-normal text-milk">{hint}</span>}
       </span>
       {children}
@@ -40,7 +42,7 @@ function Field({ label, error, children, hint }: { label: string; error?: string
           </motion.span>
         )}
       </AnimatePresence>
-    </label>
+    </Wrapper>
   );
 }
 
@@ -120,6 +122,7 @@ export function Checkout() {
     const e = step === 0 ? validateWhen(form, earliest) : validateDetails(form);
     setErrors(e);
     if (Object.keys(e).length === 0) go(step + 1);
+    else window.setTimeout(() => document.querySelector('[role="dialog"] [role="alert"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 60);
   };
 
   const summary = (ref: string, paid: boolean) => ({
@@ -155,6 +158,7 @@ export function Checkout() {
       setPayError({ msg: e.message, unavailable: e.unavailable });
       if (e.unavailable) set('payment', 'whatsapp');
       setBusy(false);
+      window.setTimeout(() => document.querySelector('[role="dialog"] [role="alert"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
     }
   };
 
@@ -183,7 +187,7 @@ export function Checkout() {
             </>
           ) : (
             <>
-              <WhatsAppIcon className="size-5" /> Send order on WhatsApp
+              <WhatsAppIcon className="size-5" /> Order on WhatsApp
             </>
           )}
         </Button>
@@ -195,6 +199,14 @@ export function Checkout() {
     <Sheet open={isOpen} onClose={close} title="Checkout" footer={lines.length > 0 && footer} width="md:w-[540px]">
       <div className="px-5 pb-8 md:px-6">
         <Stepper step={step} />
+
+        <AnimatePresence>
+          {payError && (
+            <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mt-4 overflow-hidden rounded-2xl bg-blush px-4 py-3 text-sm text-berry-deep" role="alert">
+              {payError.msg}
+            </motion.p>
+          )}
+        </AnimatePresence>
 
         <div className="relative mt-6 overflow-x-clip">
           <AnimatePresence mode="wait" initial={false} custom={dir}>
@@ -240,7 +252,7 @@ export function Checkout() {
                   <AnimatePresence initial={false} mode="wait">
                     {form.fulfilment === 'delivery' ? (
                       <motion.div key="zones" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-                        <Field label="Your area" error={errors.zoneId}>
+                        <Field group label="Your area" error={errors.zoneId}>
                           <div role="radiogroup" className="grid gap-2">
                             {deliveryZones.map((z) => {
                               const active = form.zoneId === z.id;
@@ -277,7 +289,7 @@ export function Checkout() {
                     )}
                   </AnimatePresence>
 
-                  <Field label="Day" error={errors.date} hint={`· earliest ${prettyDate(earliest)}`}>
+                  <Field group label="Day" error={errors.date} hint={`· earliest ${prettyDate(earliest)}`}>
                     <div className="grid grid-cols-4 gap-2">
                       {quickDates.map((d) => {
                         const [wd, day, mon] = prettyDate(d).replace(',', '').split(' ');
@@ -302,7 +314,7 @@ export function Checkout() {
                       })}
                     </div>
                     {showOtherDate || (form.date && !quickDates.includes(form.date)) ? (
-                      <input type="date" min={earliest} value={form.date} onChange={(e) => set('date', e.target.value)} className={cn(inputCls(errors.date), 'mt-2')} aria-label="Pick another date" />
+                      <input name="date" type="date" min={earliest} value={form.date} onChange={(e) => set('date', e.target.value)} className={cn(inputCls(errors.date), 'mt-2')} aria-label="Pick another date" />
                     ) : (
                       <button type="button" onClick={() => setShowOtherDate(true)} className="mt-2 text-sm font-medium text-berry underline-offset-4 hover:underline">
                         Another day…
@@ -310,7 +322,7 @@ export function Checkout() {
                     )}
                   </Field>
 
-                  <Field label="Time" error={errors.slotId}>
+                  <Field group label="Time" error={errors.slotId}>
                     <div role="radiogroup" className="flex flex-wrap gap-2">
                       {TIME_SLOTS.map((s) => (
                         <Chip key={s.id} selected={form.slotId === s.id} onSelect={() => set('slotId', s.id)} layoutGroup="slot">
@@ -325,28 +337,29 @@ export function Checkout() {
               {step === 1 && (
                 <div className="space-y-5">
                   <Field label="Name" error={errors.name}>
-                    <input autoComplete="name" value={form.customer.name} onChange={(e) => setCustomer('name', e.target.value)} className={inputCls(errors.name)} placeholder="Layla Hassan" />
+                    <input name="name" autoComplete="name" value={form.customer.name} onChange={(e) => setCustomer('name', e.target.value)} className={inputCls(errors.name)} placeholder="Layla Hassan" />
                   </Field>
                   <Field label="Mobile" error={errors.phone} hint="· for WhatsApp updates">
-                    <input type="tel" inputMode="tel" autoComplete="tel" value={form.customer.phone} onChange={(e) => setCustomer('phone', e.target.value)} className={inputCls(errors.phone)} placeholder="050 123 4567" />
+                    <input name="phone" type="tel" inputMode="tel" autoComplete="tel" value={form.customer.phone} onChange={(e) => setCustomer('phone', e.target.value)} className={inputCls(errors.phone)} placeholder="050 123 4567" />
                   </Field>
                   <Field label="Email" error={errors.email} hint="· optional, for your receipt">
-                    <input type="email" inputMode="email" autoComplete="email" value={form.customer.email} onChange={(e) => setCustomer('email', e.target.value)} className={inputCls(errors.email)} placeholder="layla@email.com" />
+                    <input name="email" type="email" inputMode="email" autoComplete="email" spellCheck={false} value={form.customer.email} onChange={(e) => setCustomer('email', e.target.value)} className={inputCls(errors.email)} placeholder="layla@email.com" />
                   </Field>
                   {form.fulfilment === 'delivery' && (
                     <Field label="Address" error={errors.address}>
                       <textarea
                         rows={2}
+                        name="address"
                         autoComplete="street-address"
                         value={form.customer.address}
                         onChange={(e) => setCustomer('address', e.target.value)}
                         className={cn(inputCls(errors.address), 'h-auto py-3')}
-                        placeholder="Villa / building, flat, street, area"
+                        placeholder="Villa / building, flat, street, area…"
                       />
                     </Field>
                   )}
                   <Field label="Anything else?" hint="· optional">
-                    <textarea rows={2} value={form.customer.notes} onChange={(e) => setCustomer('notes', e.target.value)} className={cn(inputCls(), 'h-auto py-3')} placeholder="Allergies, a surprise, gate code…" />
+                    <textarea name="notes" rows={2} value={form.customer.notes} onChange={(e) => setCustomer('notes', e.target.value)} className={cn(inputCls(), 'h-auto py-3')} placeholder="Allergies, a surprise, gate code…" />
                   </Field>
                 </div>
               )}
@@ -428,14 +441,6 @@ export function Checkout() {
                       })}
                     </div>
                   </fieldset>
-
-                  <AnimatePresence>
-                    {payError && (
-                      <motion.p initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="rounded-2xl bg-blush px-4 py-3 text-sm text-berry-deep" role="alert">
-                        {payError.msg}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
 
                   <p className="flex items-center gap-2 text-xs text-milk">
                     <Lock className="size-3.5" /> We only use your details for this order.

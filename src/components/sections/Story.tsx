@@ -4,6 +4,7 @@ import { STATS } from '../../data/content';
 import { media } from '../../data/media';
 import { CountUp } from '../ui/CountUp';
 import { Img } from '../ui/Img';
+import { LoopVideo } from '../ui/LoopVideo';
 import { Reveal } from '../ui/Reveal';
 import { SectionHeading } from '../ui/SectionHeading';
 import { Heart } from '../ui/Squiggle';
@@ -25,7 +26,7 @@ export function Story() {
             <p className="mt-3 px-1 font-hand text-2xl text-milk">me, happiest with a piping bag</p>
           </motion.div>
           <motion.div className="absolute -bottom-6 right-0 z-20 w-[46%] overflow-hidden rounded-full border-[6px] border-cream shadow-lift" style={{ y: smallY }}>
-            <video src={media.craft.video.src} poster={media.craft.poster.src} autoPlay muted loop playsInline preload="none" className="aspect-square w-full object-cover" aria-hidden />
+            <LoopVideo video={media.craft.video} poster={media.craft.poster} className="aspect-square w-full object-cover" />
           </motion.div>
           <Heart className="absolute -left-2 top-10 z-20 size-10 rotate-[-15deg] text-berry" />
         </div>

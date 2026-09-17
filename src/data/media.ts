@@ -15,6 +15,7 @@ const img = (file: string, alt: string, placeholder = false): Media => ({
 
 export const media = {
   logo: img('berrybrown_logo.webp', 'Berry Brown hand-drawn cake slice logo'),
+  logoMark: img('logo-mark.webp', 'Berry Brown cake slice sketch'),
 
   hero: {
     video: { src: '/videos/hero-drip.mp4', alt: 'Chocolate being drizzled over a berry layer cake', placeholder: true },

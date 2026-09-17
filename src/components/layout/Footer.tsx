@@ -107,9 +107,11 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-3 border-t border-cream/10 pt-6 text-xs text-cream/45 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} Berry Brown · Baked with love in Dubai</p>
+          <p>
+            © {new Date().getFullYear()} <span translate="no">Berry Brown</span> · Baked with love in Dubai
+          </p>
           <p className="flex items-center gap-2">
-            <img src={media.logo.src} alt="" className="size-7 rounded-full object-cover object-top opacity-80 invert" />
+            <img src={media.logoMark.src} alt="" className="size-8 rounded-full object-cover" />
             <span className="font-hand text-lg text-cream/60">Safa x</span>
           </p>
         </div>

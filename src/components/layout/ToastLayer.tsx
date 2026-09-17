@@ -1,18 +1,19 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { Check } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { spring } from '../../lib/motion';
 import { useUI } from '../../store/ui';
 
 export function ToastLayer() {
-  const { toast, open } = useUI();
-  return (
-    <div className="pointer-events-none fixed inset-x-0 top-[max(80px,calc(env(safe-area-inset-top)+72px))] z-[85] flex justify-center px-4" aria-live="polite">
+  const { toast, open, overlay } = useUI();
+  return createPortal(
+    <div className="pointer-events-none fixed inset-x-0 top-[max(80px,calc(env(safe-area-inset-top)+72px))] z-[90] flex justify-center px-4" aria-live="polite">
       <AnimatePresence>
         {toast && (
           <motion.button
             type="button"
             key={toast.id}
-            onClick={() => open({ kind: 'cart' })}
+            onClick={() => (toast.action ? toast.action.run() : overlay?.kind !== 'cart' && open({ kind: 'cart' }))}
             initial={{ y: -30, opacity: 0, scale: 0.9 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -20, opacity: 0, scale: 0.95 }}
@@ -27,10 +28,11 @@ export function ToastLayer() {
               </span>
             )}
             <span className="font-medium">{toast.title}</span>
-            <span className="text-cream/60 underline underline-offset-4">View bag</span>
+            <span className="text-cream/60 underline underline-offset-4">{toast.action?.label ?? 'View bag'}</span>
           </motion.button>
         )}
       </AnimatePresence>
-    </div>
+    </div>,
+    document.body,
   );
 }

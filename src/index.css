@@ -68,7 +68,7 @@
     border-radius: 10px;
   }
   img { user-select: none; -webkit-user-drag: none; }
-  button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  button, a, [role='button'] { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   button:disabled { cursor: not-allowed; }
   input, textarea, select { font: inherit; }
 }

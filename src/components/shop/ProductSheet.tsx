@@ -122,6 +122,8 @@ function Details({ product, onAdded }: { product: Product; onAdded(): void }) {
             </span>
           </span>
           <input
+            name="plaque-message"
+            autoComplete="off"
             value={message}
             maxLength={MESSAGE_MAX}
             onChange={(e) => setMessage(e.target.value)}
