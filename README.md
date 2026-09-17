@@ -71,7 +71,8 @@ You can also add it in the Cloudflare dashboard under Workers → berrybrown-pas
 ## Project layout
 
 ```
-functions/api/checkout.ts   Stripe session creation (Cloudflare Pages Function)
+worker/                     Cloudflare Worker: /api/checkout (Stripe); everything else is static assets
+wrangler.jsonc              Worker + assets config
 public/                     images, videos, favicon, _headers (cache rules)
 wrangler.jsonc              Worker and assets config
 src/
