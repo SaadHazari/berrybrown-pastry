@@ -126,15 +126,18 @@
 }
 
 .brand-logo-icon {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+  object-fit: cover;
+  background: #FFF;
+  border: 1.5px solid var(--color-gold-500);
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.25);
   transition: transform var(--transition-smooth);
 }
 
 .brand-logo:hover .brand-logo-icon {
-  transform: rotate(8deg) scale(1.05);
+  transform: rotate(6deg) scale(1.06);
 }
 
 .brand-logo-text {
