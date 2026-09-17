@@ -1,0 +1,323 @@
+/* Catalog Section */
+.catalog-section {
+  background-color: #FFF;
+  position: relative;
+}
+
+.catalog-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.filter-btn {
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border: 1px solid rgba(70, 20, 47, 0.12);
+  background: #FFF;
+  transition: all var(--transition-smooth);
+}
+
+.filter-btn:hover {
+  border-color: var(--color-gold-500);
+  color: var(--color-berry-900);
+}
+
+.filter-btn.active {
+  background: var(--color-berry-900);
+  color: #FFF;
+  border-color: var(--color-berry-900);
+  box-shadow: 0 4px 14px rgba(30, 7, 19, 0.2);
+}
+
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2.5rem;
+}
+
+.product-card {
+  background: #FFF;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(70, 20, 47, 0.08);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(212, 175, 55, 0.35);
+}
+
+.product-image-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: var(--color-ivory-100);
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.06);
+}
+
+.product-badge-overlay {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+}
+
+.product-quick-view-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 5, 13, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+  z-index: 3;
+}
+
+.product-card:hover .product-quick-view-overlay {
+  opacity: 1;
+}
+
+.product-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--color-text-title);
+  line-height: 1.25;
+}
+
+.product-tagline {
+  font-size: 0.84rem;
+  color: var(--color-gold-600);
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+}
+
+.product-desc {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-dietary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag-pill {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  background-color: var(--color-ivory-100);
+  border-radius: var(--radius-full);
+  color: var(--color-text-body);
+  border: 1px solid rgba(70, 20, 47, 0.06);
+}
+
+.product-footer-row {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(70, 20, 47, 0.08);
+}
+
+.product-price-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-prefix {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.price-value {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--color-berry-900);
+}
+
+.price-value span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-gold-600);
+  margin-right: 0.25rem;
+}
+
+/* Modal Dialog for Product Details */
+.product-dialog {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-modal);
+  background: #FFF;
+  max-width: 900px;
+  width: 92%;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+.product-dialog::backdrop {
+  background: rgba(18, 5, 12, 0.75);
+  backdrop-filter: blur(8px);
+}
+
+.dialog-content {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.dialog-image-col {
+  background-color: var(--color-ivory-100);
+  position: relative;
+}
+
+.dialog-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 380px;
+}
+
+.dialog-body-col {
+  padding: 2.2rem 2.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #FFF;
+  border: 1px solid rgba(70, 20, 47, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--color-berry-900);
+  z-index: 10;
+  transition: all var(--transition-fast);
+}
+
+.dialog-close-btn:hover {
+  background: var(--color-berry-900);
+  color: #FFF;
+}
+
+/* Option Selectors in Modal */
+.options-group-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-title);
+  margin-bottom: 0.75rem;
+}
+
+.size-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+}
+
+.size-option-card {
+  padding: 0.85rem;
+  border: 1.5px solid rgba(70, 20, 47, 0.12);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.size-option-card:hover {
+  border-color: var(--color-gold-500);
+}
+
+.size-option-card.selected {
+  border-color: var(--color-gold-500);
+  background-color: var(--color-gold-subtle);
+}
+
+.size-option-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-title);
+  margin-bottom: 0.2rem;
+}
+
+.size-option-price {
+  font-size: 0.84rem;
+  color: var(--color-berry-800);
+  font-weight: 700;
+}
+
+/* Plaque Customizer */
+.plaque-preview-box {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.2rem;
+  background: linear-gradient(135deg, #2D0B1D 0%, #1A0711 100%);
+  border: 1px solid var(--color-border-gold);
+  border-radius: var(--radius-sm);
+  color: var(--color-gold-300);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  text-align: center;
+  letter-spacing: 0.02em;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}

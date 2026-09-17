@@ -1,0 +1,306 @@
+/* Checkout Modal Dialog */
+.checkout-dialog {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-modal);
+  background: #FFF;
+  max-width: 820px;
+  width: 94%;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+.checkout-dialog::backdrop {
+  background: rgba(18, 5, 12, 0.75);
+  backdrop-filter: blur(8px);
+}
+
+.checkout-wrapper {
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-header {
+  background: linear-gradient(135deg, var(--color-berry-900) 0%, var(--color-cocoa-900) 100%);
+  color: #FFF;
+  padding: 1.8rem 2.2rem;
+  position: relative;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.checkout-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all var(--transition-fast);
+}
+
+.checkout-close-btn:hover {
+  background: var(--color-gold-500);
+  color: var(--color-cocoa-950);
+}
+
+.checkout-title {
+  color: #FFF;
+  font-size: 1.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.checkout-subtitle {
+  color: var(--color-gold-300);
+  font-size: 0.88rem;
+}
+
+/* Step Wizard Progress */
+.checkout-steps-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  position: relative;
+}
+
+.checkout-steps-bar::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  position: relative;
+  z-index: 2;
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.step-indicator.active .step-circle {
+  background: var(--color-gold-500);
+  color: var(--color-cocoa-950);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+}
+
+.step-indicator.completed .step-circle {
+  background: #27AE60;
+  color: #FFF;
+}
+
+.step-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.04em;
+}
+
+.step-indicator.active .step-label {
+  color: var(--color-gold-300);
+}
+
+/* Step Content Sections */
+.checkout-body {
+  padding: 2.2rem;
+}
+
+.step-panel {
+  display: none;
+}
+
+.step-panel.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-heading {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  color: var(--color-text-title);
+  margin-bottom: 0.35rem;
+}
+
+.step-subtext {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* Radio Cards (Delivery Type & Payment Options) */
+.radio-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.radio-card {
+  padding: 1.1rem;
+  border: 1.5px solid rgba(70, 20, 47, 0.12);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  background: #FFF;
+}
+
+.radio-card:hover {
+  border-color: var(--color-gold-500);
+}
+
+.radio-card.selected {
+  border-color: var(--color-gold-500);
+  background: var(--color-gold-subtle);
+}
+
+.radio-card-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text-title);
+  margin-bottom: 0.2rem;
+}
+
+.radio-card-desc {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Order Summary Box inside Checkout */
+.checkout-order-summary {
+  background: var(--color-ivory-100);
+  border-radius: var(--radius-sm);
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(70, 20, 47, 0.08);
+}
+
+.checkout-btn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(70, 20, 47, 0.1);
+}
+
+/* Confirmation Receipt Screen */
+.confirmation-container {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.confirmation-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--color-gold-gradient);
+  color: var(--color-cocoa-950);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-gold-glow);
+}
+
+.order-ref-badge {
+  display: inline-block;
+  background: var(--color-berry-900);
+  color: var(--color-gold-300);
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 1.2rem;
+  border-radius: var(--radius-full);
+  margin-block: 0.75rem 1.5rem;
+  border: 1px solid var(--color-gold-500);
+}
+
+.invoice-card {
+  background: var(--color-ivory-50);
+  border: 1px solid rgba(70, 20, 47, 0.12);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: left;
+  max-width: 580px;
+  margin: 0 auto 2rem auto;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-block: 1rem;
+  font-size: 0.88rem;
+}
+
+.invoice-table th {
+  text-align: left;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(70, 20, 47, 0.1);
+  color: var(--color-text-muted);
+}
+
+.invoice-table td {
+  padding-block: 0.5rem;
+  border-bottom: 1px dashed rgba(70, 20, 47, 0.06);
+}
+
+.invoice-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(70, 20, 47, 0.15);
+}
+
+.invoice-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.invoice-row.total {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-berry-900);
+  font-family: var(--font-serif);
+}
