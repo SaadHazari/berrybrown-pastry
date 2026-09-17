@@ -9,7 +9,7 @@ It is a single marketing page (hero video, favourite cakes, kitchen gallery, sto
 - React 19, TypeScript and Vite
 - Tailwind CSS v4 (design tokens in `src/index.css`)
 - `motion` (Framer Motion) for animation and `lenis` for smooth scrolling
-- Cloudflare Pages for hosting, with a Pages Function (`functions/api/checkout.ts`) that creates Stripe Checkout sessions
+- Cloudflare Workers with static assets for hosting (`wrangler.jsonc`). A small Worker (`worker/`) handles `/api/checkout` and creates Stripe Checkout sessions.
 - Vitest for tests
 
 ## Getting started
@@ -18,31 +18,35 @@ It is a single marketing page (hero video, favourite cakes, kitchen gallery, sto
 npm install
 npm run dev       # http://localhost:5173
 npm test          # pricing, cart, checkout validation and Stripe payload tests
-npm run build     # type-checks the app and the function, then builds to dist/
+npm run build     # type-checks the app and the Worker, then builds to dist/
 ```
 
-`npm run dev` does not run the Pages Function, so **Pay online** falls back to WhatsApp locally. To test Stripe locally, build first and then run:
+`npm run dev` does not run the Worker, so **Pay online** falls back to WhatsApp locally. To test the full site with the API, put `STRIPE_SECRET_KEY=sk_test_...` in a `.dev.vars` file (it is git-ignored), then run:
 
 ```bash
 npm run build
-npx wrangler pages dev dist --binding STRIPE_SECRET_KEY=sk_test_...
+npx wrangler dev
 ```
 
-## Deploying (Cloudflare Pages)
+## Deploying (Cloudflare Workers)
 
-| Setting | Value |
-| --- | --- |
-| Build command | `npm run build` |
-| Output directory | `dist` |
-| Node version | 20 (from `.nvmrc`) |
-| Environment variable | `STRIPE_SECRET_KEY` (secret; use the test key first) |
+The `berrybrown-pastry` Worker is connected to this GitHub repo through Cloudflare Workers Builds:
 
-If `STRIPE_SECRET_KEY` is missing, the site still works: checkout tells the customer that online payment is unavailable and switches them to WhatsApp.
+- Pushing to **`main`** runs `npm run build` and then `npx wrangler deploy`, which publishes to **https://berrybrown.me**.
+- Pushing to any other branch uploads a preview version.
+
+To turn on online payments, set the Stripe key once. Use a test key first.
+
+```bash
+npx wrangler secret put STRIPE_SECRET_KEY
+```
+
+You can also add it in the Cloudflare dashboard under Workers → berrybrown-pastry → Settings → Variables and Secrets. Until the key is set, checkout tells customers that online payment is unavailable and switches them to WhatsApp.
 
 ### How online payment works
 
 1. The browser posts the bag, delivery details and an order reference to `/api/checkout`.
-2. The function **re-prices everything from `src/data/products.ts`**, so prices sent from the browser are never trusted. It then checks the date, area, phone number and so on, and creates a Stripe Checkout session in AED. Delivery is added as its own line item. All order details are saved in the session and payment metadata, so they appear in the Stripe dashboard.
+2. The Worker **re-prices everything from `src/data/products.ts`**, so prices sent from the browser are never trusted. It then checks the date, area, phone number and so on, and creates a Stripe Checkout session in AED. Delivery is added as its own line item. All order details are saved in the session and payment metadata, so they appear in the Stripe dashboard.
 3. After paying, the customer returns to `/?order=success&ref=…`. The site shows a confirmation with confetti, clears the bag, and offers a button that sends the full order details to Safa on WhatsApp.
 4. If the customer cancels, they return to `/?order=cancelled` and checkout reopens with their bag still there.
 
@@ -68,7 +72,8 @@ If `STRIPE_SECRET_KEY` is missing, the site still works: checkout tells the cust
 
 ```
 functions/api/checkout.ts   Stripe session creation (Cloudflare Pages Function)
-public/                     images, videos, favicon, _headers
+public/                     images, videos, favicon, _headers (cache rules)
+wrangler.jsonc              Worker and assets config
 src/
   App.tsx                   page layout, smooth scroll, overlays
   data/                     catalogue, zones, content, builder, media registry

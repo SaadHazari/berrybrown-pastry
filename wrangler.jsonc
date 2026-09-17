@@ -1,9 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "berrybrown-pastry",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-09-16",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
-  }
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // Only the API goes through the Worker; everything else is served straight from assets.
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true }
+  // Secret (set once): npx wrangler secret put STRIPE_SECRET_KEY
 }

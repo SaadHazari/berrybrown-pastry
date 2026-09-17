@@ -25,8 +25,8 @@ and feel premium on desktop.
 
 React 19 + Vite + TypeScript, Tailwind CSS v4, `motion` (Framer Motion) for animation,
 `lenis` for smooth scroll, `lucide-react` icons, `canvas-confetti` for success.
-Hosted on Cloudflare Pages (Node 20). Stripe via a Cloudflare Pages Function
-(`functions/api/checkout.ts`) using Stripe's REST API with `fetch` (no SDK needed).
+Hosted on Cloudflare Workers with static assets (Node 20 build). Stripe via the Worker
+(`worker/checkout.ts`) using Stripe's REST API with `fetch` (no SDK needed).
 
 ## Page structure (single page)
 

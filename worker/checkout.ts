@@ -1,6 +1,7 @@
-import { buildStripeForm, parseCheckoutRequest } from '../../src/lib/checkoutRequest';
+import { buildStripeForm, parseCheckoutRequest } from '../src/lib/checkoutRequest';
 
-interface Env {
+export interface Env {
+  ASSETS: Fetcher;
   STRIPE_SECRET_KEY?: string;
 }
 
@@ -10,7 +11,9 @@ const json = (data: unknown, status = 200) =>
     headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
   });
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+/** POST /api/checkout — validates the order, re-prices it, and creates a Stripe Checkout session. */
+export async function handleCheckout(request: Request, env: Env): Promise<Response> {
+  if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
   if (!env.STRIPE_SECRET_KEY) return json({ error: 'Online payments are not configured' }, 503);
 
   const origin = new URL(request.url).origin;
@@ -43,6 +46,4 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return json({ error: 'Payment could not be started. Please try again or order on WhatsApp.' }, 502);
   }
   return json({ url: data.url });
-};
-
-export const onRequest: PagesFunction<Env> = async () => json({ error: 'Method not allowed' }, 405);
+}
