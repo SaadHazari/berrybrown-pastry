@@ -16,18 +16,32 @@ describe('quote validation', () => {
     expect(validateQuote('box', { ...base, logo: 'yes', qty: '30', date: '2026-10-20' }, now).qty).toBe('Your logo needs 50 boxes or more');
   });
 
-  it('accepts trimmed whole numbers only', () => {
+  it('reads trimmed whole numbers, thousands separators and Arabic digits', () => {
     const base = { ...EMPTY_QUOTE, boxSize: '6', logo: 'no' as const, date: '2026-10-05', name: 'Lina' };
     expect(validateQuote('box', { ...base, qty: ' 25 ' }, now)).toEqual({});
-    expect(validateQuote('box', { ...base, qty: '20 boxes' }, now).qty).toBe('The minimum is 20 boxes');
-    expect(validateQuote('box', { ...base, qty: '25.5' }, now).qty).toBe('The minimum is 20 boxes');
+    expect(validateQuote('box', { ...base, qty: '1,000' }, now)).toEqual({});
+    expect(validateQuote('box', { ...base, qty: '٦٠' }, now)).toEqual({});
+    expect(validateQuote('box', { ...base, qty: '۶۰' }, now)).toEqual({});
   });
 
-  it('gives plain boxes 5 days and branded boxes 3 weeks, and refuses typed earlier dates', () => {
+  it('asks for a number when the answer is not one', () => {
+    const base = { ...EMPTY_QUOTE, boxSize: '6', logo: 'no' as const, date: '2026-10-05', name: 'Lina' };
+    expect(validateQuote('box', { ...base, qty: '20 boxes' }, now).qty).toBe('Type the number of boxes');
+    expect(validateQuote('box', { ...base, qty: '25.5' }, now).qty).toBe('Type the number of boxes');
+    const w = { ...EMPTY_QUOTE, where: 'venue' as const, qty: 'twelve', date: '2026-10-10', name: 'Mira' };
+    expect(validateQuote('workshop', w, now).qty).toBe('Type the number of people');
+  });
+
+  it('gives plain boxes 5 days and branded boxes 2 weeks, and refuses typed earlier dates', () => {
     expect(earliestQuoteDate('box', { ...EMPTY_QUOTE, logo: 'no' }, now)).toBe('2026-10-02');
-    expect(earliestQuoteDate('box', { ...EMPTY_QUOTE, logo: 'yes' }, now)).toBe('2026-10-18');
+    expect(earliestQuoteDate('box', { ...EMPTY_QUOTE, logo: 'yes' }, now)).toBe('2026-10-11');
     const f = { ...EMPTY_QUOTE, boxSize: '6', logo: 'yes' as const, qty: '60', date: '2026-10-10', name: 'Lina' };
-    expect(validateQuote('box', f, now).date).toBe('The earliest date is 18 Oct');
+    expect(validateQuote('box', f, now).date).toBe('The earliest date is 11 Oct');
+  });
+
+  it('lets a logo order placed on the Diwali deadline (20 Oct) arrive before Diwali (8 Nov)', () => {
+    const f = { ...EMPTY_QUOTE, boxSize: '8', logo: 'yes' as const, qty: '60', date: '2026-11-07', name: 'Lina' };
+    expect(validateQuote('box', f, new Date(2026, 9, 20, 18))).toEqual({});
   });
 
   it('needs 12 people and a place for a workshop', () => {

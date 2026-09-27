@@ -27,9 +27,18 @@ export function earliestQuoteDate(about: QuoteAbout, f: QuoteForm, now: Date = n
   return localIso(addDays(now, leadDays(about, f)));
 }
 
-/** A trimmed whole number, or null. "20 boxes" and "2.5" are null. */
+const ARABIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
+const PERSIAN_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+
+/**
+ * A whole number as people type it: " 25 ", "1,000", "1 000", or Arabic / Persian digits ("٦٠").
+ * Anything else ("20 boxes", "2.5") is null.
+ */
 function count(qty: string): number | null {
-  const t = qty.trim();
+  const t = qty
+    .replace(/[٠-٩]/g, (d) => String(ARABIC_DIGITS.indexOf(d)))
+    .replace(/[۰-۹]/g, (d) => String(PERSIAN_DIGITS.indexOf(d)))
+    .replace(/[\s,٬]/g, '');
   return /^\d+$/.test(t) ? Number(t) : null;
 }
 
@@ -39,15 +48,18 @@ export function validateQuote(about: QuoteAbout, f: QuoteForm, now: Date = new D
   if (about === 'box') {
     if (!f.boxSize) e.boxSize = 'Pick a box size';
     if (!f.logo) e.logo = 'Pick yes or no';
-    if (n === null || n < BOX.minBoxes) e.qty = `The minimum is ${BOX.minBoxes} boxes`;
+    if (n === null) e.qty = 'Type the number of boxes';
+    else if (n < BOX.minBoxes) e.qty = `The minimum is ${BOX.minBoxes} boxes`;
     else if (f.logo === 'yes' && n < BOX.minBranded) e.qty = `Your logo needs ${BOX.minBranded} boxes or more`;
   } else if (about === 'workshop') {
     if (!f.where) e.where = 'Pick a place';
-    if (n === null || n < WORKSHOP.minSeats) e.qty = `The minimum is ${WORKSHOP.minSeats} people`;
+    if (n === null) e.qty = 'Type the number of people';
+    else if (n < WORKSHOP.minSeats) e.qty = `The minimum is ${WORKSHOP.minSeats} people`;
   } else {
     const fmt = EVENTS.formats.find((x) => x.id === f.format);
     if (!fmt) e.format = 'Pick one';
-    else if (n === null || n < fmt.min || n > fmt.max) e.qty = `${fmt.title} is for ${fmt.min}–${fmt.max} ${fmt.unit}`;
+    else if (n === null) e.qty = 'Type the number of people';
+    else if (n < fmt.min || n > fmt.max) e.qty = `${fmt.title} is for ${fmt.min}–${fmt.max} ${fmt.unit}`;
     if (!f.area.trim()) e.area = 'Tell us the office area';
   }
   const earliest = earliestQuoteDate(about, f, now);

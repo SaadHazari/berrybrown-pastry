@@ -16,9 +16,12 @@ export const BOX = {
   sizes: BOX_SIZES,
   minBoxes: 20,
   minBranded: 50,
-  /** Plain boxes take 3–5 days and branded 2–3 weeks; the form uses the long end. */
+  /**
+   * Plain boxes take 3–5 days (the form asks for 5). Branded take 2–3 weeks; the form asks for 2,
+   * so a logo order placed on a branded deadline (Diwali: 20 Oct) can still arrive for the day (8 Nov).
+   */
   plainDays: 5,
-  brandedDays: 21,
+  brandedDays: 14,
   facts: ['Min 20 boxes', 'Your logo from 50', 'Ready in 3–5 days', '2–3 weeks with your logo', 'We invoice your company'],
 };
 
