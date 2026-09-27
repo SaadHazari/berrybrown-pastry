@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildStripeForm, parseCheckoutRequest } from './checkoutRequest';
+import { buildStripeForm, parseCheckoutRequest, stripeImage } from './checkoutRequest';
 
 const now = new Date(Date.UTC(2026, 8, 17, 8, 0)); // 12:00 in Dubai
 const valid = {
@@ -103,5 +103,14 @@ describe('buildStripeForm', () => {
     if (!r.ok) throw new Error(r.error);
     const f = buildStripeForm(r.order, 'https://x.dev', { orderId: ID });
     expect(f.get('line_items[1][price_data][unit_amount]')).toBeNull();
+  });
+});
+
+describe('stripeImage', () => {
+  it('sends real photos only — never placeholders or AI stand-ins', () => {
+    const base = { src: '/images/ai/x-1200.webp', alt: 'A cake', label: 'Cake' };
+    expect(stripeImage({ ...base, placeholder: true }, 'https://berrybrown.me')).toBeNull();
+    expect(stripeImage({ ...base, placeholder: false, ai: true }, 'https://berrybrown.me')).toBeNull();
+    expect(stripeImage({ ...base, src: '/images/real/cake.jpg', placeholder: false }, 'https://berrybrown.me')).toBe('https://berrybrown.me/images/real/cake.jpg');
   });
 });

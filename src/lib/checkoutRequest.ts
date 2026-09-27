@@ -6,6 +6,7 @@
  * object carries brand=berry_brown, the order id and ref, so Dormers finance can filter and
  * reconcile, and the webhook can ignore Dormers events.
  */
+import type { Media } from '../data/media';
 import { TIME_SLOTS, getZone } from '../data/zones';
 import { isValidEmail, isValidPhone, normalisePhone } from './validation';
 import type { Customer } from './order';
@@ -106,6 +107,14 @@ export const CHECKOUT_BRANDING = {
   font_family: 'lora',
 } as const;
 
+/**
+ * The product photo Stripe shows on the payment page and receipt: real photos only.
+ * Placeholders and AI stand-ins stay off the payment record (Stripe documents JPEG and PNG for product images).
+ */
+export function stripeImage(image: Media, origin: string): string | null {
+  return image.placeholder || image.ai ? null : new URL(image.src, origin).toString();
+}
+
 export function buildStripeForm(order: ValidOrder, origin: string, opts: StripeFormOptions): URLSearchParams {
   const f = new URLSearchParams();
   const zone = getZone(order.zoneId)!;
@@ -137,7 +146,8 @@ export function buildStripeForm(order: ValidOrder, origin: string, opts: StripeF
     f.set(`${p}[price_data][product_data][metadata][brand]`, BRAND);
     f.set(`${p}[price_data][product_data][metadata][product_id]`, product.id);
     f.set(`${p}[price_data][product_data][metadata][size_id]`, size.id);
-    if (!product.image.placeholder) f.set(`${p}[price_data][product_data][images][0]`, new URL(product.image.src, origin).toString());
+    const image = stripeImage(product.image, origin);
+    if (image) f.set(`${p}[price_data][product_data][images][0]`, image);
     i++;
   }
 
