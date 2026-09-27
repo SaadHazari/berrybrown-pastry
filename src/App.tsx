@@ -8,7 +8,7 @@ import { ToastLayer } from './components/layout/ToastLayer';
 import { WhatsAppFab } from './components/layout/WhatsAppFab';
 import { Closing } from './components/sections/Closing';
 import { Companies } from './components/sections/Companies';
-import { CustomCake } from './components/sections/CustomCake';
+import { CustomCake } from './components/sections/custom/CustomCake';
 import { Faq } from './components/sections/Faq';
 import { Hero } from './components/sections/Hero';
 import { Reviews } from './components/sections/Reviews';

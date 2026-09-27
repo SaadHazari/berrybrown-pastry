@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EMPTY_CUSTOM } from '../data/custom';
+import { CUSTOMISED, EMPTY_CUSTOM } from '../data/custom';
 import { EMPTY_QUOTE } from '../data/quote';
 import { GENERAL_MESSAGE, customCakeMessage, enquiryMessage, mailtoLink, orderRef, quoteMessage, whatsappLink, whatsappOrderText } from './order';
 
@@ -60,46 +60,41 @@ describe('order', () => {
 });
 
 describe('customCakeMessage', () => {
-  const form = {
-    ...EMPTY_CUSTOM,
-    occasion: 'birthday',
-    serves: '6-8',
-    look: 'flowers',
-    flavour: 'pistachio-kunafa',
-    words: 'Happy 60th, Dad',
-    date: '2026-10-03',
-  };
+  const form = { ...EMPTY_CUSTOM, occasion: 'birthday', serves: '6in', look: 'flowers', flavour: 'pistachio', words: 'Happy 60th, Dad', date: '2026-10-03' };
 
-  it('lists the six answers and the from-price', () => {
+  it('lists every answer and the from-price', () => {
     const text = customCakeMessage(form);
+    expect(text.split('\n')[0]).toBe("Hi Berry Brown, I'd like a custom cake.");
     expect(text).toContain('Occasion: Birthday');
-    expect(text).toContain('People: 6–8 · 6"');
+    expect(text).toContain('People: 6–8 people · 6 inch');
     expect(text).toContain('Look: Fresh flowers');
-    expect(text).toContain('Flavour: Pistachio Kunafa');
+    expect(text).toContain('Flavour: Pistachio & kunafa');
     expect(text).toContain('Words on the cake: "Happy 60th, Dad"');
     expect(text).toContain('Date: Sat 3 Oct');
     expect(text).toContain('From AED 300 on the site');
     expect(text).not.toContain('Inspiration:');
-    expect(text).not.toContain("I'll send");
   });
 
-  it('adds inspiration links when photos uploaded (route A)', () => {
-    const text = customCakeMessage(form, ['https://berrybrown.me/api/inspiration/a/1.jpg', 'https://berrybrown.me/api/inspiration/a/2.jpg']);
-    expect(text.match(/Inspiration: https:/g)).toHaveLength(2);
-    expect(text).not.toContain("I'll send");
-  });
-
-  it('falls back to sending photos in WhatsApp when upload failed (route B)', () => {
-    const text = customCakeMessage(form, [], 3);
-    expect(text).toContain("I'll send my inspiration photos here.");
-  });
-
-  it('uses the free-text answers for "Something else"', () => {
-    const text = customCakeMessage({ ...form, occasion: 'other', occasionOther: 'Graduation', flavour: 'other', flavourOther: 'Lemon and thyme', serves: 'more' });
+  it('prints the Customised text and the custom flavour add-on', () => {
+    const text = customCakeMessage({ ...form, occasion: CUSTOMISED, occasionOther: 'Graduation', serves: CUSTOMISED, servesOther: 'About 40 people', look: CUSTOMISED, lookOther: 'Gold leaf and white roses', flavour: CUSTOMISED, flavourOther: 'Lemon and thyme' });
     expect(text).toContain('Occasion: Graduation');
-    expect(text).toContain('Flavour: Lemon and thyme');
-    expect(text).toContain('People: More · Two tiers (quoted separately)');
-    expect(text).toContain('From AED 850');
+    expect(text).toContain('People: About 40 people');
+    expect(text).toContain('Look: Gold leaf and white roses');
+    expect(text).toContain('Flavour: Lemon and thyme (+AED 60)');
+    expect(text).toContain('From AED 360 on the site');
+  });
+
+  it('never repeats Customised text after a normal pick', () => {
+    expect(customCakeMessage({ ...form, occasionOther: 'Old idea' })).not.toContain('Old idea');
+  });
+
+  it('says so when there are no words', () => {
+    expect(customCakeMessage({ ...form, words: '', noWords: true })).toContain('Words on the cake: none');
+  });
+
+  it('adds inspiration links, or asks to send photos in WhatsApp', () => {
+    expect(customCakeMessage(form, ['https://x/1.jpg', 'https://x/2.jpg']).match(/Inspiration: https:/g)).toHaveLength(2);
+    expect(customCakeMessage(form, [], 3)).toContain("I'll send my inspiration photos here.");
   });
 });
 

@@ -1,7 +1,7 @@
 import { CONTACT, OFFERS, type OfferId } from '../data/content';
 import { BOX, EVENTS, WORKSHOP, type QuoteAbout } from '../data/companies';
 import type { QuoteForm } from '../data/quote';
-import { customFromPrice, customSummary, serveOption, type CustomForm } from '../data/custom';
+import { CUSTOMISED, CUSTOM_FLAVOUR_ADD, customFromPrice, customSummary, type CustomForm } from '../data/custom';
 import { TIME_SLOTS, getZone } from '../data/zones';
 import { aed, prettyDate } from './format';
 import { resolveLine, totals, type LineInput } from './pricing';
@@ -60,22 +60,21 @@ export function whatsappOrderText(o: OrderSummary): string {
 }
 
 /**
- * The message for a custom cake (§4.3).
- * `photoUrls` are links from the inspiration upload; `unsentPhotos` > 0 means the upload
- * failed and the customer will attach the photos in WhatsApp instead (route B).
+ * The message for a custom cake. `photoUrls` are links from the inspiration upload; `unsentPhotos` > 0 means
+ * the upload failed and the customer will attach the photos in WhatsApp instead.
  */
 export function customCakeMessage(f: CustomForm, photoUrls: string[] = [], unsentPhotos = 0): string {
   const rows = customSummary(f);
-  const serve = serveOption(f.serves);
   const value = (label: string) => rows.find((r) => r.label === label)?.value ?? '';
+  const words = f.words.trim();
   return tidy([
     `${GREETING} I'd like a custom cake.`,
     '',
     `Occasion: ${value('Occasion')}`,
-    `People: ${value('People')}${serve?.note ? ' (quoted separately)' : ''}`,
+    `People: ${value('People')}`,
     `Look: ${value('Look')}`,
-    `Flavour: ${value('Flavour')}`,
-    f.words.trim() ? `Words on the cake: "${f.words.trim()}"` : '',
+    `Flavour: ${value('Flavour')}${f.flavour === CUSTOMISED ? ` (+AED ${CUSTOM_FLAVOUR_ADD})` : ''}`,
+    f.noWords || !words ? 'Words on the cake: none' : `Words on the cake: "${words}"`,
     `Date: ${f.date ? prettyDate(f.date) : ''}`,
     `From ${aed(customFromPrice(f))} on the site`,
     '',
