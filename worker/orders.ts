@@ -1,6 +1,5 @@
 import { parseCheckoutRequest } from '../src/lib/checkoutRequest';
-import { orderRow } from '../src/lib/orderRow';
-import { json, sameOrigin, type Env } from './checkout';
+import { createPendingOrder, json, sameOrigin, type Env } from './checkout';
 import { supabaseFrom } from './supabase';
 
 /**
@@ -22,11 +21,7 @@ export async function handleOrders(request: Request, env: Env): Promise<Response
   const parsed = parseCheckoutRequest(body);
   if (!parsed.ok) return json({ error: parsed.error }, 400);
 
-  try {
-    await db.insert('orders', orderRow(parsed.order, 'whatsapp'));
-  } catch (e) {
-    console.error('orders insert', String(e));
-    return json({ error: 'Could not save the order' }, 502);
-  }
-  return json({ ok: true }, 201);
+  const { orderId, stored } = await createPendingOrder(db, parsed.order, 'whatsapp');
+  if (!stored) return json({ error: 'Could not save the order' }, 502);
+  return json({ ok: true, orderId }, 201);
 }

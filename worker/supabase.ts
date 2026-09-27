@@ -2,8 +2,10 @@
  * A tiny Supabase client for the Worker: PostgREST and Storage over fetch, with the secret key.
  * No SDK — nothing to pin, nothing to bundle. The secret key goes on the `apikey` header only
  * (the new sb_secret_* keys are not JWTs, so they must not be sent as a Bearer token).
+ *
+ * All variables are BB_-prefixed so a Dormers key can never be picked up by accident.
  */
-export type SupabaseEnv = { SUPABASE_URL?: string; SUPABASE_SECRET_KEY?: string };
+export type SupabaseEnv = { BB_SUPABASE_URL?: string; BB_SUPABASE_SECRET_KEY?: string };
 
 export class SupabaseError extends Error {
   constructor(
@@ -18,8 +20,8 @@ export type Supabase = ReturnType<typeof createSupabase>;
 
 /** Returns null when the Worker has no Supabase config, so callers can degrade gracefully. */
 export function supabaseFrom(env: SupabaseEnv) {
-  if (!env.SUPABASE_URL || !env.SUPABASE_SECRET_KEY) return null;
-  return createSupabase(env.SUPABASE_URL.replace(/\/$/, ''), env.SUPABASE_SECRET_KEY);
+  if (!env.BB_SUPABASE_URL || !env.BB_SUPABASE_SECRET_KEY) return null;
+  return createSupabase(env.BB_SUPABASE_URL.replace(/\/$/, ''), env.BB_SUPABASE_SECRET_KEY);
 }
 
 function createSupabase(url: string, key: string) {
@@ -46,7 +48,28 @@ function createSupabase(url: string, key: string) {
       );
     },
 
-    /** UPDATE rows matching `filters` (PostgREST syntax: { ref: 'eq.BB-…' }). Returns the number of rows changed. */
+    /** INSERT, or on a unique conflict either merge (`merge`) or leave the existing row (`ignore`). Returns the stored row. */
+    async upsert<T extends Record<string, unknown>>(table: string, row: Record<string, unknown>, onConflict: string, mode: 'merge' | 'ignore' = 'merge'): Promise<T | null> {
+      const res = await check(
+        await fetch(`${url}/rest/v1/${table}?on_conflict=${encodeURIComponent(onConflict)}`, {
+          method: 'POST',
+          headers: { ...base, 'Content-Type': 'application/json', Prefer: `return=representation, resolution=${mode === 'merge' ? 'merge-duplicates' : 'ignore-duplicates'}` },
+          body: JSON.stringify(row),
+        }),
+        `upsert ${table}`,
+      );
+      const rows = (await res.json()) as T[];
+      return rows[0] ?? null;
+    },
+
+    /** SELECT rows matching `filters` (PostgREST syntax: { ref: 'eq.BB-…' }). */
+    async select<T>(table: string, columns: string, filters: Record<string, string>, limit = 10): Promise<T[]> {
+      const qs = new URLSearchParams({ select: columns, ...filters, limit: String(limit) }).toString();
+      const res = await check(await fetch(`${url}/rest/v1/${table}?${qs}`, { headers: { ...base, Accept: 'application/json' } }), `select ${table}`);
+      return (await res.json()) as T[];
+    },
+
+    /** UPDATE rows matching `filters`. Returns the number of rows changed. */
     async update(table: string, filters: Record<string, string>, patch: Record<string, unknown>): Promise<number> {
       const qs = new URLSearchParams(filters).toString();
       const res = await check(

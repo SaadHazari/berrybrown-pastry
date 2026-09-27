@@ -1,11 +1,16 @@
 /**
- * Server-side (Cloudflare Pages Function) validation + Stripe payload building.
+ * Server-side (Cloudflare Worker) validation + Stripe payload building.
  * Pure: no DOM, no fetch — shared with tests.
+ *
+ * Multi-brand rule: Dormers is the legal merchant on the Stripe account. Every Berry Brown
+ * object carries brand=berry_brown, the order id and ref, so Dormers finance can filter and
+ * reconcile, and the webhook can ignore Dormers events.
  */
 import { TIME_SLOTS, getZone } from '../data/zones';
 import { isValidEmail, isValidPhone, normalisePhone } from './validation';
 import type { Customer } from './order';
 import { MESSAGE_MAX, deliveryFee, earliestDate, resolveLine, subtotal, type LineInput } from './pricing';
+import { APPLICATION, BRAND } from './stripeEvent';
 
 export type ValidOrder = {
   ref: string;
@@ -84,7 +89,24 @@ export function parseCheckoutRequest(body: unknown, now: Date = new Date()): Res
   return { ok: true, order: { ref, lines, zoneId, date, slotId, customer } };
 }
 
-export function buildStripeForm(order: ValidOrder, origin: string): URLSearchParams {
+export type StripeFormOptions = {
+  /** The Berry Brown order id (uuid), minted before the session so every Stripe object carries it. */
+  orderId: string;
+  customerId?: string | null;
+  /** Card statement suffix, appended to the account's (Dormers) prefix. Set BB_STRIPE_DESCRIPTOR_SUFFIX once the prefix length is known. */
+  descriptorSuffix?: string;
+};
+
+/** Berry Brown look for the hosted Checkout page. Account-level branding stays Dormers'; this overrides per session. */
+export const CHECKOUT_BRANDING = {
+  display_name: 'Berry Brown',
+  background_color: '#F6EEDF',
+  button_color: '#7A2A3A',
+  border_style: 'rounded',
+  font_family: 'lora',
+} as const;
+
+export function buildStripeForm(order: ValidOrder, origin: string, opts: StripeFormOptions): URLSearchParams {
   const f = new URLSearchParams();
   const zone = getZone(order.zoneId)!;
   const slot = TIME_SLOTS.find((s) => s.id === order.slotId)!;
@@ -96,6 +118,13 @@ export function buildStripeForm(order: ValidOrder, origin: string): URLSearchPar
   f.set('cancel_url', `${origin}/?order=cancelled&ref=${order.ref}`);
   if (order.customer.email) f.set('customer_email', order.customer.email);
 
+  // Berry Brown branding on the shared account (hosted page only).
+  for (const [k, v] of Object.entries(CHECKOUT_BRANDING)) f.set(`branding_settings[${k}]`, v);
+  if (origin.startsWith('https://')) {
+    f.set('branding_settings[icon][type]', 'url');
+    f.set('branding_settings[icon][url]', `${origin}/icon-512.png`);
+  }
+
   let i = 0;
   for (const l of order.lines) {
     const { product, size, flavour } = resolveLine(l);
@@ -103,8 +132,11 @@ export function buildStripeForm(order: ValidOrder, origin: string): URLSearchPar
     f.set(`${p}[quantity]`, String(l.qty));
     f.set(`${p}[price_data][currency]`, 'aed');
     f.set(`${p}[price_data][unit_amount]`, String(size.price * 100));
-    f.set(`${p}[price_data][product_data][name]`, `${product.name} · ${size.label}`);
-    f.set(`${p}[price_data][product_data][description]`, `${flavour.name}${l.message ? ` · Plaque: "${l.message}"` : ''}`);
+    f.set(`${p}[price_data][product_data][name]`, `BB | ${product.name} | ${size.label}`);
+    f.set(`${p}[price_data][product_data][description]`, `${flavour.name}${l.message ? ` · Message: "${l.message}"` : ''}`);
+    f.set(`${p}[price_data][product_data][metadata][brand]`, BRAND);
+    f.set(`${p}[price_data][product_data][metadata][product_id]`, product.id);
+    f.set(`${p}[price_data][product_data][metadata][size_id]`, size.id);
     if (!product.image.placeholder) f.set(`${p}[price_data][product_data][images][0]`, new URL(product.image.src, origin).toString());
     i++;
   }
@@ -115,7 +147,8 @@ export function buildStripeForm(order: ValidOrder, origin: string): URLSearchPar
     f.set(`${p}[quantity]`, '1');
     f.set(`${p}[price_data][currency]`, 'aed');
     f.set(`${p}[price_data][unit_amount]`, String(fee * 100));
-    f.set(`${p}[price_data][product_data][name]`, `Chilled delivery · ${zone.name}`);
+    f.set(`${p}[price_data][product_data][name]`, `BB | Delivery | ${zone.name}`);
+    f.set(`${p}[price_data][product_data][metadata][brand]`, BRAND);
   }
 
   const messages = order.lines
@@ -123,8 +156,13 @@ export function buildStripeForm(order: ValidOrder, origin: string): URLSearchPar
     .map((l) => `${resolveLine(l).product.name}: ${l.message}`)
     .join(' | ');
 
+  // The Berry Brown namespace (§5 of the multi-brand spec) plus what Safa needs to see in the dashboard.
   const meta: Record<string, string> = {
-    ref: order.ref,
+    brand: BRAND,
+    application: APPLICATION,
+    order_id: opts.orderId,
+    order_ref: order.ref,
+    customer_id: opts.customerId ?? '',
     fulfilment: zone.pickup ? 'pickup' : `delivery: ${zone.name}`,
     date: order.date,
     slot: slot.label,
@@ -137,5 +175,7 @@ export function buildStripeForm(order: ValidOrder, origin: string): URLSearchPar
   for (const [k, v] of Object.entries(meta)) if (v) f.set(`metadata[${k}]`, v.slice(0, 500));
   f.set('payment_intent_data[description]', `Berry Brown order ${order.ref}`);
   for (const [k, v] of Object.entries(meta)) if (v) f.set(`payment_intent_data[metadata][${k}]`, v.slice(0, 500));
+  if (order.customer.email) f.set('payment_intent_data[receipt_email]', order.customer.email);
+  if (opts.descriptorSuffix) f.set('payment_intent_data[statement_descriptor_suffix]', opts.descriptorSuffix.slice(0, 22));
   return f;
 }

@@ -10,6 +10,6 @@ describe('worker supabase helper', () => {
 
   it('is null without config, so the site keeps working', () => {
     expect(supabaseFrom({})).toBeNull();
-    expect(supabaseFrom({ SUPABASE_URL: 'https://x.supabase.co/', SUPABASE_SECRET_KEY: 'sb_secret_x' })?.url).toBe('https://x.supabase.co');
+    expect(supabaseFrom({ BB_SUPABASE_URL: 'https://x.supabase.co/', BB_SUPABASE_SECRET_KEY: 'sb_secret_x' })?.url).toBe('https://x.supabase.co');
   });
 });

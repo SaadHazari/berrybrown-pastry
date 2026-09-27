@@ -38,22 +38,44 @@ The `berrybrown-pastry` Worker is connected to this GitHub repo through Cloudfla
 - Pushing to **`main`** runs `npm run build` and then `npx wrangler deploy`, which publishes to **https://berrybrown.me**.
 - Pushing to any other branch uploads a preview version.
 
-### One-time setup (three secrets, one Stripe webhook)
+### One-time setup (secrets and one Stripe webhook)
 
-Secrets go in with `npx wrangler login` + `npx wrangler secret put NAME`, or in the Cloudflare dashboard under Workers → berrybrown-pastry → Settings → Variables and Secrets. Until a secret is set, its feature degrades quietly: no Stripe key means checkout switches to WhatsApp; no Supabase key means nothing is saved and photo upload falls back to "I'll send my photos here".
+Every Berry Brown variable is `BB_`-prefixed so a Dormers key can never be picked up by accident. Secrets go in with `npx wrangler login` + `npx wrangler secret put NAME`, or in the Cloudflare dashboard under Workers → berrybrown-pastry → Settings → Variables and Secrets. Until a secret is set, its feature degrades quietly: no Stripe key means checkout switches to WhatsApp; no Supabase key means nothing is saved and photo upload falls back to "I'll send my photos here".
 
-1. **`SUPABASE_SECRET_KEY`** — Supabase dashboard → Project Settings → API keys → the `sb_secret_…` key. The project URL is already in `wrangler.jsonc`.
-2. **`STRIPE_SECRET_KEY`** — `sk_test_…` first, `sk_live_…` when ready.
-3. **`STRIPE_WEBHOOK_SECRET`** — in Stripe → Developers → Webhooks, add an endpoint for `https://berrybrown.me/api/stripe/webhook` with the events `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`. Copy its signing secret (`whsec_…`). This is what marks orders **paid** in Supabase.
-4. **Redirect.** Add a Cloudflare redirect rule from `barrybrown.me` to `berrybrown.me`.
+1. **`BB_SUPABASE_SECRET_KEY`** — Supabase dashboard → Project Settings → API keys → the `sb_secret_…` key. The project URL is already in `wrangler.jsonc` as `BB_SUPABASE_URL`.
+2. **`BB_STRIPE_SECRET_KEY`** — the **Dormers** Stripe account key (`dormers.ae`). `sk_test_…` first, `sk_live_…` when ready.
+3. **`BB_STRIPE_WEBHOOK_SECRET`** — in Stripe → Developers → Webhooks, add an endpoint for `https://berrybrown.me/api/stripe/webhook`, description "Berry Brown (berrybrown.me)", with the events `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `charge.refunded`. Copy its signing secret (`whsec_…`). This is the only thing that marks orders **paid**.
+4. **`BB_STRIPE_DESCRIPTOR_SUFFIX`** (optional) — the text added after the Dormers card-statement prefix, e.g. `BERRY BROWN`. Check the prefix first in Stripe → Settings → Public details: prefix + suffix must fit 22 characters, or leave this unset.
+5. **Redirect.** Add a Cloudflare redirect rule from `barrybrown.me` to `berrybrown.me`.
+
+### Stripe: one Dormers account, a separate Berry Brown namespace
+
+Dormers is the legal merchant; Berry Brown is a brand (per the Dormers | Berry Brown multi-brand implementation spec, 27 Sep 2026). There is one Stripe account and no second one. The code keeps the brands apart:
+
+| Where | What Berry Brown sets |
+| --- | --- |
+| Checkout Session | `client_reference_id` = the order ref (`BB-YYMMDD-XXXX`); metadata `brand=berry_brown`, `application=berry_brown_web`, `order_id` (Supabase uuid), `order_ref`, `customer_id` |
+| PaymentIntent | the same metadata, description `Berry Brown order BB-…`, receipt to the customer's email, optional statement suffix |
+| Products | inline, named `BB \| Cake \| Size` (and `BB \| Delivery \| Dubai`), product metadata `brand=berry_brown` |
+| Hosted page | `branding_settings`: display name "Berry Brown", Butter background, Claret button, rounded corners, Lora (the closest serif Stripe offers to Alegreya), the sprig icon. The account's legal name still appears in the terms and receipts, as it must |
+| Webhook | verifies the signature, then ignores anything without `brand=berry_brown` (Dormers events get a 200 and no action). Refunds must also match a Berry Brown order by PaymentIntent |
+| Supabase | the order is created `pending` **before** the Stripe session; `payments` gets one row per Stripe event (idempotent on the event id); refunds are negative rows |
+
+In the Stripe dashboard, filter Berry Brown payments with the search `metadata["brand"]:"berry_brown"` or by product names starting with `BB |`.
+
+⚠️ **The Dormers side must ignore Berry Brown events too.** On 27 Sep 2026 the Dormers account had two other live webhooks listening to `checkout.session.completed`: the Dormers app (`https://dormers.ae/api/webhook`) and a Make scenario ("Stripe Checkout Fullfillment"). Both will receive every Berry Brown payment. Before Berry Brown takes live payments, each of them must skip events whose object has `metadata.brand = "berry_brown"` (or whose `client_reference_id` starts with `BB-`), and answer 200 so Stripe does not retry.
+
+**Dashboard checks before launch (account-level, shared with Dormers):** receipt emails (Settings → Emails) show the account's public business name and support details; card statements show the account prefix. Keep the legal merchant accurate, and make sure the support email and phone on receipts are ones that can answer a Berry Brown customer.
 
 ### Supabase
 
-Project `ylrqmwfnelwqbychdpfb` (region Tokyo, free plan). Free projects pause after a week without traffic; upgrade before launch or accept that the first visitor after a quiet week gets the sample content and no order log. To move to a closer region (Mumbai or Frankfurt): create the new project, run `supabase/migrations/20260927110000_init_berrybrown.sql` in its SQL editor, then change the URL and publishable key in `src/data/supabase.ts` and `wrangler.jsonc`, and re-set `SUPABASE_SECRET_KEY`.
+Project `ylrqmwfnelwqbychdpfb` (region Tokyo, free plan). Free projects pause after a week without traffic; upgrade before launch or accept that the first visitor after a quiet week gets the sample content and no order log. To move to a closer region (Mumbai or Frankfurt): create the new project, run the three files in `supabase/migrations/` in order in its SQL editor, then change the URL and publishable key in `src/data/supabase.ts` and `BB_SUPABASE_URL` in `wrangler.jsonc`, and re-set `BB_SUPABASE_SECRET_KEY`.
 
 | Table | What lands there | Who writes |
 | --- | --- | --- |
-| `orders` | Every order of the Six. Stripe orders arrive `pending` and become `paid` through the webhook. WhatsApp orders arrive `pending` when the customer taps send; mark them `confirmed` by hand. | Worker |
+| `customers` | One row per customer, keyed by UAE mobile. Berry Brown customers only. | Worker |
+| `orders` | Every order of the Six. Stripe orders arrive `pending` and become `paid` through the webhook. WhatsApp orders arrive `pending` when the customer taps send; mark them `confirmed` by hand. Keeps `stripe_checkout_session_id` and `stripe_payment_intent_id` for reconciliation. | Worker |
+| `payments` | One row per Stripe payment event: `succeeded`, or `refunded` with a negative amount. Reconcile: order total → payments → Stripe payout. | Webhook |
 | `enquiries` | Custom-cake sends (answers, from-price, photo links, the WhatsApp text) and company enquiries | Worker |
 | `uploads` | One row per inspiration photo, for the 10-per-IP-per-hour limit | Worker |
 | `cakes` | **The log.** A row per cake is created automatically when an order turns `paid`. Add a photo to the `cakes` bucket, put its path in `photo_path`, tick `published`, and it appears on the site (newest three). | Trigger + Safa |
@@ -67,7 +89,7 @@ Photo upload limits: 3 files per send, 10 MB each, JPG/PNG/WebP/HEIC (checked by
 
 1. The browser posts the bag, delivery details and an order reference to `/api/checkout`.
 2. The Worker **re-prices everything from `src/data/products.ts`**, so prices sent from the browser are never trusted. It checks the date, phone number and so on, and creates a Stripe Checkout session in AED. Delivery (AED 20, free over AED 300) is its own line item. Order details are saved in the session and payment metadata, so they appear in the Stripe dashboard.
-3. The Worker also saves the order in Supabase as `pending`. When Stripe confirms payment it calls `/api/stripe/webhook`, which marks the order `paid`; the database then gives every cake in it a number in the log.
+3. Before creating the session, the Worker saves the customer and the order in Supabase as `pending`, so every Stripe object can carry the order id. When Stripe confirms payment it calls `/api/stripe/webhook`, which marks the order `paid` and adds a `payments` row; the database then gives every cake in it a number in the log. The success page never marks anything paid.
 4. After paying, the customer returns to `/?order=success&ref=…`, the bag clears, and a button sends the full order to Safa on WhatsApp.
 5. If the customer cancels, they return to `/?order=cancelled` and checkout reopens with the bag still there.
 

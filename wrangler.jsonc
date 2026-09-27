@@ -11,12 +11,13 @@
     "run_worker_first": ["/api/*"]
   },
   "vars": {
-    // Public. The secret key is NOT here — see the secrets below.
-    "SUPABASE_URL": "https://ylrqmwfnelwqbychdpfb.supabase.co"
+    // Public. Every Berry Brown variable is BB_-prefixed so a Dormers key can never be used by accident.
+    "BB_SUPABASE_URL": "https://ylrqmwfnelwqbychdpfb.supabase.co"
   },
   "observability": { "enabled": true }
   // Secrets (set once each, or in the dashboard under Settings → Variables and Secrets):
-  //   npx wrangler secret put STRIPE_SECRET_KEY        sk_live_… (use sk_test_… first)
-  //   npx wrangler secret put STRIPE_WEBHOOK_SECRET    whsec_… from the Stripe webhook for https://berrybrown.me/api/stripe/webhook
-  //   npx wrangler secret put SUPABASE_SECRET_KEY      sb_secret_… from Supabase → Project Settings → API keys
+  //   npx wrangler secret put BB_SUPABASE_SECRET_KEY        sb_secret_… from Supabase → Project Settings → API keys
+  //   npx wrangler secret put BB_STRIPE_SECRET_KEY          the Dormers account key: sk_test_… first, sk_live_… later
+  //   npx wrangler secret put BB_STRIPE_WEBHOOK_SECRET      whsec_… from the Stripe webhook for https://berrybrown.me/api/stripe/webhook
+  //   npx wrangler secret put BB_STRIPE_DESCRIPTOR_SUFFIX   optional, e.g. "BERRY BROWN" — Dormers prefix + suffix must fit 22 characters
 }
