@@ -1,3 +1,4 @@
+import { DUBAI_ZONE_ID } from '../data/zones';
 import type { CartLine } from '../store/cartReducer';
 import type { Customer } from './order';
 import { isValidEmail, isValidPhone } from './validation';
@@ -15,7 +16,7 @@ export type CheckoutForm = {
 
 export const EMPTY_FORM: CheckoutForm = {
   fulfilment: 'delivery',
-  zoneId: '',
+  zoneId: DUBAI_ZONE_ID,
   date: '',
   slotId: '',
   customer: { name: '', phone: '', email: '', address: '', notes: '' },
@@ -46,7 +47,8 @@ function write(key: string, value: unknown) {
 
 export const loadForm = (): CheckoutForm => {
   const f = read<CheckoutForm>(FORM_KEY);
-  return f ? { ...EMPTY_FORM, ...f, customer: { ...EMPTY_FORM.customer, ...f.customer } } : EMPTY_FORM;
+  // There is one delivery zone now; anything stored from the old zone list maps to it.
+  return f ? { ...EMPTY_FORM, ...f, zoneId: DUBAI_ZONE_ID, customer: { ...EMPTY_FORM.customer, ...f.customer } } : EMPTY_FORM;
 };
 export const saveForm = (f: CheckoutForm) => write(FORM_KEY, f);
 export const loadPending = () => read<PendingOrder>(PENDING_KEY);
@@ -67,7 +69,7 @@ export function validateWhen(f: CheckoutForm, earliest: string): StepErrors {
 
 export function validateDetails(f: CheckoutForm): StepErrors {
   const e: StepErrors = {};
-  if (f.customer.name.trim().length < 2) e.name = 'Your name please';
+  if (f.customer.name.trim().length < 2) e.name = 'Your name, please';
   if (!isValidPhone(f.customer.phone)) e.phone = 'A UAE mobile, like 050 123 4567';
   if (!isValidEmail(f.customer.email.trim())) e.email = 'That email looks off';
   if (f.fulfilment === 'delivery' && f.customer.address.trim().length < 6) e.address = 'Building, flat and area';

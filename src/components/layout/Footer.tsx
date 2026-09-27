@@ -1,120 +1,63 @@
-import { motion } from 'motion/react';
-import { Clock, Mail, MapPin } from 'lucide-react';
 import { CONTACT } from '../../data/content';
-import { media } from '../../data/media';
-import { ease } from '../../lib/motion';
+import { cn } from '../../lib/cn';
+import { useInView } from '../../lib/hooks';
 import { whatsappLink } from '../../lib/order';
-import { Heart } from '../ui/Squiggle';
-import { WhatsAppIcon } from './WhatsAppFab';
+import { HeartIcon } from '../ui/Icons';
 
-function Instagram({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
-      <rect x="3" y="3" width="18" height="18" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-const IG_TILES = [media.gallery.berrySlice, media.products.chocolateDrip, media.gallery.coffee, media.products.mangoTart, media.gallery.pistachioSlice, media.gallery.rusticCake];
-
-const LINE = ['Made', 'with', 'heart,'];
-const LINE2 = ['not', 'haste.'];
-
-/** Sits under the main content and is uncovered as the page scrolls away. */
 export function Footer() {
+  // The heart glow: one 2 s ease from 0.6 to 1.0 when the footer comes into view. No colour change.
+  const [heartRef, seen] = useInView<HTMLSpanElement>('0px');
   return (
-    <footer className="relative z-0 md:sticky md:bottom-0 -mt-16 bg-cocoa pt-28 text-cream md:-mt-20 md:pt-36">
-      <div className="container-x pb-[max(32px,env(safe-area-inset-bottom))]">
-        <h2 className="font-display text-[clamp(3rem,11vw,9.5rem)] font-light leading-[0.9]">
-          <span className="block">
-            {LINE.map((w, i) => (
-              <motion.span
-                key={w}
-                className="mr-[0.22em] inline-block"
-                initial={{ y: 60, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: '-5%' }}
-                transition={{ type: 'spring', stiffness: 120, damping: 16, delay: i * 0.08 }}
-              >
-                {w}
-              </motion.span>
-            ))}
-          </span>
-          <span className="block italic text-blush">
-            {LINE2.map((w, i) => (
-              <motion.span
-                key={w}
-                className="mr-[0.22em] inline-block"
-                initial={{ opacity: 0, filter: 'blur(10px)' }}
-                whileInView={{ opacity: 1, filter: 'blur(0px)' }}
-                viewport={{ once: true, margin: '-5%' }}
-                transition={{ duration: 0.9, delay: 0.35 + i * 0.12, ease: ease.out }}
-              >
-                {w}
-              </motion.span>
-            ))}
-            <Heart className="inline-block size-[0.5em] -translate-y-[0.1em] text-berry motion-safe:animate-pulse" />
-          </span>
-        </h2>
+    <footer className="section-more bg-cocoa text-butter">
+      <div className="container-x">
+        <div className="flex flex-col items-center text-center">
+          <img src="/brand/berrybrown-logo-on-dark.svg" alt="Berry Brown" width={396} height={329} className="w-[180px]" />
+          <p className="t-title3 mt-lg inline-flex items-center gap-sm">
+            Made with heart, not haste.
+            <span ref={heartRef} className={cn('text-rose transition-opacity duration-[2000ms] ease-out', seen ? 'opacity-100' : 'opacity-60')} aria-hidden>
+              <HeartIcon className="size-[0.8em]" />
+            </span>
+          </p>
+        </div>
 
-        <div className="mt-14 grid gap-12 md:mt-20 md:grid-cols-[1.2fr_1fr]">
+        <div className="mt-2xl grid gap-xl border-t border-butter/15 pt-xl md:grid-cols-3">
           <div>
-            <a href={`https://instagram.com/${CONTACT.instagram}`} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 text-sm text-cream/70 hover:text-cream">
-              <Instagram className="size-4" /> @{CONTACT.instagram}
-              <span className="transition-transform group-hover:translate-x-1">→</span>
-            </a>
-            <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
-              {IG_TILES.map((m, i) => (
-                <a
-                  key={m.src}
-                  href={`https://instagram.com/${CONTACT.instagram}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative aspect-square overflow-hidden rounded-2xl"
-                  aria-label={`Instagram post ${i + 1}`}
-                >
-                  <img src={m.src} alt="" loading="lazy" className="size-full object-cover transition duration-500 group-hover:scale-110" />
-                  <span className="absolute inset-0 grid place-items-center bg-berry/0 opacity-0 transition group-hover:bg-berry/50 group-hover:opacity-100">
-                    <Heart className="size-6 text-cream" />
-                  </span>
+            <p className="t-label text-butter-60">Order</p>
+            <ul className="mt-sm space-y-xs">
+              <li>
+                <a href={whatsappLink('Hi Safa, I have a question about a cake.')} target="_blank" rel="noopener noreferrer" className="link">
+                  WhatsApp {CONTACT.phoneDisplay}
                 </a>
-              ))}
-            </div>
+              </li>
+              <li>
+                <a href={`mailto:${CONTACT.email}`} className="link">
+                  {CONTACT.email}
+                </a>
+              </li>
+            </ul>
           </div>
-
-          <div className="grid grid-cols-2 gap-8 text-sm">
-            <div className="space-y-3">
-              <p className="eyebrow text-cream/45">Say hello</p>
-              <a href={whatsappLink('Hi Safa! 🍰')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-blush">
-                <WhatsAppIcon className="size-4" /> {CONTACT.phoneDisplay}
-              </a>
-              <a href={`mailto:${CONTACT.email}`} className="flex items-center gap-2 hover:text-blush">
-                <Mail className="size-4" /> {CONTACT.email}
-              </a>
+          {CONTACT.instagram && (
+            <div>
+              <p className="t-label text-butter-60">Follow</p>
+              <ul className="mt-sm">
+                <li>
+                  <a href={`https://instagram.com/${CONTACT.instagram}`} target="_blank" rel="noopener noreferrer" className="link">
+                    Instagram @{CONTACT.instagram}
+                  </a>
+                </li>
+              </ul>
             </div>
-            <div className="space-y-3">
-              <p className="eyebrow text-cream/45">Find us</p>
-              <p className="flex items-center gap-2">
-                <MapPin className="size-4" /> {CONTACT.location}
-              </p>
-              <p className="flex items-center gap-2">
-                <Clock className="size-4" /> {CONTACT.hours}
-              </p>
-            </div>
+          )}
+          <div>
+            <p className="t-label text-butter-60">Studio</p>
+            <ul className="mt-sm space-y-xs">
+              <li>{CONTACT.location}</li>
+              <li>{CONTACT.hours}</li>
+            </ul>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-cream/10 pt-6 text-xs text-cream/45 md:flex-row md:items-center md:justify-between">
-          <p>
-            © {new Date().getFullYear()} <span translate="no">Berry Brown</span> · Baked with love in Dubai
-          </p>
-          <p className="flex items-center gap-2">
-            <img src={media.logoMark.src} alt="" className="size-8 rounded-full object-cover" />
-            <span className="font-hand text-lg text-cream/60">Safa x</span>
-          </p>
-        </div>
+        <p className="t-caption mt-xl text-butter-60">{CONTACT.legal}</p>
       </div>
     </footer>
   );

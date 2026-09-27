@@ -1,226 +1,117 @@
-import { media } from './media';
+import { media, type Media } from './media';
 
 export type Size = { id: string; label: string; serves: string; price: number; popular?: boolean };
 export type Flavour = { id: string; name: string };
-export type Category = 'signature' | 'celebration' | 'tarts';
 
 export type Product = {
   id: string;
   name: string;
   short: string;
-  note: string; // handwritten aside from Safa
-  category: Category;
-  badge?: string;
-  image: string;
-  gallery: string[];
+  image: Media;
   leadTimeHours: number;
   sizes: Size[];
   flavours: Flavour[];
-  tags: string[];
   allergens: string[];
+  /** Names are provisional until Safa confirms the real Six. */
+  sample: boolean;
 };
 
-const round = (id: string, price: number, serves: string, label: string, popular = false): Size => ({
-  id,
-  price,
-  serves,
-  label,
-  popular,
-});
-
-const STANDARD_SIZES = (petite: number, classic: number, grand: number): Size[] => [
-  round('petite', petite, '2–4', '4" Petite'),
-  round('classic', classic, '6–8', '6" Classic', true),
-  round('grand', grand, '10–14', '8" Grand'),
+/** One flat ladder for all six. 150 / 200 / 280 — agreed 21 Sep, Saad to confirm before merge. */
+export const PRICE_LADDER: Size[] = [
+  { id: '5in', label: '5"', serves: '4–6', price: 150 },
+  { id: '6in', label: '6"', serves: '6–8', price: 200, popular: true },
+  { id: '8in', label: '8"', serves: '10–14', price: 280 },
 ];
 
+/** "Written on" — a hand-piped message and one decoration on any of the Six. */
+export const WRITTEN_ON = { price: 50 };
+
+const cake = (
+  id: string,
+  name: string,
+  short: string,
+  image: Media,
+  flavours: Flavour[],
+  allergens: string[],
+): Product => ({
+  id,
+  name,
+  short,
+  image,
+  leadTimeHours: 24,
+  sizes: PRICE_LADDER,
+  flavours,
+  allergens,
+  sample: true,
+});
+
 export const PRODUCTS: Product[] = [
-  {
-    id: 'berry-chocolate-drip',
-    name: 'Berry Chocolate Drip',
-    short: 'Dark chocolate sponge, berry jam and a glossy ganache drip.',
-    note: 'the one everyone asks for',
-    category: 'signature',
-    badge: 'Most loved',
-    image: media.products.chocolateDrip.src,
-    gallery: [media.products.chocolateDrip.src, media.gallery.chocolateSlice.src],
-    leadTimeHours: 24,
-    sizes: STANDARD_SIZES(195, 295, 420),
-    flavours: [
+  cake(
+    'berry-chocolate-drip',
+    'Berry Chocolate Drip',
+    'Dark chocolate sponge, berry jam and a glossy ganache drip.',
+    media.six[0],
+    [
       { id: 'dark', name: 'Dark chocolate & raspberry' },
       { id: 'milk', name: 'Milk chocolate & strawberry' },
-      { id: 'mocha', name: 'Mocha & blackberry' },
     ],
-    tags: ['Halal', 'No gelatin'],
-    allergens: ['Dairy', 'Gluten', 'Eggs'],
-  },
-  {
-    id: 'pistachio-kunafa',
-    name: 'Pistachio Kunafa Cake',
-    short: 'Pistachio cream, crunchy golden kunafa and a hint of orange blossom.',
-    note: 'a little taste of home',
-    category: 'signature',
-    badge: 'Dubai favourite',
-    image: media.products.pistachioKunafa.src,
-    gallery: [media.products.pistachioKunafa.src, media.gallery.pistachioSlice.src],
-    leadTimeHours: 24,
-    sizes: STANDARD_SIZES(220, 320, 460),
-    flavours: [
+    ['Dairy', 'Gluten', 'Eggs'],
+  ),
+  cake(
+    'pistachio-kunafa',
+    'Pistachio Kunafa',
+    'Pistachio cream, crisp golden kunafa and a little orange blossom.',
+    media.six[1],
+    [
       { id: 'classic', name: 'Pistachio & kunafa' },
       { id: 'rose', name: 'Pistachio, rose & raspberry' },
     ],
-    tags: ['Halal', 'No gelatin'],
-    allergens: ['Dairy', 'Pistachio', 'Gluten', 'Eggs'],
-  },
-  {
-    id: 'berry-cream-sponge',
-    name: 'Berry Cream Sponge',
-    short: 'Light vanilla sponge, whipped cream and a big pile of fresh berries.',
-    note: 'soft as a cloud',
-    category: 'signature',
-    image: media.products.creamSponge.src,
-    gallery: [media.products.creamSponge.src, media.gallery.berrySlice.src],
-    leadTimeHours: 24,
-    sizes: STANDARD_SIZES(175, 265, 380),
-    flavours: [
+    ['Dairy', 'Pistachio', 'Gluten', 'Eggs'],
+  ),
+  cake(
+    'berry-cream-sponge',
+    'Berry Cream Sponge',
+    'Light vanilla sponge, whipped cream and fresh berries.',
+    media.six[2],
+    [
       { id: 'vanilla', name: 'Vanilla & mixed berries' },
       { id: 'lemon', name: 'Lemon & raspberry' },
     ],
-    tags: ['Halal', 'Fresh fruit'],
-    allergens: ['Dairy', 'Gluten', 'Eggs'],
-  },
-  {
-    id: 'salted-caramel-chocolate',
-    name: 'Salted Caramel Chocolate',
-    short: 'Rich chocolate mousse over a soft caramel centre and hazelnut crunch.',
-    note: 'for the serious chocolate people',
-    category: 'signature',
-    image: media.products.caramelChocolate.src,
-    gallery: [media.products.caramelChocolate.src],
-    leadTimeHours: 24,
-    sizes: STANDARD_SIZES(210, 310, 440),
-    flavours: [
+    ['Dairy', 'Gluten', 'Eggs'],
+  ),
+  cake(
+    'salted-caramel-chocolate',
+    'Salted Caramel Chocolate',
+    'Chocolate mousse over a soft caramel centre and hazelnut crunch.',
+    media.six[3],
+    [
       { id: 'caramel', name: 'Dark chocolate & salted caramel' },
       { id: 'praline', name: 'Double hazelnut praline' },
     ],
-    tags: ['Halal', 'No gelatin', 'Less sugar'],
-    allergens: ['Dairy', 'Hazelnut', 'Gluten', 'Eggs'],
-  },
-  {
-    id: 'blueberry-cheesecake',
-    name: 'Blueberry Cheesecake',
-    short: 'Creamy baked cheesecake on a buttery biscuit base, crowned with blueberries.',
-    note: 'baked slow, the old way',
-    category: 'celebration',
-    image: media.products.blueberryCheesecake.src,
-    gallery: [media.products.blueberryCheesecake.src],
-    leadTimeHours: 24,
-    sizes: STANDARD_SIZES(185, 275, 395),
-    flavours: [
+    ['Dairy', 'Hazelnut', 'Gluten', 'Eggs'],
+  ),
+  cake(
+    'blueberry-cheesecake',
+    'Blueberry Cheesecake',
+    'Baked cheesecake on a butter biscuit base, topped with blueberries.',
+    media.six[4],
+    [
       { id: 'blueberry', name: 'Vanilla & blueberry' },
       { id: 'lotus', name: 'Lotus biscoff' },
     ],
-    tags: ['Halal', 'No gelatin'],
-    allergens: ['Dairy', 'Gluten', 'Eggs'],
-  },
-  {
-    id: 'berry-charlotte',
-    name: 'Vanilla Berry Charlotte',
-    short: 'Ladyfingers tied with ribbon around vanilla cream and berries.',
-    note: 'pretty enough for a tea party',
-    category: 'celebration',
-    image: media.products.charlotte.src,
-    gallery: [media.products.charlotte.src],
-    leadTimeHours: 24,
-    sizes: [
-      round('classic', 290, '6–8', '6" Classic', true),
-      round('grand', 420, '10–14', '8" Grand'),
-    ],
-    flavours: [
+    ['Dairy', 'Gluten', 'Eggs'],
+  ),
+  cake(
+    'berry-charlotte',
+    'Vanilla Berry Charlotte',
+    'Ladyfingers tied with ribbon around vanilla cream and berries.',
+    media.six[5],
+    [
       { id: 'vanilla', name: 'Vanilla & wild berries' },
       { id: 'lemon', name: 'Lemon & raspberry' },
     ],
-    tags: ['Halal', 'Fresh fruit'],
-    allergens: ['Dairy', 'Gluten', 'Eggs'],
-  },
-  {
-    id: 'celebration-tiered',
-    name: 'Floral Celebration Cake',
-    short: 'Two or three tiers of buttercream and fresh flowers for the big days.',
-    note: "let's make it yours",
-    category: 'celebration',
-    badge: '48h notice',
-    image: media.products.celebration.src,
-    gallery: [media.products.celebration.src, media.gallery.birthday.src],
-    leadTimeHours: 48,
-    sizes: [
-      round('two', 850, '18–24', '2 tiers', true),
-      round('two-grand', 1250, '30–38', '2 tiers, tall'),
-      round('three', 1850, '50–65', '3 tiers'),
-    ],
-    flavours: [
-      { id: 'vanilla-berry', name: 'Vanilla & strawberry' },
-      { id: 'choc-caramel', name: 'Chocolate & salted caramel' },
-      { id: 'pistachio-rose', name: 'Pistachio & cardamom rose' },
-    ],
-    tags: ['Halal', 'No gelatin'],
-    allergens: ['Dairy', 'Almond', 'Gluten', 'Eggs'],
-  },
-  {
-    id: 'mango-passion-tart',
-    name: 'Mango Passion Tart',
-    short: 'Crisp butter pastry, passion fruit curd and a mango rose on top.',
-    note: 'sunshine on a plate',
-    category: 'tarts',
-    badge: 'Seasonal',
-    image: media.products.mangoTart.src,
-    gallery: [media.products.mangoTart.src],
-    leadTimeHours: 24,
-    sizes: [
-      round('classic', 240, '5–7', '6" Tart', true),
-      round('grand', 340, '8–11', '8" Tart'),
-    ],
-    flavours: [
-      { id: 'passion', name: 'Passion fruit & mango' },
-      { id: 'lime', name: 'Lime & coconut' },
-    ],
-    tags: ['Halal', 'Fresh fruit'],
-    allergens: ['Dairy', 'Almond', 'Gluten', 'Eggs'],
-  },
-  {
-    id: 'citrus-almond-tart',
-    name: 'Citrus Almond Tart',
-    short: 'Almond cream, lemon curd and fresh orange and grapefruit.',
-    note: 'bright and not too sweet',
-    category: 'tarts',
-    image: media.products.citrusTart.src,
-    gallery: [media.products.citrusTart.src],
-    leadTimeHours: 24,
-    sizes: [
-      round('mini', 95, '1–2', 'Individual (x2)'),
-      round('classic', 220, '5–7', '6" Tart', true),
-      round('grand', 320, '8–11', '8" Tart'),
-    ],
-    flavours: [{ id: 'citrus', name: 'Orange, grapefruit & lemon' }],
-    tags: ['Halal', 'Fresh fruit'],
-    allergens: ['Dairy', 'Almond', 'Gluten', 'Eggs'],
-  },
-];
-
-export const CATEGORIES: { id: Category | 'all'; label: string }[] = [
-  { id: 'all', label: 'Everything' },
-  { id: 'signature', label: 'Signature cakes' },
-  { id: 'celebration', label: 'Celebrations' },
-  { id: 'tarts', label: 'Tarts' },
-];
-
-export const FAVOURITE_IDS = [
-  'berry-chocolate-drip',
-  'pistachio-kunafa',
-  'berry-cream-sponge',
-  'mango-passion-tart',
-  'blueberry-cheesecake',
-  'celebration-tiered',
+    ['Dairy', 'Gluten', 'Eggs'],
+  ),
 ];
 
 export function getProduct(id: string): Product | undefined {
@@ -231,6 +122,7 @@ export function defaultSize(p: Product): Size {
   return p.sizes.find((s) => s.popular) ?? p.sizes[0];
 }
 
-export function fromPrice(p: Product): number {
-  return Math.min(...p.sizes.map((s) => s.price));
+/** `5" 150 · 6" 200 · 8" 280` — the price ladder as one Jost line. */
+export function ladderLine(p: Product): string {
+  return p.sizes.map((s) => `${s.label} ${s.price}`).join(' · ');
 }

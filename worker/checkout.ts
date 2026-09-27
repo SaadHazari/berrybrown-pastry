@@ -3,6 +3,8 @@ import { buildStripeForm, parseCheckoutRequest } from '../src/lib/checkoutReques
 export interface Env {
   ASSETS: Fetcher;
   STRIPE_SECRET_KEY?: string;
+  /** R2 bucket for custom-cake inspiration photos (wrangler.jsonc). */
+  INSPIRATION?: R2Bucket;
 }
 
 const json = (data: unknown, status = 200) =>

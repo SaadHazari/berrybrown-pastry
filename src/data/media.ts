@@ -1,54 +1,46 @@
 /**
- * Every image and video on the site is listed here.
+ * Every photo slot on the page is listed here — twelve, and that is the budget forever.
  *
- * `placeholder: true` marks free stock media (Unsplash / Mixkit licence) standing in
- * for Safa's own photos. To swap one: drop the new file in /public/images (or
- * /public/videos), change `src`, and set `placeholder` to false.
+ * Until Safa's real photos exist, every slot renders the Rose placeholder panel
+ * (`placeholder: true`). To swap one in: put the file in /public/images with the
+ * same name, keep the 4:5 ratio, and set `placeholder` to false.
  */
-export type Media = { src: string; alt: string; placeholder?: boolean };
+export type Media = { src: string; alt: string; label: string; placeholder: boolean };
 
-const img = (file: string, alt: string, placeholder = false): Media => ({
+const slot = (file: string, alt: string, label: string): Media => ({
   src: `/images/${file}`,
   alt,
-  placeholder,
+  label,
+  placeholder: true,
 });
 
 export const media = {
-  logo: img('berrybrown_logo.webp', 'Berry Brown hand-drawn cake slice logo'),
-  logoMark: img('logo-mark.webp', 'Berry Brown cake slice sketch'),
+  /** Hero, right column. */
+  hero: slot('bb-the-six-01.jpg', 'Classic chocolate, one of the Six', 'THE SIX · CLASSIC CHOCOLATE'),
 
-  hero: {
-    video: { src: '/videos/hero-drip.mp4', alt: 'Chocolate being drizzled over a berry layer cake', placeholder: true },
-    poster: img('hero-poster.webp', 'Chocolate being drizzled over a berry layer cake', true),
-  },
+  /** The Six cards, in catalogue order. */
+  six: [
+    slot('bb-the-six-01.jpg', 'Berry Chocolate Drip', 'THE SIX · 1 OF 6'),
+    slot('bb-the-six-02.jpg', 'Pistachio Kunafa', 'THE SIX · 2 OF 6'),
+    slot('bb-the-six-03.jpg', 'Berry Cream Sponge', 'THE SIX · 3 OF 6'),
+    slot('bb-the-six-04.jpg', 'Salted Caramel Chocolate', 'THE SIX · 4 OF 6'),
+    slot('bb-the-six-05.jpg', 'Blueberry Cheesecake', 'THE SIX · 5 OF 6'),
+    slot('bb-the-six-06.jpg', 'Vanilla Berry Charlotte', 'THE SIX · 6 OF 6'),
+  ],
 
-  craft: {
-    video: { src: '/videos/craft-scraper.mp4', alt: 'Smoothing buttercream on a cake', placeholder: true },
-    poster: img('craft-poster.webp', 'Smoothing buttercream on a cake', true),
-  },
+  /** Chef Safa section. */
+  safa: slot('bb-safa.jpg', "Chef Safa's hands at work", 'HANDS'),
 
-  chef: img('chef_safa_portrait.webp', 'Chef Safa piping cream in her kitchen', true),
+  /** The log, newest first. */
+  log: [
+    slot('bb-log-041.jpg', 'Cake number 41', '#041'),
+    slot('bb-log-040.jpg', 'Cake number 40', '#040'),
+    slot('bb-log-039.jpg', 'Cake number 39', '#039'),
+  ],
 
-  products: {
-    chocolateDrip: img('chocolate-drip-cake.webp', 'Chocolate drip cake with piped chocolate swirls', true),
-    pistachioKunafa: img('pistachio_kunafa_cake.webp', 'Pistachio cake with golden kunafa', true),
-    creamSponge: img('cream-berry-sponge.webp', 'Layered cream sponge topped with berries', true),
-    caramelChocolate: img('valrhona_chocolate_entremet.webp', 'Glossy chocolate caramel cake', true),
-    blueberryCheesecake: img('blueberry-cheesecake-table.webp', 'Blueberry topped cheesecakes on a table', true),
-    charlotte: img('berry_charlotte_cake.webp', 'Charlotte cake tied with ribbon and topped with berries', true),
-    celebration: img('celebration_bespoke_cake.webp', 'Tiered celebration cake with flowers', true),
-    mangoTart: img('exotic_mango_tart.webp', 'Mango rose tart', true),
-    citrusTart: img('citrus-almond-tart.webp', 'Citrus tart with almonds', true),
-  },
-
-  gallery: {
-    berrySlice: img('berry-layer-slice.webp', 'A slice of berry layer cake', true),
-    pistachioSlice: img('pistachio-raspberry-slice.webp', 'Pistachio and raspberry cake slice', true),
-    chocolateSlice: img('chocolate-slice-fork.webp', 'Fork in a slice of chocolate cake', true),
-    rusticCake: img('rustic-sugar-cake.webp', 'Sugar-dusted cake on a wooden table', true),
-    kneading: img('kneading-dough.webp', 'Hands kneading dough on a floured table', true),
-    tartDisplay: img('fruit-tart-display.webp', 'Fresh fruit tarts in a display', true),
-    coffee: img('coffee-and-pastries.webp', 'Coffee and pastries on a tray', true),
-    birthday: img('birthday-cake-hand.webp', 'Birthday cake with candles held outdoors', true),
-  },
+  /** Custom-cake summary card. */
+  custom: slot('bb-custom.jpg', 'A custom cake in the making', 'THE ONE WE MAKE FOR YOU'),
 };
+
+/** Flat list of all slots — used by the README check and tests. */
+export const ALL_MEDIA: Media[] = [media.hero, ...media.six, media.safa, ...media.log, media.custom];

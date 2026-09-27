@@ -1,124 +1,218 @@
 @import "tailwindcss";
 
+/* Fonts — self-hosted from the brand kit. Sentences in Alegreya, labels and numbers in Jost. */
+@font-face { font-family: "Alegreya"; font-style: normal; font-weight: 500; font-display: swap; src: url("/fonts/alegreya-500.woff2") format("woff2"); }
+@font-face { font-family: "Alegreya"; font-style: italic; font-weight: 500; font-display: swap; src: url("/fonts/alegreya-500-italic.woff2") format("woff2"); }
+@font-face { font-family: "Alegreya"; font-style: normal; font-weight: 600; font-display: swap; src: url("/fonts/alegreya-600.woff2") format("woff2"); }
+@font-face { font-family: "Jost"; font-style: normal; font-weight: 500; font-display: swap; src: url("/fonts/jost-500.woff2") format("woff2"); }
+
 @theme {
-  --color-cream: #f6efe4;
-  --color-paper: #fbf7f0;
-  --color-oat: #eadfcc;
-  --color-latte: #d9c7ad;
-  --color-cocoa: #2b1b14;
-  --color-milk: #6b4a3a;
-  --color-berry: #9e2a4b;
-  --color-berry-deep: #7a1f39;
-  --color-blush: #f2d6d9;
-  --color-sage: #8a9a7b;
-  --color-sage-soft: #e3e8dc;
+  /* Colour — the four brand colours and the two Cocoa tints. Nothing else exists. */
+  --color-*: initial;
+  --color-butter: #F6EEDF;   /* page background          */
+  --color-cocoa: #3E2A21;    /* ink, buttons, footer     */
+  --color-rose: #E7CFC6;     /* panels, image mats       */
+  --color-claret: #7A2A3A;   /* ONE accent per section   */
+  --color-cocoa-70: #726156; /* second-level text        */
+  --color-cocoa-15: #D9D0C8; /* hairlines only           */
+  --color-butter-60: rgb(246 238 223 / 0.6); /* secondary text on Cocoa */
 
-  --font-display: "Fraunces", Georgia, serif;
-  --font-hand: "Caveat", "Comic Sans MS", cursive;
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  /* Type */
+  --font-*: initial;
+  --font-voice: "Alegreya", Georgia, serif;
+  --font-label: "Jost", "Futura", system-ui, sans-serif;
 
-  --radius-card: 28px;
-  --radius-blob: 48px;
+  /* Spacing — LiftKit golden-ratio scale. Only these seven values; numeric utilities are off. */
+  --spacing: initial;
+  --spacing-0: 0px;
+  --spacing-2xs: calc(1rem / 1.618 / 1.618 / 1.618); /*  4.2 px */
+  --spacing-xs: calc(1rem / 1.618 / 1.618);          /*  6.9 px */
+  --spacing-sm: calc(1rem / 1.618);                  /* 11.1 px */
+  --spacing-md: 1rem;                                /* 18   px */
+  --spacing-lg: calc(1rem * 1.618);                  /* 29.1 px */
+  --spacing-xl: calc(1rem * 1.618 * 1.618);          /* 47.1 px */
+  --spacing-2xl: calc(1rem * 1.618 * 1.618 * 1.618); /* 76.2 px */
+  --spacing-3xl: calc(1rem * 1.618 * 1.618 * 1.618 * 1.618); /* 123 px */
 
-  --shadow-soft: 0 1px 2px rgb(43 27 20 / 0.04), 0 8px 24px -8px rgb(43 27 20 / 0.12);
-  --shadow-lift: 0 2px 4px rgb(43 27 20 / 0.05), 0 24px 48px -16px rgb(43 27 20 / 0.28);
-  --shadow-polaroid: 0 1px 1px rgb(43 27 20 / 0.08), 0 12px 30px -10px rgb(43 27 20 / 0.35);
+  /* Shape — 4 px corners everywhere, no shadows except the open sheet. */
+  --radius-*: initial;
+  --radius: 4px;
+  --shadow-*: initial;
+  --shadow-sheet: 0 24px 48px -16px rgb(62 42 33 / 0.25);
+  --animate-*: initial;
+  --animate-toast: toast-in 200ms ease-out;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  --ease-standard: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
-
-  --animate-marquee: marquee var(--marquee-duration, 30s) linear infinite;
-  --animate-wiggle: wiggle 0.5s var(--ease-out-soft);
-
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes wiggle {
-    0%, 100% { transform: rotate(0); }
-    25% { transform: rotate(-12deg) scale(1.1); }
-    60% { transform: rotate(8deg) scale(1.05); }
+  @keyframes toast-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 }
 
 @layer base {
+  :root { font-size: 18px; }
+  @media (max-width: 767px) { :root { font-size: 17px; } }
+
   html {
     -webkit-text-size-adjust: 100%;
-    scroll-padding-top: 96px;
+    scroll-padding-top: calc(64px + var(--spacing-md));
+    scroll-behavior: smooth;
   }
   body {
-    background: var(--color-cream);
+    background: var(--color-butter);
     color: var(--color-cocoa);
-    font-family: var(--font-sans);
+    font-family: var(--font-voice);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.618;
+    letter-spacing: -0.011em;
+    font-variant-numeric: lining-nums;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
   }
-  h1, h2, h3, .font-display {
-    font-family: var(--font-display);
-    font-variation-settings: "SOFT" 100, "opsz" 96;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-  }
+  h1, h2, h3, h4 { font-weight: 600; text-wrap: balance; }
   p { text-wrap: pretty; }
-  ::selection { background: var(--color-blush); color: var(--color-berry-deep); }
-  :focus-visible {
-    outline: 2.5px solid var(--color-berry);
-    outline-offset: 3px;
-    border-radius: 10px;
-  }
+  em, i { font-style: italic; font-weight: 500; }
+  ::selection { background: var(--color-rose); color: var(--color-cocoa); }
+  :focus-visible { outline: 2px solid var(--color-cocoa); outline-offset: 2px; border-radius: var(--radius); }
   img { user-select: none; -webkit-user-drag: none; }
-  button, a, [role='button'] { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  button, a, [role='button'], label[for], summary { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   button:disabled { cursor: not-allowed; }
-  input, textarea, select { font: inherit; }
+  input, textarea, select, button { font: inherit; font-variant-numeric: inherit; color: inherit; }
 }
 
-@layer utilities {
-  .eyebrow {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-  .container-x {
-    width: 100%;
-    max-width: 1280px;
-    margin-inline: auto;
-    padding-inline: max(20px, env(safe-area-inset-left));
-  }
-  @media (min-width: 768px) {
-    .container-x { padding-inline: 40px; }
-  }
-  .no-scrollbar { scrollbar-width: none; }
-  .no-scrollbar::-webkit-scrollbar { display: none; }
-  .pb-safe { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
-  .text-shadow-soft { text-shadow: 0 2px 24px rgb(43 27 20 / 0.35); }
-  .polaroid {
-    background: var(--color-paper);
-    padding: 10px 10px 36px;
-    border-radius: 6px;
-    box-shadow: var(--shadow-polaroid);
-  }
-}
+/* ---------- Type scale: LiftKit sizes × brand fonts (base 18 px) ---------- */
+@utility t-display { font-family: var(--font-voice); font-weight: 600; font-size: 2.618rem; line-height: 1.272; letter-spacing: -0.022em; font-variant-numeric: lining-nums; }
+@utility t-title1 { font-family: var(--font-voice); font-weight: 600; font-size: 2.058rem; line-height: 1.272; letter-spacing: -0.022em; font-variant-numeric: lining-nums; }
+@utility t-title2 { font-family: var(--font-voice); font-weight: 600; font-size: 1.618rem; line-height: 1.272; letter-spacing: -0.02em; font-variant-numeric: lining-nums; }
+@utility t-title3 { font-family: var(--font-voice); font-weight: 600; font-size: 1.272rem; line-height: 1.272; letter-spacing: -0.017em; font-variant-numeric: lining-nums; }
+@utility t-heading { font-family: var(--font-voice); font-weight: 600; font-size: 1.128rem; line-height: 1.272; letter-spacing: -0.014em; font-variant-numeric: lining-nums; }
+@utility t-oneliner { font-family: var(--font-voice); font-style: italic; font-weight: 500; font-size: 1.056rem; line-height: 1.4; letter-spacing: 0; font-variant-numeric: lining-nums; }
+@utility t-body { font-family: var(--font-voice); font-style: normal; font-weight: 500; font-size: 1rem; line-height: 1.618; letter-spacing: -0.011em; font-variant-numeric: lining-nums; }
+@utility t-callout { font-family: var(--font-voice); font-style: normal; font-weight: 500; font-size: 0.9425rem; line-height: 1.272; letter-spacing: -0.009em; font-variant-numeric: lining-nums; }
+@utility t-caption { font-family: var(--font-voice); font-style: italic; font-weight: 500; font-size: max(13px, 0.786rem); line-height: 1.272; letter-spacing: -0.007em; font-variant-numeric: lining-nums; }
+@utility t-price { font-family: var(--font-label); font-style: normal; font-weight: 500; font-size: 0.8356rem; line-height: 1.272; letter-spacing: 0; font-variant-numeric: tabular-nums lining-nums; }
+@utility t-button { font-family: var(--font-label); font-style: normal; font-weight: 500; font-size: max(12px, 0.697rem); line-height: 1; letter-spacing: 0.16em; text-transform: uppercase; }
+@utility t-price-sm { font-family: var(--font-label); font-style: normal; font-weight: 500; font-size: 13px; line-height: 1.272; letter-spacing: 0; font-variant-numeric: tabular-nums lining-nums; }
+@utility t-label { font-family: var(--font-label); font-style: normal; font-weight: 500; font-size: max(11px, 0.618rem); line-height: 1.272; letter-spacing: 0.2em; text-transform: uppercase; }
 
-/* Paper grain — fixed, non-interactive, very subtle */
-.grain {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  opacity: 0.07;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.17 0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* ---------- Layout ---------- */
+@utility container-x {
+  width: 100%;
+  max-width: 1257px;
+  margin-inline: auto;
+  padding-inline: max(var(--spacing-md), env(safe-area-inset-left), env(safe-area-inset-right));
+  @media (width >= 1024px) { padding-inline: 4.235rem; }
 }
+@utility section-default { padding-block: 1.618rem; @media (width >= 1024px) { padding-block: 4.235rem; } }
+@utility section-more { padding-block: 4.235rem; @media (width >= 1024px) { padding-block: 6.852rem; } }
+@utility section-most { padding-block: 6.852rem; @media (width >= 1024px) { padding-block: 11.087rem; } }
 
-/* Lenis */
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-stopped { overflow: hidden; }
+/* ---------- Controls ---------- */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  min-height: 44px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: max(12px, 0.697rem);
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  &:disabled { opacity: 0.5; }
+}
+@utility btn-claret {
+  background: var(--color-claret);
+  color: var(--color-butter);
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--color-claret), #000 6%); }
+}
+@utility btn-cocoa {
+  background: var(--color-cocoa);
+  color: var(--color-butter);
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--color-cocoa), #000 6%); }
+}
+@utility btn-ghost {
+  background: transparent;
+  color: var(--color-cocoa);
+  border-color: var(--color-cocoa-15);
+  &:hover:not(:disabled) { background: rgb(62 42 33 / 0.06); }
+}
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  min-height: 44px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-cocoa-15);
+  background: var(--color-butter);
+  color: var(--color-cocoa);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: max(12px, 0.697rem);
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  &:hover { background: rgb(62 42 33 / 0.06); }
+}
+@utility chip-on {
+  background: var(--color-cocoa);
+  border-color: var(--color-cocoa);
+  color: var(--color-butter);
+  &:hover { background: color-mix(in srgb, var(--color-cocoa), #000 6%); }
+}
+@utility field {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-cocoa-15);
+  background: var(--color-butter);
+  color: var(--color-cocoa);
+  font-family: var(--font-voice);
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.4;
+  &::placeholder { color: var(--color-cocoa-70); opacity: 1; }
+  &:focus { border-color: var(--color-cocoa); outline: none; }
+}
+@utility link {
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+  &:hover { text-decoration: underline; }
+}
+/* ---------- The only motion: one entry fade per section, and the user-opened sheet ---------- */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 400ms var(--ease-out), transform 400ms var(--ease-out);
+  &.reveal-in { opacity: 1; transform: none; }
+}
+@utility sheet { transition: transform 320ms var(--ease-out), opacity 200ms ease; }
+@utility sheet-from-right { transform: translateX(100%); &.sheet-shown { transform: none; } }
+@utility sheet-from-bottom { transform: translateY(100%); &.sheet-shown { transform: none; } }
+@utility sheet-from-center { opacity: 0; transform: translateY(12px); &.sheet-shown { opacity: 1; transform: none; } }
+@utility mat { background: var(--color-rose); padding: var(--spacing-sm); border-radius: var(--radius); }
+@utility no-scrollbar { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+@utility pb-safe { padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom)); }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

@@ -4,8 +4,8 @@ import { buildStripeForm, parseCheckoutRequest } from './checkoutRequest';
 const now = new Date(Date.UTC(2026, 8, 17, 8, 0)); // 12:00 in Dubai
 const valid = {
   ref: 'BB-260917-AB12',
-  lines: [{ productId: 'berry-chocolate-drip', sizeId: 'classic', flavourId: 'dark', qty: 1, message: 'Hi' }],
-  zoneId: 'downtown',
+  lines: [{ productId: 'berry-chocolate-drip', sizeId: '6in', flavourId: 'dark', qty: 1, message: 'Hi' }],
+  zoneId: 'dubai',
   date: '2026-09-18',
   slotId: 'evening',
   customer: { name: 'Sara', phone: '0501234567', email: 'sara@example.com', address: 'Tower 1, 1204', notes: '' },
@@ -24,6 +24,7 @@ describe('parseCheckoutRequest', () => {
       { ...valid, lines: [{ ...valid.lines[0], sizeId: 'free' }] },
       { ...valid, lines: [{ ...valid.lines[0], qty: -1 }] },
       { ...valid, zoneId: 'moon' },
+      { ...valid, zoneId: 'downtown' }, // old zone list is gone
       { ...valid, slotId: 'midnight' },
       { ...valid, date: '2026-09-17' },
       { ...valid, date: 'tomorrow' },
@@ -46,19 +47,20 @@ describe('buildStripeForm', () => {
   it('prices from the catalogue and adds delivery', () => {
     const r = parseCheckoutRequest({ ...valid, lines: [{ ...valid.lines[0], qty: 1 }] }, now);
     if (!r.ok) throw new Error(r.error);
-    const form = buildStripeForm(r.order, 'https://berrybrown.ae');
+    const form = buildStripeForm(r.order, 'https://berrybrown.me');
     expect(form.get('mode')).toBe('payment');
     expect(form.get('line_items[0][price_data][currency]')).toBe('aed');
-    expect(form.get('line_items[0][price_data][unit_amount]')).toBe('29500');
-    expect(form.get('line_items[1][price_data][unit_amount]')).toBe('3000');
+    expect(form.get('line_items[0][price_data][unit_amount]')).toBe('20000');
+    expect(form.get('line_items[0][price_data][product_data][images][0]')).toBeNull(); // placeholder slots send no image
+    expect(form.get('line_items[1][price_data][unit_amount]')).toBe('2000');
     expect(form.get('customer_email')).toBe('sara@example.com');
     expect(form.get('client_reference_id')).toBe('BB-260917-AB12');
-    expect(form.get('success_url')).toBe('https://berrybrown.ae/?order=success&ref=BB-260917-AB12');
-    expect(form.get('cancel_url')).toBe('https://berrybrown.ae/?order=cancelled&ref=BB-260917-AB12');
+    expect(form.get('success_url')).toBe('https://berrybrown.me/?order=success&ref=BB-260917-AB12');
+    expect(form.get('cancel_url')).toBe('https://berrybrown.me/?order=cancelled&ref=BB-260917-AB12');
     expect(form.get('metadata[phone]')).toBe('0501234567');
   });
 
-  it('omits delivery when free', () => {
+  it('omits delivery when free (300 and over)', () => {
     const r = parseCheckoutRequest({ ...valid, lines: [{ ...valid.lines[0], qty: 2 }] }, now);
     if (!r.ok) throw new Error(r.error);
     const form = buildStripeForm(r.order, 'https://x.dev');

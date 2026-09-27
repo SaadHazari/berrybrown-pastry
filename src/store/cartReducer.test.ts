@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { cartReducer, lineKey } from './cartReducer';
 
-const line = { productId: 'berry-chocolate-drip', sizeId: 'classic', flavourId: 'dark', qty: 1 };
+const line = { productId: 'berry-chocolate-drip', sizeId: '6in', flavourId: 'dark', qty: 1 };
 
 describe('cartReducer', () => {
   it('adds a new line with a stable key', () => {

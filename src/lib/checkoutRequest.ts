@@ -105,7 +105,7 @@ export function buildStripeForm(order: ValidOrder, origin: string): URLSearchPar
     f.set(`${p}[price_data][unit_amount]`, String(size.price * 100));
     f.set(`${p}[price_data][product_data][name]`, `${product.name} · ${size.label}`);
     f.set(`${p}[price_data][product_data][description]`, `${flavour.name}${l.message ? ` · Plaque: "${l.message}"` : ''}`);
-    f.set(`${p}[price_data][product_data][images][0]`, new URL(product.image, origin).toString());
+    if (!product.image.placeholder) f.set(`${p}[price_data][product_data][images][0]`, new URL(product.image.src, origin).toString());
     i++;
   }
 

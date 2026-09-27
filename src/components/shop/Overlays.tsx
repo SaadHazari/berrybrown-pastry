@@ -7,7 +7,6 @@ import { useCart } from '../../store/cart';
 import { useUI } from '../../store/ui';
 import { CartDrawer } from './CartDrawer';
 import { Checkout } from './Checkout';
-import { Lightbox } from './Lightbox';
 import { MenuOverlay } from './MenuOverlay';
 import { ProductSheet } from './ProductSheet';
 import { SuccessOverlay } from './SuccessOverlay';
@@ -47,7 +46,7 @@ function useStripeReturn() {
       } else if (status === 'cancelled') {
         open({ kind: 'checkout', notice: 'Payment was cancelled. Nothing was charged, and your bag is still here.' });
       }
-    }, 2600); // after the preloader
+    }, 300);
     return () => window.clearTimeout(t);
   }, [open, clear]);
 }
@@ -61,7 +60,6 @@ export default function Overlays() {
       <CartDrawer />
       <Checkout />
       <SuccessOverlay />
-      <Lightbox />
     </>
   );
 }

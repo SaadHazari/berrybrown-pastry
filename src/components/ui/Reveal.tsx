@@ -1,27 +1,11 @@
-import { motion, useReducedMotion } from 'motion/react';
-import type { ReactNode } from 'react';
-import { ease } from '../../lib/motion';
+import { createElement, type ReactNode } from 'react';
+import { cn } from '../../lib/cn';
+import { useInView } from '../../lib/hooks';
 
-type Props = {
-  children: ReactNode;
-  delay?: number;
-  y?: number;
-  className?: string;
-  as?: 'div' | 'li' | 'section' | 'span';
-};
+type Tag = 'div' | 'section' | 'ul' | 'li' | 'figure';
 
-export function Reveal({ children, delay = 0, y = 28, className, as = 'div' }: Props) {
-  const reduce = useReducedMotion();
-  const Tag = motion[as];
-  return (
-    <Tag
-      className={className}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y, filter: 'blur(6px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, margin: '0px 0px -12% 0px' }}
-      transition={{ duration: 0.8, delay, ease: ease.out }}
-    >
-      {children}
-    </Tag>
-  );
+/** The one allowed motion: a fade-and-rise (opacity 0→1, 12 px, 400 ms, once) on section entry. CSS in index.css. */
+export function Reveal({ children, className, as = 'div' }: { children: ReactNode; className?: string; as?: Tag }) {
+  const [ref, seen] = useInView<HTMLElement>();
+  return createElement(as, { ref, className: cn('reveal', seen && 'reveal-in', className) }, children);
 }

@@ -10,15 +10,17 @@ describe('checkout validation', () => {
     expect(isValidPhone('12345')).toBe(false);
   });
 
-  it('requires area, date and slot for delivery', () => {
-    expect(Object.keys(validateWhen(EMPTY_FORM, '2026-09-18')).sort()).toEqual(['date', 'slotId', 'zoneId']);
-    const ok = { ...EMPTY_FORM, zoneId: 'downtown', date: '2026-09-18', slotId: 'evening' };
+  it('starts with the one Dubai zone and still needs a date and slot', () => {
+    expect(EMPTY_FORM.zoneId).toBe('dubai');
+    expect(Object.keys(validateWhen(EMPTY_FORM, '2026-09-18')).sort()).toEqual(['date', 'slotId']);
+    const ok = { ...EMPTY_FORM, date: '2026-09-18', slotId: 'evening' };
     expect(validateWhen(ok, '2026-09-18')).toEqual({});
     expect(validateWhen({ ...ok, date: '2026-09-17' }, '2026-09-18').date).toBeTruthy();
+    expect(validateWhen({ ...ok, zoneId: '' }, '2026-09-18').zoneId).toBeTruthy();
   });
 
   it('does not need an area or address for pickup', () => {
-    const f = { ...EMPTY_FORM, fulfilment: 'pickup' as const, date: '2026-09-18', slotId: 'morning', customer: { ...EMPTY_FORM.customer, name: 'Sara', phone: '0501234567' } };
+    const f = { ...EMPTY_FORM, fulfilment: 'pickup' as const, zoneId: '', date: '2026-09-18', slotId: 'morning', customer: { ...EMPTY_FORM.customer, name: 'Sara', phone: '0501234567' } };
     expect(validateWhen(f, '2026-09-18')).toEqual({});
     expect(validateDetails(f)).toEqual({});
   });

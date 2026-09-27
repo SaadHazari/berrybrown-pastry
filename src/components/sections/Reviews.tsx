@@ -1,69 +1,86 @@
-import { Pause, Play, Star } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { RATING, REVIEWS } from '../../data/content';
 import { cn } from '../../lib/cn';
-import { Marquee } from '../ui/Marquee';
+import { StarIcon } from '../ui/Icons';
+import { Reveal } from '../ui/Reveal';
 import { SectionHeading } from '../ui/SectionHeading';
 
-const COLORS = ['bg-blush', 'bg-sage-soft', 'bg-oat', 'bg-paper'];
-
-function Bubble({ r, i }: { r: (typeof REVIEWS)[number]; i: number }) {
-  return (
-    <figure className={cn('relative mx-2.5 w-[300px] shrink-0 rounded-[28px] rounded-bl-md p-6 md:w-[380px]', COLORS[i % COLORS.length])}>
-      <div className="flex gap-0.5 text-berry" aria-label="5 stars">
-        {Array.from({ length: 5 }, (_, k) => (
-          <Star key={k} className="size-4 fill-current" />
-        ))}
-      </div>
-      <blockquote className="mt-3 text-[1.05rem] leading-relaxed text-cocoa">“{r.text}”</blockquote>
-      <figcaption className="mt-5 flex items-center gap-3">
-        <span className="grid size-10 place-items-center rounded-full bg-cocoa font-display text-lg text-cream">{r.name[0]}</span>
-        <span className="text-sm">
-          <span className="block font-semibold">{r.name}</span>
-          <span className="text-milk">
-            {r.area} · {r.cake}
-          </span>
-        </span>
-      </figcaption>
-    </figure>
-  );
-}
-
 export function Reviews() {
-  const [offset] = useState(() => Math.floor(Math.random() * REVIEWS.length));
-  const [paused, setPaused] = useState(false);
-  const rotated = [...REVIEWS.slice(offset), ...REVIEWS.slice(0, offset)];
+  const ref = useRef<HTMLUListElement>(null);
+  const [index, setIndex] = useState(0);
+
+  const step = () => {
+    const el = ref.current;
+    const card = el?.firstElementChild as HTMLElement | null;
+    if (!el || !card) return 0;
+    return card.offsetWidth + parseFloat(getComputedStyle(el).columnGap || '0');
+  };
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const on = () => {
+      const s = step();
+      if (s) setIndex(Math.round(el.scrollLeft / s));
+    };
+    el.addEventListener('scroll', on, { passive: true });
+    return () => el.removeEventListener('scroll', on);
+  }, []);
+
+  const go = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * step(), behavior: 'smooth' });
+  const goTo = (i: number) => ref.current?.scrollTo({ left: i * step(), behavior: 'smooth' });
+
   return (
-    <section id="reviews" className="relative py-16 md:py-28" aria-labelledby="reviews-title">
-      <div className="container-x flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <SectionHeading id="reviews-title" kicker="kind words" title="Straight from the table" accent={['table']} />
-        <div className="flex items-center gap-4">
-          <p className="flex items-center gap-2 text-milk">
-            <Star className="size-5 fill-berry text-berry" aria-hidden />
-            <span className="font-display text-3xl text-cocoa">{RATING.score}</span> from {RATING.count}+ reviews
+    <section id="reviews" className="section-more" aria-labelledby="reviews-title">
+      <Reveal className="container-x">
+        <div className="flex flex-wrap items-end justify-between gap-md">
+          <SectionHeading id="reviews-title" title="Kind words" />
+          <p className="t-price">
+            <span className="text-claret">{RATING.score}</span> · {RATING.count}+ reviews
           </p>
-          <button
-            type="button"
-            onClick={() => setPaused((p) => !p)}
-            className="grid size-10 place-items-center rounded-full ring-1 ring-cocoa/15 transition hover:bg-oat motion-reduce:hidden"
-            aria-label={paused ? 'Play scrolling reviews' : 'Pause scrolling reviews'}
-          >
-            {paused ? <Play className="size-4" /> : <Pause className="size-4" />}
+        </div>
+
+        <ul ref={ref} className="no-scrollbar mt-xl flex snap-x snap-mandatory gap-md overflow-x-auto" role="list" aria-label="Customer reviews">
+          {REVIEWS.map((r, i) => (
+            <li key={r.name} className="w-full shrink-0 snap-start md:w-[calc((100%-2*var(--spacing-md))/3)]">
+              <figure className={cn('flex h-full flex-col rounded border border-cocoa-15 p-lg', i % 2 ? 'bg-rose' : 'bg-butter')}>
+                <div className="flex gap-2xs text-cocoa" role="img" aria-label="5 stars">
+                  {Array.from({ length: 5 }, (_, k) => (
+                    <StarIcon key={k} className="size-[12px]" />
+                  ))}
+                </div>
+                <blockquote className="t-body mt-md">“{r.text}”</blockquote>
+                <figcaption className="mt-auto pt-lg">
+                  <span className="t-price block">{r.name}</span>
+                  <span className="t-caption text-cocoa">
+                    {r.area} · {r.cake}
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-lg hidden gap-sm md:flex">
+          <button type="button" onClick={() => go(-1)} className="grid size-[44px] place-items-center rounded border border-cocoa-15 text-cocoa transition-colors hover:bg-cocoa/6" aria-label="Previous reviews">
+            <ArrowLeft className="size-[18px]" strokeWidth={1.6} />
+          </button>
+          <button type="button" onClick={() => go(1)} className="grid size-[44px] place-items-center rounded border border-cocoa-15 text-cocoa transition-colors hover:bg-cocoa/6" aria-label="Next reviews">
+            <ArrowRight className="size-[18px]" strokeWidth={1.6} />
           </button>
         </div>
-      </div>
-      <div className="mt-12 space-y-5 [mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]">
-        <Marquee duration={60} paused={paused}>
-          {rotated.map((r, i) => (
-            <Bubble key={r.name} r={r} i={i} />
+
+        <ol className="mt-md flex justify-center gap-sm md:hidden" aria-label="Review pages">
+          {REVIEWS.map((r, i) => (
+            <li key={r.name}>
+              <button type="button" onClick={() => goTo(i)} className="grid size-[24px] place-items-center" aria-label={`Review ${i + 1}`} aria-current={i === index ? 'true' : undefined}>
+                <span className={cn('block size-[6px] rounded-full', i === index ? 'bg-cocoa' : 'bg-cocoa-15')} />
+              </button>
+            </li>
           ))}
-        </Marquee>
-        <Marquee duration={70} reverse paused={paused} className="hidden md:flex">
-          {[...rotated].reverse().map((r, i) => (
-            <Bubble key={r.name} r={r} i={i + 2} />
-          ))}
-        </Marquee>
-      </div>
+        </ol>
+      </Reveal>
     </section>
   );
 }

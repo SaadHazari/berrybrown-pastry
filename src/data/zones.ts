@@ -6,17 +6,16 @@ export type Zone = {
   pickup?: boolean;
 };
 
+export const DUBAI_ZONE_ID = 'dubai';
 export const PICKUP_ZONE_ID = 'pickup';
 
+/** One Dubai zone: AED 20, free over AED 300. Never a headline — a line in checkout only. */
 export const ZONES: Zone[] = [
-  { id: 'downtown', name: 'Downtown, DIFC & Business Bay', fee: 30, freeOver: 500 },
-  { id: 'marina', name: 'Marina, JBR & Palm', fee: 35, freeOver: 500 },
-  { id: 'jumeirah', name: 'Jumeirah, Umm Suqeim & Al Wasl', fee: 30, freeOver: 500 },
-  { id: 'hills', name: 'Dubai Hills, Barsha & JVC', fee: 35, freeOver: 500 },
-  { id: 'ranches', name: 'Arabian Ranches, Damac Hills & Mudon', fee: 45, freeOver: 650 },
-  { id: 'creek', name: 'Creek Harbour, Festival City & Mirdif', fee: 45, freeOver: 650 },
-  { id: PICKUP_ZONE_ID, name: 'Pickup from our Al Quoz kitchen', fee: 0, freeOver: 0, pickup: true },
+  { id: DUBAI_ZONE_ID, name: 'Dubai', fee: 20, freeOver: 300 },
+  { id: PICKUP_ZONE_ID, name: 'Pickup from the studio', fee: 0, freeOver: 0, pickup: true },
 ];
+
+export const DELIVERY_ZONE = ZONES[0];
 
 export const TIME_SLOTS = [
   { id: 'morning', label: '10am – 1pm' },

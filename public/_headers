@@ -1,10 +1,13 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-/images/*
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/brand/*
   Cache-Control: public, max-age=604800
 
-/videos/*
+/images/*
   Cache-Control: public, max-age=604800
 
 /*

@@ -1,113 +1,156 @@
-import { media } from './media';
+import { media, type Media } from './media';
 
 export const CONTACT = {
-  whatsapp: '971501234567',
-  phoneDisplay: '+971 50 123 4567',
-  email: 'hello@berrybrown.ae',
-  instagram: 'berrybrown.pastry',
-  location: 'Al Quoz, Dubai',
+  whatsapp: '971509478943',
+  phoneDisplay: '+971 50 947 8943',
+  email: 'saad@berrybrown.me',
+  /** Saad to confirm the handle. Blank hides the Follow column in the footer. */
+  instagram: '',
+  /** Saad to confirm the pickup / studio wording. */
+  location: 'Dubai',
   hours: 'Every day · 9am – 9pm',
+  legal: 'Berry Brown is a trading name of Dormers Restaurant L.L.C., Dubai. Trade licence 1433956. Not registered for VAT.',
 };
 
-/** SAMPLE rating — replace with the real Google/Instagram rating before launch. */
-export const RATING = { score: 4.9, count: 260 };
+/** SAMPLE rating — Saad swaps in the real one. */
+export const RATING = { score: 4.9, count: 260, sample: true };
 
-export const MARQUEE_ITEMS = [
-  'Baked to order',
-  '100% Halal',
-  'Chilled delivery across Dubai',
-  'No gelatin',
-  'Real butter, real fruit',
-  'Made with heart, not haste',
-];
-
-/** Rotates per visit — a small "variable reward" for returning visitors. */
-export const OVEN_NOTES = [
-  'Fresh from the oven today: pistachio sponges',
-  'Today in the kitchen: whipping up a berry drip cake',
-  'This week: mangoes are perfect, tarts are back',
-  'Just out: a tray of chocolate sponges cooling',
-];
-
-export const STEPS = [
-  { n: '01', title: 'Pick your cake', text: 'Choose a size and flavour, and add a message.', image: media.gallery.berrySlice },
-  { n: '02', title: 'Choose a day', text: 'We bake it fresh for you, with just 24 hours notice.', image: media.gallery.kneading },
-  { n: '03', title: 'We bring it chilled', text: 'Delivered cold to your door, or picked up in Al Quoz.', image: media.gallery.birthday },
-];
-
-/** SAMPLE numbers — replace with Safa's real figures before launch. */
+/** SAMPLE stats — static Jost numbers, no count-up. */
 export const STATS = [
-  { value: 12, suffix: ' yrs', label: 'baking' },
-  { value: 3400, suffix: '+', label: 'cakes baked' },
-  { value: 100, suffix: '%', label: 'from scratch' },
+  { value: '12 years', sample: true },
+  { value: '3,400+ cakes', sample: true },
+  { value: '100% from scratch', sample: true },
 ];
 
-/** SAMPLE reviews — replace with real customer reviews (with permission) before launch. */
-export const REVIEWS = [
+export type Review = { name: string; area: string; text: string; cake: string; sample: boolean };
+
+/** SAMPLE reviews — replace with real ones (with permission) when Saad sends them. */
+export const REVIEWS: Review[] = [
   {
     name: 'Reem A.',
     area: 'Emirates Hills',
-    text: 'The drip cake was gone in ten minutes. Not too sweet, just perfect. My kids are still talking about it!',
+    text: 'The drip cake was gone in ten minutes. Not too sweet, just right. The kids are still talking about it.',
     cake: 'Berry Chocolate Drip',
+    sample: true,
   },
   {
     name: 'Maya & Alex',
     area: 'Palm Jumeirah',
     text: 'Safa made our wedding cake and it tasted even better than it looked. Every guest asked where it came from.',
-    cake: 'Floral Celebration Cake',
+    cake: 'Custom wedding cake',
+    sample: true,
   },
   {
     name: 'Fatima H.',
     area: 'Downtown',
-    text: 'The pistachio kunafa cake is a dream. Arrived cold and perfect in the middle of August.',
-    cake: 'Pistachio Kunafa Cake',
+    text: 'The pistachio kunafa is a dream. It arrived cold and perfect in the middle of August.',
+    cake: 'Pistachio Kunafa',
+    sample: true,
   },
   {
     name: 'Omar K.',
     area: 'Dubai Hills',
-    text: 'Ordered at night, cake at the door next evening. Easy, friendly, and so good.',
+    text: 'Ordered at night, cake at the door the next evening. Easy, friendly and very good.',
     cake: 'Blueberry Cheesecake',
+    sample: true,
   },
   {
     name: 'Sara M.',
     area: 'JVC',
-    text: 'Feels like a cake your favourite aunt would make, but prettier. We order every birthday now.',
+    text: 'Like a cake your favourite aunt would make, but prettier. We order every birthday now.',
     cake: 'Berry Cream Sponge',
+    sample: true,
   },
 ];
 
 export const FAQS = [
   {
     q: 'How early should I order?',
-    a: 'Most cakes need 24 hours. Tiered celebration cakes need 48 hours, and a week is ideal for weddings.',
+    a: 'The Six need 24 hours. Custom cakes need 48 hours. Two tiers need a week.',
   },
   {
     q: 'How do cakes survive the Dubai heat?',
-    a: 'Every cake is packed with ice packs in an insulated box and driven over chilled. Keep it in the fridge until about 15 minutes before serving.',
+    a: 'Every cake travels with ice packs in an insulated box. Keep it in the fridge until about 15 minutes before serving.',
   },
   {
     q: 'Is everything Halal?',
-    a: 'Yes, 100%. We never use gelatin. We set creams with fruit pectin or agar instead.',
+    a: 'Yes. We never use gelatin. Creams are set with fruit pectin or agar instead.',
   },
   {
     q: 'Can I add a message?',
-    a: 'Yes. Every cake can have a free handwritten chocolate plaque (up to 35 characters).',
+    a: 'Yes. Every cake can carry a hand-piped message of up to 35 characters.',
   },
   {
     q: 'How do I pay?',
     a: 'Pay online by card or Apple Pay, or send your order on WhatsApp and pay by bank transfer or cash on delivery.',
   },
+  {
+    q: 'Do you do corporate orders?',
+    a: 'Yes. Gift boxes from 20, workshops for up to 12, and dessert tables for 40–60. Send the date and headcount and we reply with a quote and an invoice.',
+  },
+  {
+    q: 'How do deposits work?',
+    a: 'Custom cakes, boxes and events are confirmed with a 50% deposit. The rest is due on delivery.',
+  },
 ];
 
-export type GalleryItem = { src: string; alt: string; caption: string; tall?: boolean };
+export type LogEntry = { n: number; for: string; flavour: string; size: string; image: Media; sample: boolean };
 
-export const GALLERY: GalleryItem[] = [
-  { ...media.gallery.rusticCake, tall: true, caption: 'Sunday sugar cake' },
-  { ...media.gallery.berrySlice, tall: true, caption: 'Berry layers' },
-  { ...media.gallery.coffee, caption: 'Coffee break' },
-  { ...media.gallery.tartDisplay, tall: true, caption: 'Tart morning' },
-  { ...media.gallery.pistachioSlice, tall: true, caption: 'Pistachio & raspberry' },
-  { ...media.gallery.kneading, caption: 'Where it starts' },
-  { ...media.gallery.chocolateSlice, tall: true, caption: 'Last slice' },
-  { ...media.gallery.birthday, caption: 'Make a wish' },
+/** The log — numbered real cakes, newest first. SAMPLE entries until real cakes exist. */
+export const LOG: LogEntry[] = [
+  { n: 41, for: "for Ayesha's dad, 60th", flavour: 'Classic chocolate', size: '8"', image: media.log[0], sample: true },
+  { n: 40, for: 'for a baby shower in Jumeirah', flavour: 'Berry cream sponge', size: '6"', image: media.log[1], sample: true },
+  { n: 39, for: "for Lina and Omar's engagement", flavour: 'Pistachio kunafa', size: '8"', image: media.log[2], sample: true },
 ];
+
+export const cakeNumber = (n: number) => `#${String(n).padStart(3, '0')}`;
+
+export type OfferId = 'box' | 'workshop' | 'table';
+export type Offer = { id: OfferId; title: string; text: string; price: string; icon: string };
+
+export const OFFERS: Offer[] = [
+  {
+    id: 'box',
+    title: 'The Box',
+    text: 'Brownies and cookies in a branded sleeve with a hand-written card. Your logo on the sleeve from 50 boxes.',
+    price: '6 pc 65 · 8 pc 90 · 10 pc 120 · min 20',
+    icon: '/brand/berrybrown-circle-cocoa.svg',
+  },
+  {
+    id: 'workshop',
+    title: 'Make one with Safa',
+    text: 'A 90-minute decorating workshop at your venue. Twelve seats, one cake each.',
+    price: 'From 150 per seat · 12 seats',
+    icon: '/brand/berrybrown-circle-rose.svg',
+  },
+  {
+    id: 'table',
+    title: 'The Table',
+    text: 'Minis of the Six for 40–60 guests. Set up, served, cleared.',
+    price: 'From 35 per head',
+    icon: '/brand/berrybrown-circle-cocoa.svg',
+  },
+];
+
+export const isOfferId = (v: string | null): v is OfferId => v === 'box' || v === 'workshop' || v === 'table';
+
+export type Deadline = { label: string; date: string };
+
+/** Corporate order deadlines. Past dates are hidden automatically. */
+export const DEADLINES: Deadline[] = [
+  { label: 'Diwali boxes close', date: '2026-10-20' },
+  { label: 'National Day', date: '2026-11-10' },
+  { label: 'Year-end', date: '2026-11-27' },
+];
+
+const localIso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+export function upcomingDeadlines(now: Date = new Date()): Deadline[] {
+  const today = localIso(now);
+  return DEADLINES.filter((d) => d.date >= today);
+}
+
+export function shortDate(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}

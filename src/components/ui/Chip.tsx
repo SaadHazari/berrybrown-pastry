@@ -1,41 +1,26 @@
-import { motion } from 'motion/react';
 import type { ReactNode } from 'react';
 import { cn } from '../../lib/cn';
-import { spring } from '../../lib/motion';
 
 type Props = {
   selected: boolean;
   onSelect(): void;
   children: ReactNode;
   className?: string;
-  layoutGroup?: string;
-  role?: 'radio' | 'tab';
+  role?: 'radio' | 'button';
 };
 
-/** Selectable pill; the selected background slides between siblings via layoutId. */
-export function Chip({ selected, onSelect, children, className, layoutGroup, role = 'radio' }: Props) {
+/** Rectangle chip, 4 px corners. Selected = Cocoa fill + Butter text; unselected = Butter + hairline. */
+export function Chip({ selected, onSelect, children, className, role = 'radio' }: Props) {
   return (
-    <motion.button
+    <button
       type="button"
-      role={role}
+      role={role === 'radio' ? 'radio' : undefined}
       aria-checked={role === 'radio' ? selected : undefined}
-      aria-selected={role === 'tab' ? selected : undefined}
+      aria-pressed={role === 'button' ? selected : undefined}
       onClick={onSelect}
-      whileTap={{ scale: 0.95 }}
-      className={cn(
-        'relative isolate rounded-full px-4 py-2.5 text-sm font-medium transition-colors duration-300',
-        selected ? 'text-cream' : 'text-cocoa/80 hover:text-cocoa ring-1 ring-inset ring-cocoa/15 hover:ring-cocoa/30',
-        className,
-      )}
+      className={cn('chip', selected && 'chip-on', className)}
     >
-      {selected && (
-        <motion.span
-          layoutId={layoutGroup ? `chip-${layoutGroup}` : undefined}
-          className="absolute inset-0 -z-10 rounded-full bg-cocoa"
-          transition={spring.soft}
-        />
-      )}
       {children}
-    </motion.button>
+    </button>
   );
 }
