@@ -10,7 +10,7 @@ export function Studio() {
   return (
     <section id="studio" className="section-more overflow-clip" aria-labelledby="studio-title">
       <div className="container-x grid items-center gap-2xl md:grid-cols-2">
-        <div className="relative mx-auto w-full max-w-md pb-xl md:max-w-none">
+        <div className="relative mx-auto w-full max-w-[28rem] pb-xl md:max-w-none">
           <Parallax offset={40} rotate={-2} className="relative z-10 w-[82%]">
             <Frame caption={media.studio.hands.label}>
               <Photo media={media.studio.hands} sizes="(min-width: 768px) 40vw, 80vw" />

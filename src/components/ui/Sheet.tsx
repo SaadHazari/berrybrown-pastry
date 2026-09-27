@@ -77,7 +77,7 @@ export function Sheet({ open, onClose, title, hideTitle, variant = 'side', child
   const enter = variant === 'center' ? 'sheet-from-center' : variant === 'full' || bottom ? 'sheet-from-bottom' : 'sheet-from-right';
   const position =
     variant === 'center'
-      ? 'relative m-auto max-h-[90dvh] w-[calc(100%-2*var(--spacing-md))] max-w-lg rounded'
+      ? 'relative m-auto max-h-[90dvh] w-[calc(100%-2*var(--spacing-md))] max-w-[32rem] rounded'
       : variant === 'full'
         ? 'absolute inset-0 md:inset-lg md:rounded'
         : bottom
