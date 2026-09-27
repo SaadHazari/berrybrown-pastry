@@ -1,0 +1,100 @@
+{
+  "brand": "Berry Brown",
+  "edition": "1 · September 2026",
+  "colours": [
+    {
+      "name": "Butter",
+      "hex": "#F6EEDF",
+      "rgb": [
+        246,
+        238,
+        223
+      ],
+      "cmyk_fogra39_approx": [
+        5,
+        6,
+        15,
+        0
+      ],
+      "use": "Background. The page, the box, the card."
+    },
+    {
+      "name": "Cocoa",
+      "hex": "#3E2A21",
+      "rgb": [
+        62,
+        42,
+        33
+      ],
+      "cmyk_fogra39_approx": [
+        31,
+        68,
+        81,
+        85
+      ],
+      "use": "Ink. Lines, text, the name."
+    },
+    {
+      "name": "Rose",
+      "hex": "#E7CFC6",
+      "rgb": [
+        231,
+        207,
+        198
+      ],
+      "cmyk_fogra39_approx": [
+        11,
+        22,
+        21,
+        0
+      ],
+      "use": "Soft background. Panels, stickers, the profile circle."
+    },
+    {
+      "name": "Claret",
+      "hex": "#7A2A3A",
+      "rgb": [
+        122,
+        42,
+        58
+      ],
+      "cmyk_fogra39_approx": [
+        17,
+        94,
+        49,
+        54
+      ],
+      "use": "The berry. One accent, used once per layout."
+    }
+  ],
+  "tints": [
+    {
+      "name": "Cocoa 70%",
+      "value": "#726156",
+      "use": "Second-level text on Butter (contrast 5.1:1)."
+    },
+    {
+      "name": "Cocoa 15%",
+      "value": "rgba(62,42,33,.15)",
+      "use": "Hairlines and dividers only."
+    }
+  ],
+  "ratio_percent": {
+    "Butter": 60,
+    "Cocoa": 25,
+    "Rose": 10,
+    "Claret": 5
+  },
+  "contrast": {
+    "Cocoa on Butter": 11.7,
+    "Cocoa on Rose": 9.1,
+    "Butter on Claret": 8.2,
+    "Butter on Cocoa": 11.7,
+    "Claret on Cocoa (never)": 1.4
+  },
+  "fonts": {
+    "voice": "Alegreya (Medium 500 body, Medium Italic 500 one-liners, SemiBold 600 headings)",
+    "label": "Jost (Medium 500; capitals +0.2em for labels, +0.32em logo line only)",
+    "name": "Logo files only (traced Pony Club lettering). Never typed."
+  }
+}
