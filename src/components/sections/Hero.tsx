@@ -18,12 +18,14 @@ export function Hero() {
   const reduce = useReducedMotion();
   const rise = (i: number) =>
     reduce ? {} : { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.9, delay: 0.1 + i * 0.06, ease: ease.out } };
+  // The logo and the photos are the largest things on first load: they never start invisible, so the page paints them at once.
+  const slide = (i: number) => (reduce ? {} : { initial: { y: 24 }, animate: { y: 0 }, transition: { duration: 0.9, delay: 0.1 + i * 0.06, ease: ease.out } });
 
   return (
     <section id="top" className="relative overflow-clip pb-3xl pt-xl lg:pt-2xl" aria-labelledby="hero-title">
       <div className="container-x grid items-center gap-2xl lg:grid-cols-12">
         <div className="lg:col-span-6">
-          <motion.h1 id="hero-title" {...rise(0)} className="mx-auto w-[280px] md:w-[360px] lg:mx-0 lg:w-[440px]">
+          <motion.h1 id="hero-title" {...slide(0)} className="mx-auto w-[280px] md:w-[360px] lg:mx-0 lg:w-[440px]">
             <img src="/brand/berrybrown-logo-primary.svg" alt="Berry Brown — made with heart, not haste" width={396} height={329} className="h-auto w-full" />
           </motion.h1>
           <motion.p {...rise(1)} className="t-title3 mt-xl">
@@ -55,7 +57,7 @@ export function Hero() {
           </motion.div>
         </div>
 
-        <motion.div {...rise(3)} className="relative lg:col-span-6">
+        <motion.div {...slide(3)} className="relative lg:col-span-6">
           <div aria-hidden className="absolute bottom-[4%] left-[14%] top-[8%] -right-md rounded bg-rose lg:-right-2xl" />
           <Parallax offset={24} className="relative ml-auto w-[88%] max-w-[460px]">
             <Frame caption={media.hero.cake.label} captionClassName="text-right">
