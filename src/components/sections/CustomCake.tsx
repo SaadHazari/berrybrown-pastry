@@ -295,7 +295,7 @@ export function CustomCake() {
 
           <aside className="hidden lg:col-span-5 lg:block" aria-label="Your cake">
             <div className="rounded border border-cocoa-15 p-md lg:sticky lg:top-[calc(64px+var(--spacing-lg))]">
-              <Photo media={media.custom} />
+              <Photo media={media.looks.custom} />
               <h3 className="t-heading mt-md">Your cake</h3>
               <dl className="mt-sm border-t border-cocoa-15">
                 {rows.map((r) => (

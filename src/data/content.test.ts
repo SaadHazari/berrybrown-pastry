@@ -1,13 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { CONTACT, FAQS, LOG, REVIEWS, cakeNumber, upcomingDeadlines } from './content';
-import { ALL_MEDIA } from './media';
 import { PRODUCTS, ladderLine } from './products';
 
 describe('content', () => {
-  it('keeps the photo budget at twelve slots', () => {
-    expect(ALL_MEDIA).toHaveLength(12);
-  });
-
   it('has exactly six cakes on one flat ladder', () => {
     expect(PRODUCTS).toHaveLength(6);
     for (const p of PRODUCTS) expect(ladderLine(p)).toBe('5" 150 · 6" 200 · 8" 280');

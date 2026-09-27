@@ -8,7 +8,7 @@ export function Safa() {
     <section id="safa" className="section-more" aria-labelledby="safa-title">
       <Reveal className="container-x grid gap-xl lg:grid-cols-12 lg:items-center lg:gap-2xl">
         <div className="lg:col-span-5">
-          <Photo media={media.safa} />
+          <Photo media={media.studio.hands} />
         </div>
         <div className="lg:col-span-7">
           <p className="t-label text-cocoa-70">Chef Safa</p>

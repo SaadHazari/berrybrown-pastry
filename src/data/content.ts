@@ -1,4 +1,4 @@
-import { media, type Media } from './media';
+import { LOG_MEDIA, type Media } from './media';
 
 export const CONTACT = {
   whatsapp: '971547944882',
@@ -84,9 +84,9 @@ export type LogEntry = { n: number; for: string; flavour: string; size: string; 
 
 /** The log — numbered real cakes, newest first. SAMPLE entries until real cakes exist. */
 export const LOG: LogEntry[] = [
-  { n: 41, for: "for Ayesha's dad, 60th", flavour: 'Classic chocolate', size: '8"', image: media.log[0], sample: true },
-  { n: 40, for: 'for a baby shower in Jumeirah', flavour: 'Berry cream sponge', size: '6"', image: media.log[1], sample: true },
-  { n: 39, for: "for Lina and Omar's engagement", flavour: 'Pistachio kunafa', size: '8"', image: media.log[2], sample: true },
+  { n: 41, for: "for Ayesha's dad, 60th", flavour: 'Classic chocolate', size: '8"', image: LOG_MEDIA[0], sample: true },
+  { n: 40, for: 'for a baby shower in Jumeirah', flavour: 'Berry cream sponge', size: '6"', image: LOG_MEDIA[1], sample: true },
+  { n: 39, for: "for Lina and Omar's engagement", flavour: 'Pistachio kunafa', size: '8"', image: LOG_MEDIA[2], sample: true },
 ];
 
 export const cakeNumber = (n: number) => `#${String(n).padStart(3, '0')}`;

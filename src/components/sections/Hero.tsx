@@ -31,7 +31,7 @@ export function Hero() {
           </p>
         </div>
         <figure className="md:max-w-[26rem] lg:col-span-5 lg:max-w-none">
-          <Photo media={media.hero} eager />
+          <Photo media={media.hero.cake} eager />
           <figcaption className="t-caption mt-sm text-cocoa-70">
             Cake {cakeNumber(latest.n)} · {latest.for}
           </figcaption>
