@@ -1,23 +1,31 @@
+import { AnimatePresence, motion } from 'motion/react';
+import { Plus } from 'lucide-react';
 import { useId, useState } from 'react';
 import { FAQS } from '../../data/content';
+import { media } from '../../data/media';
 import { cn } from '../../lib/cn';
-import { Reveal } from '../ui/Reveal';
-import { SectionHeading } from '../ui/SectionHeading';
+import { ease, spring } from '../../lib/motion';
+import { Frame } from '../ui/Frame';
+import { Heading } from '../ui/Heading';
+import { Photo } from '../ui/Photo';
 
 export function Faq() {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   const base = useId();
   return (
     <section id="faq" className="section-more" aria-labelledby="faq-title">
-      <Reveal className="container-x grid gap-xl lg:grid-cols-12 lg:gap-2xl">
-        <div className="lg:col-span-4">
-          <SectionHeading id="faq-title" title="Little questions" oneliner="What people ask before they order." />
+      <div className="container-x grid gap-2xl md:grid-cols-[0.8fr_1.2fr] md:gap-3xl">
+        <div>
+          <Heading id="faq-title" label="Good to know" title="Little questions." />
+          <Frame caption={media.faq.label} tilt={-3} className="mt-xl hidden w-[16rem] md:block">
+            <Photo media={media.faq} sizes="260px" />
+          </Frame>
         </div>
-        <ul className="border-t border-cocoa-15 lg:col-span-8" role="list">
+        <ul className="border-y border-cocoa-15">
           {FAQS.map((f, i) => {
             const isOpen = openIdx === i;
             return (
-              <li key={f.q} className="border-b border-cocoa-15">
+              <li key={f.q} className="border-b border-cocoa-15 last:border-b-0">
                 <h3>
                   <button
                     type="button"
@@ -25,24 +33,39 @@ export function Faq() {
                     aria-expanded={isOpen}
                     aria-controls={`${base}-a${i}`}
                     onClick={() => setOpenIdx(isOpen ? null : i)}
-                    className="flex min-h-[56px] w-full items-center justify-between gap-md py-sm text-left"
+                    className="group flex min-h-[56px] w-full items-center justify-between gap-lg py-md text-left"
                   >
-                    <span className="t-heading">{f.q}</span>
-                    <span className={cn('t-price shrink-0 text-[1.2rem] leading-none', isOpen ? 'text-claret' : 'text-cocoa-70')} aria-hidden>
-                      {isOpen ? '×' : '+'}
-                    </span>
+                    <span className={cn('t-title3 transition-colors', isOpen ? 'text-claret' : 'group-hover:text-cocoa-70')}>{f.q}</span>
+                    <motion.span
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      transition={spring.snappy}
+                      className={cn('grid size-[40px] shrink-0 place-items-center rounded-full border transition-colors', isOpen ? 'border-cocoa bg-cocoa text-butter' : 'border-cocoa-15')}
+                    >
+                      <Plus className="size-[16px]" aria-hidden />
+                    </motion.span>
                   </button>
                 </h3>
-                {isOpen && (
-                  <div id={`${base}-a${i}`} role="region" aria-labelledby={`${base}-q${i}`}>
-                    <p className="t-body max-w-[60ch] pb-lg text-cocoa-70">{f.a}</p>
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      id={`${base}-a${i}`}
+                      role="region"
+                      aria-labelledby={`${base}-q${i}`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.4, ease: ease.out }}
+                      className="overflow-hidden"
+                    >
+                      <p className="t-body max-w-[60ch] pb-lg pr-2xl text-cocoa-70">{f.a}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </li>
             );
           })}
         </ul>
-      </Reveal>
+      </div>
     </section>
   );
 }
