@@ -1,63 +1,133 @@
-import { CONTACT } from '../../data/content';
+import { motion, useReducedMotion } from 'motion/react';
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { CONTACT, PHOTO_NOTE } from '../../data/content';
+import { media } from '../../data/media';
 import { cn } from '../../lib/cn';
-import { useInView } from '../../lib/hooks';
+import { ease } from '../../lib/motion';
 import { GENERAL_MESSAGE, whatsappLink } from '../../lib/order';
-import { HeartIcon } from '../ui/Icons';
+import { HeartIcon, InstagramIcon, WhatsAppIcon } from '../ui/Icons';
+import { Photo } from '../ui/Photo';
+
+const LINE1 = ['Made', 'with', 'heart,'];
+const LINE2 = ['not', 'haste.'];
+const TILES = [media.kitchen.layers, media.six[0], media.kitchen.crumb, media.six[2], media.kitchen.flowers, media.six[4]];
+
+/** True while the footer is no taller than the window — only then can it sit under the page and be uncovered. */
+function useFits(ref: RefObject<HTMLElement | null>) {
+  const [fits, setFits] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const check = () => setFits(el.offsetHeight <= window.innerHeight);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    window.addEventListener('resize', check);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', check);
+    };
+  }, [ref]);
+  return fits;
+}
+
+function Column({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div>
+      <p className="t-label text-butter-60">{title}</p>
+      <div className="mt-sm flex flex-col gap-xs">{children}</div>
+    </div>
+  );
+}
 
 export function Footer() {
-  // The heart glow: one 2 s ease from 0.6 to 1.0 when the footer comes into view. No colour change.
-  const [heartRef, seen] = useInView<HTMLSpanElement>('0px');
+  const ref = useRef<HTMLElement>(null);
+  const fits = useFits(ref);
+  const reduce = useReducedMotion();
+  const ig = CONTACT.instagram;
+
   return (
-    <footer className="section-more bg-cocoa text-butter">
-      <div className="container-x">
-        <div className="flex flex-col items-center text-center">
-          <img src="/brand/berrybrown-logo-on-dark.svg" alt="Berry Brown" width={396} height={329} className="w-[180px]" />
-          <p className="t-title3 mt-lg inline-flex items-center gap-sm">
-            Made with heart, not haste.
-            <span ref={heartRef} className={cn('text-rose transition-opacity duration-[2000ms] ease-out', seen ? 'opacity-100' : 'opacity-60')} aria-hidden>
-              <HeartIcon className="size-[0.8em]" />
-            </span>
-          </p>
-        </div>
+    <footer ref={ref} className={cn('relative z-0 bg-cocoa pt-2xl text-butter', fits && 'md:sticky md:bottom-0')}>
+      <div className="container-x pb-[max(var(--spacing-xl),env(safe-area-inset-bottom))]">
+        <h2 className="t-giant">
+          <span className="block">
+            {LINE1.map((w, i) => (
+              <motion.span key={w} className="mr-[0.22em] inline-block" initial={reduce ? false : { y: 60, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true, margin: '-5%' }} transition={{ type: 'spring', stiffness: 120, damping: 16, delay: i * 0.08 }}>
+                {w}
+              </motion.span>
+            ))}
+          </span>
+          <span className="block italic text-rose">
+            {LINE2.map((w, i) => (
+              <motion.span key={w} className="mr-[0.22em] inline-block" initial={reduce ? false : { opacity: 0, filter: 'blur(10px)' }} whileInView={{ opacity: 1, filter: 'blur(0px)' }} viewport={{ once: true, margin: '-5%' }} transition={{ duration: 0.9, delay: 0.35 + i * 0.12, ease: ease.out }}>
+                {w}
+              </motion.span>
+            ))}
+            <motion.span className="inline-block" initial={reduce ? false : { opacity: 0.6 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 2, ease: 'easeOut' }} aria-hidden>
+              <HeartIcon className="size-[0.5em] -translate-y-[0.1em]" />
+            </motion.span>
+          </span>
+        </h2>
 
-        <div className="mt-2xl grid gap-xl border-t border-butter/15 pt-xl md:grid-cols-3">
+        <div className="mt-2xl grid gap-2xl lg:grid-cols-[1fr_1.25fr] lg:items-start">
           <div>
-            <p className="t-label text-butter-60">Order</p>
-            <ul className="mt-sm space-y-xs">
-              <li>
-                <a href={whatsappLink(GENERAL_MESSAGE)} target="_blank" rel="noopener noreferrer" className="link">
-                  WhatsApp {CONTACT.phoneDisplay}
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${CONTACT.email}`} className="link">
-                  {CONTACT.email}
-                </a>
-              </li>
-            </ul>
-          </div>
-          {CONTACT.instagram && (
-            <div>
-              <p className="t-label text-butter-60">Follow</p>
-              <ul className="mt-sm">
-                <li>
-                  <a href={`https://instagram.com/${CONTACT.instagram}`} target="_blank" rel="noopener noreferrer" className="link">
-                    Instagram @{CONTACT.instagram}
+            {ig ? (
+              <a href={`https://instagram.com/${ig}`} target="_blank" rel="noopener noreferrer" className="t-label link inline-flex items-center gap-xs text-butter-60 hover:text-butter">
+                <InstagramIcon className="size-[16px]" /> @{ig} →
+              </a>
+            ) : (
+              <p className="t-label text-butter-60">From the studio</p>
+            )}
+            <div className="mt-md grid grid-cols-3 gap-xs sm:grid-cols-6">
+              {TILES.map((m, i) =>
+                ig ? (
+                  <a key={m.src} href={`https://instagram.com/${ig}`} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded" aria-label={`Instagram post ${i + 1}`}>
+                    <Photo media={m} ratio="1 / 1" zoom sizes="120px" />
                   </a>
-                </li>
-              </ul>
+                ) : (
+                  <div key={m.src} className="overflow-hidden rounded" aria-hidden>
+                    <Photo media={m} ratio="1 / 1" zoom sizes="120px" />
+                  </div>
+                ),
+              )}
             </div>
-          )}
-          <div>
-            <p className="t-label text-butter-60">Studio</p>
-            <ul className="mt-sm space-y-xs">
-              <li>{CONTACT.location}</li>
-              <li>{CONTACT.hours}</li>
-            </ul>
+          </div>
+          <div className="grid grid-cols-2 gap-xl sm:grid-cols-[1.5fr_1fr_1fr]">
+            <Column title="Say hello">
+              <a href={whatsappLink(GENERAL_MESSAGE)} target="_blank" rel="noopener noreferrer" className="t-callout link inline-flex items-center gap-xs" aria-label={`WhatsApp ${CONTACT.phoneDisplay}`}>
+                <WhatsAppIcon className="size-[15px] shrink-0" /> {CONTACT.phoneDisplay}
+              </a>
+              <a href={`mailto:${CONTACT.email}`} className="t-callout link">
+                {CONTACT.email}
+              </a>
+            </Column>
+            <Column title="Find us">
+              <span className="t-callout">{CONTACT.location}</span>
+              <span className="t-callout">{CONTACT.hours}</span>
+            </Column>
+            <Column title="For companies">
+              <a href="#gift-boxes" className="t-callout link">
+                Gift boxes
+              </a>
+              <a href="#workshops" className="t-callout link">
+                Workshops
+              </a>
+              <a href="#events" className="t-callout link">
+                Company events
+              </a>
+            </Column>
           </div>
         </div>
 
-        <p className="t-caption mt-xl text-butter-60">{CONTACT.legal}</p>
+        <div className="mt-2xl flex flex-col gap-lg border-t border-butter/15 pt-lg md:flex-row md:items-end md:justify-between">
+          <div className="space-y-xs">
+            <p className="t-caption text-butter-60">
+              © {new Date().getFullYear()} · {CONTACT.legal}
+            </p>
+            <p className="t-caption text-butter-60">{PHOTO_NOTE}</p>
+          </div>
+          <img src="/brand/berrybrown-logo-on-dark.svg" alt="Berry Brown" width={396} height={329} className="w-[150px] shrink-0" />
+        </div>
       </div>
     </footer>
   );

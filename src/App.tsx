@@ -6,6 +6,7 @@ import { MobileBagBar } from './components/layout/MobileBagBar';
 import { Navbar } from './components/layout/Navbar';
 import { ToastLayer } from './components/layout/ToastLayer';
 import { WhatsAppFab } from './components/layout/WhatsAppFab';
+import { CakeLog } from './components/sections/CakeLog';
 import { Closing } from './components/sections/Closing';
 import { CompanyEvents } from './components/sections/CompanyEvents';
 import { CustomCake } from './components/sections/custom/CustomCake';
@@ -16,7 +17,6 @@ import { HowItWorks } from './components/sections/HowItWorks';
 import { Kitchen } from './components/sections/Kitchen';
 import { Reviews } from './components/sections/Reviews';
 import { Studio } from './components/sections/Studio';
-import { TheLog } from './components/sections/TheLog';
 import { TheSix } from './components/sections/TheSix';
 import { Udora } from './components/sections/Udora';
 import { Workshops } from './components/sections/Workshops';
@@ -48,11 +48,11 @@ export default function App() {
             <Udora />
             <Studio />
             <Kitchen />
-            <TheLog />
             <Reviews />
             <Faq />
             <Closing />
-            <div aria-hidden className="lace-edge absolute inset-x-0 top-full" />
+            <CakeLog />
+            <div id="page-end" aria-hidden className="lace-edge absolute inset-x-0 top-full" />
           </main>
           <Footer />
           <MobileBagBar />

@@ -9,13 +9,14 @@ import { useCart } from '../../store/cart';
 import { useUI } from '../../store/ui';
 import { WhatsAppIcon } from '../ui/Icons';
 
-/** Cocoa WhatsApp button. Shows once the hero has gone; hides over the custom form on small screens and under overlays. */
+/** Cocoa WhatsApp button. Shows once the hero has gone; hides over the footer, over the custom form on small screens and under overlays. */
 export function WhatsAppFab() {
   const { overlay } = useUI();
   const { count } = useCart();
   const wide = useIsWide();
   const [pastHero, setPastHero] = useState(false);
   const [overForm, setOverForm] = useState(false);
+  const [overFooter, setOverFooter] = useState(false);
 
   useEffect(() => {
     if (!('IntersectionObserver' in window)) {
@@ -35,7 +36,30 @@ export function WhatsAppFab() {
     return () => io.disconnect();
   }, []);
 
-  const visible = pastHero && overlay === null && (wide || !overForm);
+  // The footer has its own WhatsApp link, so the button steps aside once the page's lace edge (the end of <main>)
+  // is on screen. A scroll listener, not an observer: the footer sits pinned behind the page, and jumps skip thin targets.
+  useEffect(() => {
+    const end = document.getElementById('page-end');
+    if (!end) return;
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      setOverFooter(end.getBoundingClientRect().top < window.innerHeight);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const visible = pastHero && !overFooter && overlay === null && (wide || !overForm);
   return (
     <AnimatePresence>
       {visible && (
