@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { STEPS } from '../../data/content';
 import { useIsWide } from '../../lib/hooks';
 import { ease } from '../../lib/motion';
@@ -9,8 +9,9 @@ import { Rise } from '../ui/Rise';
 
 const TILTS = [-2, 1.5, -1];
 
-/** A hand-drawn arrow that draws itself once it scrolls into view. */
+/** A hand-drawn arrow that draws itself once it scrolls into view. Drawn in full with reduced motion. */
 function Arrow() {
+  const reduce = useReducedMotion();
   return (
     <svg viewBox="0 0 120 40" className="h-[32px] w-[96px] text-cocoa-70" fill="none" aria-hidden>
       <motion.path
@@ -19,7 +20,7 @@ function Arrow() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        initial={{ pathLength: 0 }}
+        initial={reduce ? false : { pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1.2, delay: 0.4, ease: ease.smooth }}
@@ -30,6 +31,7 @@ function Arrow() {
 
 export function HowItWorks() {
   const wide = useIsWide();
+  const reduce = useReducedMotion();
   return (
     <section id="how" className="section-more" aria-labelledby="how-title">
       <div className="container-x">
@@ -60,7 +62,7 @@ export function HowItWorks() {
               <li key={s.n} className="sticky pb-md" style={{ top: `${72 + i * 18}px` }}>
                 <motion.div
                   className="overflow-hidden rounded border border-cocoa-15 bg-butter shadow-frame"
-                  initial={{ opacity: 0, y: 40, scale: 0.96 }}
+                  initial={reduce ? false : { opacity: 0, y: 40, scale: 0.96 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: '-10% 0px' }}
                   transition={{ duration: 0.7, ease: ease.out }}
