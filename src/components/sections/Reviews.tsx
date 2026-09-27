@@ -1,12 +1,14 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { RATING, REVIEWS } from '../../data/content';
+import { RATING } from '../../data/content';
+import { useReviews } from '../../lib/live';
 import { cn } from '../../lib/cn';
 import { StarIcon } from '../ui/Icons';
 import { Reveal } from '../ui/Reveal';
 import { SectionHeading } from '../ui/SectionHeading';
 
 export function Reviews() {
+  const reviews = useReviews();
   const ref = useRef<HTMLUListElement>(null);
   const [index, setIndex] = useState(0);
 
@@ -42,8 +44,8 @@ export function Reviews() {
         </div>
 
         <ul ref={ref} className="no-scrollbar mt-xl flex snap-x snap-mandatory gap-md overflow-x-auto" role="list" aria-label="Customer reviews">
-          {REVIEWS.map((r, i) => (
-            <li key={r.name} className="w-full shrink-0 snap-start md:w-[calc((100%-2*var(--spacing-md))/3)]">
+          {reviews.map((r, i) => (
+            <li key={`${r.name}-${i}`} className="w-full shrink-0 snap-start md:w-[calc((100%-2*var(--spacing-md))/3)]">
               <figure className={cn('flex h-full flex-col rounded border border-cocoa-15 p-lg', i % 2 ? 'bg-rose' : 'bg-butter')}>
                 <div className="flex gap-2xs text-cocoa" role="img" aria-label="5 stars">
                   {Array.from({ length: 5 }, (_, k) => (
@@ -72,8 +74,8 @@ export function Reviews() {
         </div>
 
         <ol className="mt-md flex justify-center gap-sm md:hidden" aria-label="Review pages">
-          {REVIEWS.map((r, i) => (
-            <li key={r.name}>
+          {reviews.map((r, i) => (
+            <li key={`${r.name}-${i}`}>
               <button type="button" onClick={() => goTo(i)} className="grid size-[24px] place-items-center" aria-label={`Review ${i + 1}`} aria-current={i === index ? 'true' : undefined}>
                 <span className={cn('block size-[6px] rounded-full', i === index ? 'bg-cocoa' : 'bg-cocoa-15')} />
               </button>

@@ -10,10 +10,13 @@
     // Only the API goes through the Worker; everything else is served straight from assets.
     "run_worker_first": ["/api/*"]
   },
-  // Inspiration photos for the custom-cake form. Create the bucket once before deploying:
-  //   npx wrangler r2 bucket create berrybrown-inspiration
-  //   npx wrangler r2 bucket lifecycle add berrybrown-inspiration expire-30d --expire-days 30 -y
-  "r2_buckets": [{ "binding": "INSPIRATION", "bucket_name": "berrybrown-inspiration" }],
+  "vars": {
+    // Public. The secret key is NOT here — see the secrets below.
+    "SUPABASE_URL": "https://ylrqmwfnelwqbychdpfb.supabase.co"
+  },
   "observability": { "enabled": true }
-  // Secret (set once): npx wrangler secret put STRIPE_SECRET_KEY
+  // Secrets (set once each, or in the dashboard under Settings → Variables and Secrets):
+  //   npx wrangler secret put STRIPE_SECRET_KEY        sk_live_… (use sk_test_… first)
+  //   npx wrangler secret put STRIPE_WEBHOOK_SECRET    whsec_… from the Stripe webhook for https://berrybrown.me/api/stripe/webhook
+  //   npx wrangler secret put SUPABASE_SECRET_KEY      sb_secret_… from Supabase → Project Settings → API keys
 }

@@ -20,7 +20,7 @@ import {
   type CustomForm,
 } from '../../data/custom';
 import { media } from '../../data/media';
-import { uploadInspiration } from '../../lib/api';
+import { recordEnquiry, uploadInspiration } from '../../lib/api';
 import { cn } from '../../lib/cn';
 import { aed, prettyDate } from '../../lib/format';
 import { ACCEPTED_INPUT } from '../../lib/image';
@@ -145,7 +145,9 @@ export function CustomCake() {
         unsent = shots.length;
       }
     }
-    const link = whatsappLink(customCakeMessage(form, urls, unsent));
+    const message = customCakeMessage(form, urls, unsent);
+    const link = whatsappLink(message);
+    recordEnquiry({ kind: 'custom', answers: { ...form }, fromPrice: price, photos: urls, message });
     if (popup) popup.location.href = link;
     else if (shots.length) window.location.assign(link);
     else window.open(link, '_blank', 'noopener,noreferrer');

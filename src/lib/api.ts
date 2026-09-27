@@ -52,3 +52,27 @@ export async function uploadInspiration(files: File[]): Promise<string[]> {
   if (!res.ok || !data.urls?.length) throw new Error(data.error ?? `Upload failed (${res.status})`);
   return data.urls;
 }
+
+/** Fire-and-forget POST that survives the tab navigating away (keepalive). Never throws. */
+function record(path: string, body: unknown): void {
+  try {
+    void fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      keepalive: true,
+    }).catch(() => undefined);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Saves a WhatsApp order to Supabase the moment the customer taps "Order on WhatsApp". */
+export const recordOrder = (body: CheckoutRequest) => record('/api/orders', body);
+
+export type EnquiryBody =
+  | { kind: 'custom'; answers: Record<string, string>; fromPrice: number; photos: string[]; message: string }
+  | { kind: 'company'; about: string | null; message: string };
+
+/** Saves a custom-cake send or a company enquiry to Supabase. */
+export const recordEnquiry = (body: EnquiryBody) => record('/api/enquiries', body);

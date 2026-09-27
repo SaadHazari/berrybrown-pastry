@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CONTACT, OFFERS, isOfferId, shortDate, upcomingDeadlines, type OfferId } from '../../data/content';
 import { cn } from '../../lib/cn';
+import { recordEnquiry } from '../../lib/api';
 import { enquiryMessage, whatsappLink } from '../../lib/order';
 import { ButtonLink } from '../ui/Button';
 import { Reveal } from '../ui/Reveal';
@@ -44,7 +45,13 @@ export function Companies() {
         </ul>
 
         <div className="mt-xl flex flex-wrap items-center gap-md md:gap-lg">
-          <ButtonLink variant="claret" href={whatsappLink(enquiryMessage(about))} target="_blank" rel="noopener noreferrer">
+          <ButtonLink
+            variant="claret"
+            href={whatsappLink(enquiryMessage(about))}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => recordEnquiry({ kind: 'company', about, message: enquiryMessage(about) })}
+          >
             Enquire on WhatsApp
           </ButtonLink>
           <a href={`mailto:${CONTACT.email}?subject=${encodeURIComponent(selected ? `${selected.title} enquiry` : 'Company enquiry')}`} className="t-body link">

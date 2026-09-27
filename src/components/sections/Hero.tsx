@@ -1,13 +1,14 @@
 import { ArrowRight } from 'lucide-react';
-import { LOG, RATING, cakeNumber } from '../../data/content';
+import { RATING, cakeNumber } from '../../data/content';
 import { media } from '../../data/media';
+import { useLog } from '../../lib/live';
 import { ButtonLink } from '../ui/Button';
 import { StarIcon } from '../ui/Icons';
 import { Photo } from '../ui/Photo';
 import { Reveal } from '../ui/Reveal';
 
 export function Hero() {
-  const latest = LOG[0];
+  const latest = useLog()[0];
   return (
     <section id="top" className="section-most" aria-labelledby="hero-title">
       <Reveal className="container-x grid gap-xl lg:grid-cols-12 lg:items-center">

@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useState, type ReactNode } from 'react';
 import { DELIVERY_ZONE, DUBAI_ZONE_ID, PICKUP_ZONE_ID, TIME_SLOTS } from '../../data/zones';
-import { createCheckoutSession, CheckoutError } from '../../lib/api';
+import { createCheckoutSession, CheckoutError, recordOrder } from '../../lib/api';
 import { EMPTY_FORM, loadForm, normalisePhone, saveForm, savePending, validateDetails, validateWhen, type CheckoutForm, type StepErrors } from '../../lib/checkoutState';
 import { cn } from '../../lib/cn';
 import { aed, prettyDate } from '../../lib/format';
@@ -125,8 +125,10 @@ export function Checkout() {
 
   const sendWhatsApp = () => {
     const ref = orderRef();
-    const url = whatsappLink(whatsappOrderText(summary(ref, false)));
+    const s = summary(ref, false);
+    const url = whatsappLink(whatsappOrderText(s));
     window.open(url, '_blank', 'noopener');
+    recordOrder({ ref, lines: s.lines, zoneId, date: s.date, slotId: s.slotId, customer: s.customer });
     clear();
     saveForm(EMPTY_FORM);
     open({ kind: 'success', ref, paid: false, whatsappUrl: url });
