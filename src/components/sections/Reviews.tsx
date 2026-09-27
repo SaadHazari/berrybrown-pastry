@@ -2,6 +2,7 @@ import { Pause, Play } from 'lucide-react';
 import { useState } from 'react';
 import { RATING, type Review } from '../../data/content';
 import { cn } from '../../lib/cn';
+import { fillRow } from '../../lib/fillRow';
 import { useReviews } from '../../lib/live';
 import { DriftRow } from '../ui/DriftRow';
 import { Heading } from '../ui/Heading';
@@ -40,7 +41,8 @@ export function Reviews() {
   const [offset] = useState(() => Math.floor(Math.random() * 5));
   const [paused, setPaused] = useState(false);
   const start = offset % reviews.length;
-  const rotated = [...reviews.slice(start), ...reviews.slice(0, start)];
+  // At least 8 cards per copy (about 3,200 px), so the drift never shows a gap, even with one real review.
+  const rotated = fillRow([...reviews.slice(start), ...reviews.slice(0, start)], 8);
 
   return (
     <section id="reviews" className="section-more overflow-clip" aria-labelledby="reviews-title">
