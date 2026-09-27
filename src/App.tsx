@@ -7,15 +7,18 @@ import { Navbar } from './components/layout/Navbar';
 import { ToastLayer } from './components/layout/ToastLayer';
 import { WhatsAppFab } from './components/layout/WhatsAppFab';
 import { Closing } from './components/sections/Closing';
-import { Companies } from './components/sections/Companies';
+import { CompanyEvents } from './components/sections/CompanyEvents';
 import { CustomCake } from './components/sections/custom/CustomCake';
 import { Faq } from './components/sections/Faq';
+import { GiftBoxes } from './components/sections/GiftBoxes';
 import { Hero } from './components/sections/Hero';
 import { HowItWorks } from './components/sections/HowItWorks';
 import { Reviews } from './components/sections/Reviews';
 import { Safa } from './components/sections/Safa';
 import { TheLog } from './components/sections/TheLog';
 import { TheSix } from './components/sections/TheSix';
+import { Udora } from './components/sections/Udora';
+import { Workshops } from './components/sections/Workshops';
 import { SprigDefs } from './components/ui/Sprig';
 import { CartProvider } from './store/cart';
 import { UIProvider } from './store/ui';
@@ -38,7 +41,10 @@ export default function App() {
             <TheSix />
             <CustomCake />
             <HowItWorks />
-            <Companies />
+            <GiftBoxes />
+            <Workshops />
+            <CompanyEvents />
+            <Udora />
             <Safa />
             <TheLog />
             <Reviews />

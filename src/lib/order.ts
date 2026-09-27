@@ -1,4 +1,4 @@
-import { CONTACT, OFFERS, type OfferId } from '../data/content';
+import { CONTACT } from '../data/content';
 import { BOX, EVENTS, WORKSHOP, type QuoteAbout } from '../data/companies';
 import type { QuoteForm } from '../data/quote';
 import { CUSTOMISED, CUSTOM_FLAVOUR_ADD, customFromPrice, customSummary, type CustomForm } from '../data/custom';
@@ -80,18 +80,6 @@ export function customCakeMessage(f: CustomForm, photoUrls: string[] = [], unsen
     '',
     ...photoUrls.map((u) => `Inspiration: ${u}`),
     unsentPhotos > 0 ? "I'll send my inspiration photos here." : '',
-  ]);
-}
-
-/** The message behind ENQUIRE in "For companies and events" (§4.6). */
-export function enquiryMessage(about: OfferId | null): string {
-  const offer = about ? OFFERS.find((o) => o.id === about) : undefined;
-  return tidy([
-    offer ? `${GREETING} I'd like to ask about ${offer.title}.` : `${GREETING} I'd like to ask about an order for my company.`,
-    '',
-    'Company:',
-    'Date:',
-    'Headcount:',
   ]);
 }
 

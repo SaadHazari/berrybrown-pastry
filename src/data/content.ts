@@ -91,55 +91,6 @@ export const LOG: LogEntry[] = [
 
 export const cakeNumber = (n: number) => `#${String(n).padStart(3, '0')}`;
 
-export type OfferId = 'box' | 'workshop' | 'table';
-export type Offer = { id: OfferId; title: string; text: string; price: string; icon: string };
-
-export const OFFERS: Offer[] = [
-  {
-    id: 'box',
-    title: 'The Box',
-    text: 'Brownies and cookies in a branded sleeve with a hand-written card. Your logo on the sleeve from 50 boxes.',
-    price: '6 pc 65 · 8 pc 90 · 10 pc 120 · min 20',
-    icon: '/brand/berrybrown-circle-cocoa.svg',
-  },
-  {
-    id: 'workshop',
-    title: 'Make one with us',
-    text: 'A 90-minute decorating workshop at your venue. Twelve seats, one cake each.',
-    price: 'From 150 per seat · 12 seats',
-    icon: '/brand/berrybrown-circle-rose.svg',
-  },
-  {
-    id: 'table',
-    title: 'The Table',
-    text: 'Minis of the Six for 40–60 guests. Set up, served, cleared.',
-    price: 'From 35 per head',
-    icon: '/brand/berrybrown-circle-cocoa.svg',
-  },
-];
-
-export const isOfferId = (v: string | null): v is OfferId => v === 'box' || v === 'workshop' || v === 'table';
-
-export type Deadline = { label: string; date: string };
-
-/** Corporate order deadlines. Past dates are hidden automatically. */
-export const DEADLINES: Deadline[] = [
-  { label: 'Diwali boxes close', date: '2026-10-20' },
-  { label: 'National Day', date: '2026-11-10' },
-  { label: 'Year-end', date: '2026-11-27' },
-];
-
-const localIso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-
-export function upcomingDeadlines(now: Date = new Date()): Deadline[] {
-  const today = localIso(now);
-  return DEADLINES.filter((d) => d.date >= today);
-}
-
-export function shortDate(iso: string): string {
-  const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-}
 
 export type Step = { n: string; title: string; text: string; image: Media };
 

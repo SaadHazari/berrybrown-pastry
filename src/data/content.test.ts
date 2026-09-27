@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CONTACT, FAQS, LOG, REVIEWS, cakeNumber, upcomingDeadlines } from './content';
+import { CONTACT, FAQS, LOG, REVIEWS, cakeNumber } from './content';
 import { PRODUCTS, ladderLine } from './products';
 
 describe('content', () => {
@@ -11,12 +11,6 @@ describe('content', () => {
   it('numbers cakes with three digits, newest first', () => {
     expect(cakeNumber(41)).toBe('#041');
     expect(LOG[0].n).toBeGreaterThan(LOG[1].n);
-  });
-
-  it('hides deadlines that have passed', () => {
-    expect(upcomingDeadlines(new Date(2026, 8, 27)).map((d) => d.label)).toEqual(['Diwali boxes close', 'National Day', 'Year-end']);
-    expect(upcomingDeadlines(new Date(2026, 9, 21)).map((d) => d.label)).toEqual(['National Day', 'Year-end']);
-    expect(upcomingDeadlines(new Date(2026, 11, 1))).toEqual([]);
   });
 
   it('uses the studio contact details', () => {

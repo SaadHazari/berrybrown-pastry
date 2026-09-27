@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CUSTOMISED, EMPTY_CUSTOM } from '../data/custom';
 import { EMPTY_QUOTE } from '../data/quote';
-import { GENERAL_MESSAGE, customCakeMessage, enquiryMessage, mailtoLink, orderRef, quoteMessage, whatsappLink, whatsappOrderText } from './order';
+import { GENERAL_MESSAGE, customCakeMessage, mailtoLink, orderRef, quoteMessage, whatsappLink, whatsappOrderText } from './order';
 
 describe('order', () => {
   it('formats an order reference', () => {
@@ -95,16 +95,6 @@ describe('customCakeMessage', () => {
   it('adds inspiration links, or asks to send photos in WhatsApp', () => {
     expect(customCakeMessage(form, ['https://x/1.jpg', 'https://x/2.jpg']).match(/Inspiration: https:/g)).toHaveLength(2);
     expect(customCakeMessage(form, [], 3)).toContain("I'll send my inspiration photos here.");
-  });
-});
-
-describe('enquiryMessage', () => {
-  it('names the product the customer clicked', () => {
-    expect(enquiryMessage('box')).toContain('ask about The Box');
-    expect(enquiryMessage('workshop')).toContain('Make one with us');
-    expect(enquiryMessage('table')).toContain('The Table');
-    expect(enquiryMessage(null)).toContain('for my company');
-    expect(enquiryMessage('box')).toContain('Headcount:');
   });
 });
 

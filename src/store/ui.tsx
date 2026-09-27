@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import type { QuoteAbout } from '../data/companies';
 
 export type Overlay =
   | null
@@ -7,7 +8,8 @@ export type Overlay =
   | { kind: 'cart' }
   | { kind: 'checkout'; notice?: string }
   | { kind: 'success'; ref: string; paid: boolean; whatsappUrl?: string }
-  | { kind: 'lightbox'; index: number };
+  | { kind: 'lightbox'; index: number }
+  | { kind: 'quote'; about: QuoteAbout; format?: 'session' | 'table' };
 
 export type Toast = { id: number; title: string; image?: string; action?: { label: string; run(): void } };
 

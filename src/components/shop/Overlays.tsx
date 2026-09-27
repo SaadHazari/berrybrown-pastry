@@ -9,6 +9,7 @@ import { CartDrawer } from './CartDrawer';
 import { Checkout } from './Checkout';
 import { MenuOverlay } from './MenuOverlay';
 import { ProductSheet } from './ProductSheet';
+import { QuoteSheet, useQuoteFromUrl } from './QuoteSheet';
 import { SuccessOverlay } from './SuccessOverlay';
 
 /** Handles returning from Stripe: ?order=success&ref=… or ?order=cancelled */
@@ -53,6 +54,7 @@ function useStripeReturn() {
 
 export default function Overlays() {
   useStripeReturn();
+  useQuoteFromUrl();
   return (
     <>
       <MenuOverlay />
@@ -60,6 +62,7 @@ export default function Overlays() {
       <CartDrawer />
       <Checkout />
       <SuccessOverlay />
+      <QuoteSheet />
     </>
   );
 }

@@ -72,7 +72,7 @@ export const recordOrder = (body: CheckoutRequest) => record('/api/orders', body
 
 export type EnquiryBody =
   | { kind: 'custom'; answers: Record<string, string>; fromPrice: number; photos: string[]; message: string }
-  | { kind: 'company'; about: string | null; message: string };
+  | { kind: 'company'; about: string | null; answers?: Record<string, string>; message: string };
 
 /** Saves a custom-cake send or a company enquiry to Supabase. */
 export const recordEnquiry = (body: EnquiryBody) => record('/api/enquiries', body);
