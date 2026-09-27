@@ -34,18 +34,25 @@
   --spacing-2xl: calc(1rem * 1.618 * 1.618 * 1.618); /* 76.2 px */
   --spacing-3xl: calc(1rem * 1.618 * 1.618 * 1.618 * 1.618); /* 123 px */
 
-  /* Shape — 4 px corners everywhere, no shadows except the open sheet. */
+  /* Shape — 4 px corners everywhere. Shadows only on floating photo frames, the lifted page and open sheets. */
   --radius-*: initial;
   --radius: 4px;
   --shadow-*: initial;
   --shadow-sheet: 0 24px 48px -16px rgb(62 42 33 / 0.25);
+  --shadow-frame: 0 1px 1px rgb(62 42 33 / 0.06), 0 18px 36px -18px rgb(62 42 33 / 0.35);
+  --shadow-page: 0 30px 60px -30px rgb(62 42 33 / 0.45);
   --animate-*: initial;
   --animate-toast: toast-in 200ms ease-out;
+  --animate-drift: drift var(--drift-duration, 60s) linear infinite;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   @keyframes toast-in {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 }
 
@@ -55,7 +62,7 @@
 
   html {
     -webkit-text-size-adjust: 100%;
-    scroll-padding-top: calc(64px + var(--spacing-md));
+    scroll-padding-top: calc(76px + var(--spacing-md));
     scroll-behavior: smooth;
   }
   body {
@@ -84,6 +91,9 @@
 
 /* ---------- Type scale: LiftKit sizes × brand fonts (base 18 px) ---------- */
 @utility t-display { font-family: var(--font-voice); font-weight: 600; font-size: 2.618rem; line-height: 1.272; letter-spacing: -0.022em; font-variant-numeric: lining-nums; }
+@utility t-display2 { font-family: var(--font-voice); font-weight: 500; font-size: clamp(2.058rem, 1.2rem + 3.6vw, 3.33rem); line-height: 1.08; letter-spacing: -0.02em; font-variant-numeric: lining-nums; }
+@utility t-display1 { font-family: var(--font-voice); font-weight: 500; font-size: clamp(2.618rem, 1.4rem + 5vw, 4.236rem); line-height: 1.05; letter-spacing: -0.02em; font-variant-numeric: lining-nums; }
+@utility t-giant { font-family: var(--font-voice); font-weight: 500; font-size: clamp(3.33rem, 1rem + 10vw, 6.854rem); line-height: 0.98; letter-spacing: -0.025em; font-variant-numeric: lining-nums; }
 @utility t-title1 { font-family: var(--font-voice); font-weight: 600; font-size: 2.058rem; line-height: 1.272; letter-spacing: -0.022em; font-variant-numeric: lining-nums; }
 @utility t-title2 { font-family: var(--font-voice); font-weight: 600; font-size: 1.618rem; line-height: 1.272; letter-spacing: -0.02em; font-variant-numeric: lining-nums; }
 @utility t-title3 { font-family: var(--font-voice); font-weight: 600; font-size: 1.272rem; line-height: 1.272; letter-spacing: -0.017em; font-variant-numeric: lining-nums; }
@@ -146,6 +156,11 @@
   border-color: var(--color-cocoa-15);
   &:hover:not(:disabled) { background: rgb(62 42 33 / 0.06); }
 }
+@utility btn-butter {
+  background: var(--color-butter);
+  color: var(--color-cocoa);
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--color-butter), #000 6%); }
+}
 @utility chip {
   display: inline-flex;
   align-items: center;
@@ -207,6 +222,41 @@
 @utility sheet-from-bottom { transform: translateY(100%); &.sheet-shown { transform: none; } }
 @utility sheet-from-center { opacity: 0; transform: translateY(12px); &.sheet-shown { opacity: 1; transform: none; } }
 @utility mat { background: var(--color-rose); padding: var(--spacing-sm); border-radius: var(--radius); }
+/* A photo on a Butter card, like a print. Pair with `shadow-frame` when it floats. */
+@utility frame {
+  display: block;
+  background: var(--color-butter);
+  padding: var(--spacing-xs);
+  border: 1px solid var(--color-cocoa-15);
+  border-radius: var(--radius);
+}
+/* Horizontal scrollers that start on the container's left edge and bleed off the right. */
+@utility carousel-pad {
+  --pad: max(var(--spacing-md), env(safe-area-inset-left));
+  @media (width >= 1024px) { --pad: calc(max(0px, (100vw - 1257px) / 2) + 4.235rem); }
+  padding-inline: var(--pad);
+  scroll-padding-inline: var(--pad);
+}
+/* The brand's lace detail: Butter scallops hanging off the bottom of the page over the Cocoa footer. */
+@utility lace-edge {
+  height: 12px;
+  background-image: radial-gradient(circle at 8px 0, var(--color-butter) 7.5px, transparent 8px);
+  background-size: 16px 12px;
+  background-repeat: repeat-x;
+}
+/* Review bubbles: a small tail under the bottom-left corner, in the bubble's own colour. */
+@utility bubble-tail {
+  &::after {
+    content: '';
+    position: absolute;
+    left: var(--spacing-lg);
+    top: 100%;
+    width: 14px;
+    height: 10px;
+    background: inherit;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+  }
+}
 @utility no-scrollbar { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
 @utility pb-safe { padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom)); }
 
@@ -219,4 +269,15 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Paper grain — fixed, static, never interactive. */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.16 0 0 0 0 0.13 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

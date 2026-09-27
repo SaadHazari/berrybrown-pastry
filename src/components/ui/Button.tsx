@@ -1,9 +1,9 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 
-export type ButtonVariant = 'claret' | 'cocoa' | 'ghost';
+export type ButtonVariant = 'claret' | 'cocoa' | 'ghost' | 'butter';
 
-const VARIANT: Record<ButtonVariant, string> = { claret: 'btn-claret', cocoa: 'btn-cocoa', ghost: 'btn-ghost' };
+const VARIANT: Record<ButtonVariant, string> = { claret: 'btn-claret', cocoa: 'btn-cocoa', ghost: 'btn-ghost', butter: 'btn-butter' };
 
 export const buttonClass = (variant: ButtonVariant = 'claret', extra?: string) => cn('btn', VARIANT[variant], extra);
 
