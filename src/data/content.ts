@@ -1,4 +1,4 @@
-import { LOG_MEDIA, type Media } from './media';
+import { LOG_MEDIA, media, type Media } from './media';
 
 export const CONTACT = {
   whatsapp: '971547944882',
@@ -140,3 +140,11 @@ export function shortDate(iso: string): string {
   const [y, m, d] = iso.split('-').map(Number);
   return new Date(y, m - 1, d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
+
+export type Step = { n: string; title: string; text: string; image: Media };
+
+export const STEPS: Step[] = [
+  { n: '01', title: 'Pick your cake', text: 'Choose one of the Six, or design your own.', image: media.how[0] },
+  { n: '02', title: 'Choose a day', text: 'We bake to order. The Six need 24 hours, custom cakes a week.', image: media.how[1] },
+  { n: '03', title: 'We bring it chilled', text: 'In an insulated box, anywhere in Dubai. Or collect it from us.', image: media.how[2] },
+];

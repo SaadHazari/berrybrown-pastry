@@ -11,6 +11,7 @@ import { Companies } from './components/sections/Companies';
 import { CustomCake } from './components/sections/custom/CustomCake';
 import { Faq } from './components/sections/Faq';
 import { Hero } from './components/sections/Hero';
+import { HowItWorks } from './components/sections/HowItWorks';
 import { Reviews } from './components/sections/Reviews';
 import { Safa } from './components/sections/Safa';
 import { TheLog } from './components/sections/TheLog';
@@ -36,6 +37,7 @@ export default function App() {
             <Hero />
             <TheSix />
             <CustomCake />
+            <HowItWorks />
             <Companies />
             <Safa />
             <TheLog />
