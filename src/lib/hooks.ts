@@ -122,3 +122,32 @@ export function useScrollSpy(ids: readonly string[]): string | null {
   }, [key]);
   return active;
 }
+
+/**
+ * True while the page's lace edge (#page-end, the bottom of <main>) is less than `screens` window heights below the window.
+ * A scroll listener, not an observer: the footer sits pinned behind the page, and jumps skip thin targets.
+ */
+export function useNearPageEnd(screens = 0): boolean {
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const end = document.getElementById('page-end');
+    if (!end) return;
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      setNear(end.getBoundingClientRect().top < window.innerHeight * (1 + screens));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [screens]);
+  return near;
+}

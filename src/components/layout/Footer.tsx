@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'rea
 import { CONTACT, PHOTO_NOTE } from '../../data/content';
 import { media } from '../../data/media';
 import { cn } from '../../lib/cn';
+import { useNearPageEnd } from '../../lib/hooks';
 import { ease } from '../../lib/motion';
 import { GENERAL_MESSAGE, whatsappLink } from '../../lib/order';
 import { HeartIcon, InstagramIcon, WhatsAppIcon } from '../ui/Icons';
@@ -43,11 +44,14 @@ function Column({ title, children }: { title: string; children: ReactNode }) {
 export function Footer() {
   const ref = useRef<HTMLElement>(null);
   const fits = useFits(ref);
+  // Pinned only near the end: pinned from the top, a footer almost as tall as the window shows above the page,
+  // over the deadline strip and through the top bar. The screen of head start keeps the switch out of sight.
+  const nearEnd = useNearPageEnd(1);
   const reduce = useReducedMotion();
   const ig = CONTACT.instagram;
 
   return (
-    <footer ref={ref} className={cn('relative z-0 bg-cocoa pt-2xl text-butter', fits && 'md:sticky md:bottom-0')}>
+    <footer ref={ref} className={cn('relative z-0 bg-cocoa pt-2xl text-butter', fits && nearEnd && 'md:sticky md:bottom-0')}>
       <div className="container-x pb-[max(var(--spacing-xl),env(safe-area-inset-bottom))]">
         <h2 className="t-giant">
           <span className="block">

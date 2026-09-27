@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { CONTACT } from '../../data/content';
 import { cn } from '../../lib/cn';
-import { useIsWide } from '../../lib/hooks';
+import { useIsWide, useNearPageEnd } from '../../lib/hooks';
 import { spring } from '../../lib/motion';
 import { GENERAL_MESSAGE, whatsappLink } from '../../lib/order';
 import { useCart } from '../../store/cart';
@@ -16,7 +16,8 @@ export function WhatsAppFab() {
   const wide = useIsWide();
   const [pastHero, setPastHero] = useState(false);
   const [overForm, setOverForm] = useState(false);
-  const [overFooter, setOverFooter] = useState(false);
+  // The footer has its own WhatsApp link, so the button steps aside once the page's lace edge (the end of <main>) is on screen.
+  const overFooter = useNearPageEnd();
 
   useEffect(() => {
     if (!('IntersectionObserver' in window)) {
@@ -34,29 +35,6 @@ export function WhatsAppFab() {
       if (el) io.observe(el);
     });
     return () => io.disconnect();
-  }, []);
-
-  // The footer has its own WhatsApp link, so the button steps aside once the page's lace edge (the end of <main>)
-  // is on screen. A scroll listener, not an observer: the footer sits pinned behind the page, and jumps skip thin targets.
-  useEffect(() => {
-    const end = document.getElementById('page-end');
-    if (!end) return;
-    let raf = 0;
-    const check = () => {
-      raf = 0;
-      setOverFooter(end.getBoundingClientRect().top < window.innerHeight);
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(check);
-    };
-    check();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      cancelAnimationFrame(raf);
-    };
   }, []);
 
   const visible = pastHero && !overFooter && overlay === null && (wide || !overForm);
