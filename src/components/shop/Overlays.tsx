@@ -6,6 +6,7 @@ import { PICKUP_ZONE_ID } from '../../data/zones';
 import { useCart } from '../../store/cart';
 import { useUI } from '../../store/ui';
 import { CartDrawer } from './CartDrawer';
+import { Lightbox } from './Lightbox';
 import { Checkout } from './Checkout';
 import { MenuOverlay } from './MenuOverlay';
 import { ProductSheet } from './ProductSheet';
@@ -63,6 +64,7 @@ export default function Overlays() {
       <Checkout />
       <SuccessOverlay />
       <QuoteSheet />
+      <Lightbox />
     </>
   );
 }

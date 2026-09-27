@@ -20,11 +20,13 @@ export const PHOTO_NOTE = 'Photos show the style. Each cake is made by hand, so 
 /** SAMPLE rating — Saad swaps in the real one. */
 export const RATING = { score: 4.9, count: 260, sample: true };
 
-/** SAMPLE stats — static Jost numbers, no count-up. */
-export const STATS = [
-  { value: '12 years', sample: true },
-  { value: '3,400+ cakes', sample: true },
-  { value: '100% from scratch', sample: true },
+export type Stat = { value: number; suffix: string; label: string; sample: boolean };
+
+/** SAMPLE stats — they count up once in view. Saad swaps in the real ones. */
+export const STATS: Stat[] = [
+  { value: 12, suffix: '', label: 'years', sample: true },
+  { value: 3400, suffix: '+', label: 'cakes', sample: true },
+  { value: 100, suffix: '%', label: 'from scratch', sample: true },
 ];
 
 export type Review = { name: string; area: string; text: string; cake: string; sample: boolean };
@@ -98,4 +100,15 @@ export const STEPS: Step[] = [
   { n: '01', title: 'Pick your cake', text: 'Choose one of the Six, or design your own.', image: media.how[0] },
   { n: '02', title: 'Choose a day', text: 'We bake to order. The Six need 24 hours, custom cakes a week.', image: media.how[1] },
   { n: '03', title: 'We bring it chilled', text: 'In an insulated box, anywhere in Dubai. Or collect it from us.', image: media.how[2] },
+];
+
+export type GalleryItem = { image: Media; caption: string; tall: boolean };
+
+export const GALLERY: GalleryItem[] = [
+  { image: media.kitchen.layers, caption: 'Berry layers', tall: true },
+  { image: media.kitchen.crumb, caption: 'The crumb', tall: false },
+  { image: media.kitchen.cocoa, caption: 'Cocoa', tall: true },
+  { image: media.six[1], caption: 'Pistachio kunafa', tall: true },
+  { image: media.kitchen.packing, caption: 'Packed by hand', tall: false },
+  { image: media.kitchen.flowers, caption: 'Fresh flowers', tall: true },
 ];

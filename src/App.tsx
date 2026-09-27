@@ -13,8 +13,9 @@ import { Faq } from './components/sections/Faq';
 import { GiftBoxes } from './components/sections/GiftBoxes';
 import { Hero } from './components/sections/Hero';
 import { HowItWorks } from './components/sections/HowItWorks';
+import { Kitchen } from './components/sections/Kitchen';
 import { Reviews } from './components/sections/Reviews';
-import { Safa } from './components/sections/Safa';
+import { Studio } from './components/sections/Studio';
 import { TheLog } from './components/sections/TheLog';
 import { TheSix } from './components/sections/TheSix';
 import { Udora } from './components/sections/Udora';
@@ -45,7 +46,8 @@ export default function App() {
             <Workshops />
             <CompanyEvents />
             <Udora />
-            <Safa />
+            <Studio />
+            <Kitchen />
             <TheLog />
             <Reviews />
             <Faq />
