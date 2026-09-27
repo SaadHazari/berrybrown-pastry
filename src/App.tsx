@@ -34,8 +34,8 @@ export default function App() {
           <Navbar />
           <main id="main" className="relative z-10 bg-butter shadow-page">
             <Hero />
-            <CustomCake />
             <TheSix />
+            <CustomCake />
             <Companies />
             <Safa />
             <TheLog />
