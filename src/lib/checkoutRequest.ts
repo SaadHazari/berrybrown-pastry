@@ -166,7 +166,7 @@ export function buildStripeForm(order: ValidOrder, origin: string, opts: StripeF
     .map((l) => `${resolveLine(l).product.name}: ${l.message}`)
     .join(' | ');
 
-  // The Berry Brown namespace (§5 of the multi-brand spec) plus what Safa needs to see in the dashboard.
+  // The Berry Brown namespace (§5 of the multi-brand spec) plus what the studio needs to see in the dashboard.
   const meta: Record<string, string> = {
     brand: BRAND,
     application: APPLICATION,

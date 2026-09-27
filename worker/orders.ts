@@ -4,7 +4,7 @@ import { supabaseFrom } from './supabase';
 
 /**
  * POST /api/orders — records a WhatsApp order the moment the customer taps "Order on WhatsApp".
- * Same validation as checkout; the order is stored as pending until Safa confirms it in Supabase.
+ * Same validation as checkout; the order is stored as pending until the studio confirms it in Supabase.
  */
 export async function handleOrders(request: Request, env: Env): Promise<Response> {
   if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);

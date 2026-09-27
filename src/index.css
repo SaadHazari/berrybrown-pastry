@@ -210,18 +210,11 @@
   text-decoration-thickness: 1px;
   &:hover { text-decoration: underline; }
 }
-/* ---------- The only motion: one entry fade per section, and the user-opened sheet ---------- */
-@utility reveal {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 400ms var(--ease-out), transform 400ms var(--ease-out);
-  &.reveal-in { opacity: 1; transform: none; }
-}
+/* ---------- Sheets (user-opened overlays) ---------- */
 @utility sheet { transition: transform 320ms var(--ease-out), opacity 200ms ease; }
 @utility sheet-from-right { transform: translateX(100%); &.sheet-shown { transform: none; } }
 @utility sheet-from-bottom { transform: translateY(100%); &.sheet-shown { transform: none; } }
 @utility sheet-from-center { opacity: 0; transform: translateY(12px); &.sheet-shown { opacity: 1; transform: none; } }
-@utility mat { background: var(--color-rose); padding: var(--spacing-sm); border-radius: var(--radius); }
 /* A photo on a Butter card, like a print. Pair with `shadow-frame` when it floats. */
 @utility frame {
   display: block;
@@ -262,7 +255,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

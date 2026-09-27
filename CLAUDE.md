@@ -5,9 +5,9 @@ Stack: React 19 · TypeScript · Vite · Tailwind v4 · Cloudflare Workers (see 
 
 ## Read these before any design, CSS or copy change
 
-1. `docs/Berry_Brown_Website_Brief_v2.md` — what to build, section by section, and the order of work.
+1. `docs/superpowers/specs/2026-09-27-berrybrown-lively-redesign-design.md` — the current design: page order, sections, motion, photos.
 2. `docs/brand/Berry_Brown_Brand_Guidelines.md` — colours, fonts, logo rules, voice.
-3. `docs/brand/berrybrown-colours.css` — the exact colour and type tokens.
+3. `docs/Berry_Brown_Website_Brief_v2.md` §5 — the LiftKit spacing and type maths (`docs/brand/berrybrown-colours.css` has the exact colour tokens).
 
 ## Rules that never bend
 
@@ -15,10 +15,10 @@ Stack: React 19 · TypeScript · Vite · Tailwind v4 · Cloudflare Workers (see 
 - Sentences in **Alegreya**. Labels, buttons, prices and numbers in **Jost**. No other fonts. No handwriting fonts.
 - Four colours only: Butter `#F6EEDF`, Cocoa `#3E2A21`, Rose `#E7CFC6`, Claret `#7A2A3A`, plus Cocoa 70% `#726156` for second-level text and Cocoa 15% for hairlines.
 - **One** Claret element per section, besides the berry in the logo.
-- Corners 4 px. Never pills, never sharp. Hairlines, not boxes.
-- Nothing moves on its own: no smooth-scroll library, no marquee, no auto-play, no count-ups. One fade-in on section entry is the limit.
-- Copy: short sentences, no exclamation marks, no "indulge / delight / treat yourself". "We", not "I". Never "homemade".
-- Max 12 photos on the page. Image slots use the Rose placeholder until real photos exist.
+- Corners 4 px on cards, buttons and chips. Circles only for icon-only buttons, avatars and dots. Never pill-shaped text buttons, never sharp. Hairlines, not boxes.
+- Motion happens only on scroll, pointer or tap. One exception: the review rows drift, with a pause button. No smooth-scroll library, no marquee strip, no video, no preloader. `prefers-reduced-motion` stops all of it.
+- Copy: short sentences, no exclamation marks, no "indulge / delight / treat yourself". "We", "us", "our team" — never "I", never "Chef Safa" or "Safa" on the site. Never "homemade".
+- Photos are AI-made in the palette until real ones exist (`ai: true` in `src/data/media.ts`, files from `scripts/grade-photos.py`). Replace them one by one. The Rose placeholder is only the fallback for a missing file.
 - Spacing and type sizes follow the golden-ratio scale in the brief §5 (base 18 px; tokens 2xs…3xl).
 
 ## Where things live
@@ -31,5 +31,7 @@ Stack: React 19 · TypeScript · Vite · Tailwind v4 · Cloudflare Workers (see 
 | Cakes, sizes, prices | `src/data/products.ts` |
 | Contact, reviews, FAQ, stats | `src/data/content.ts` |
 | Tokens | `src/index.css` |
+| Photos, prompts, grading | `public/images/ai/`, `scripts/photo-slots.json`, `scripts/grade-photos.py` |
+| Company channels, deadlines, quotes | `src/data/companies.ts`, `src/data/quote.ts` |
 
 Anything marked `sample: true` in `src/data/` is placeholder content. Never present it as real.

@@ -1,8 +1,8 @@
 # Berry Brown
 
-The website for Berry Brown, a cake studio in Dubai led by Chef Safa. *Made with heart, not haste.*
+The website for Berry Brown, a cake studio in Dubai. *Made with heart, not haste.*
 
-One page, eleven parts: nav · hero · design your cake · the Six · for companies and events · Chef Safa · the log · kind words · little questions · closing line · footer. The shop opens as overlays on top of it: the Six, a product sheet, the bag and a 3-step checkout. Customers **pay online with Stripe** or **send the order on WhatsApp**. Custom cakes, boxes, workshops and events always go to WhatsApp.
+One page, sixteen parts: deadline strip and top bar · hero · the Six · design your cake · how it works · gift boxes · workshops · company events · Udora · our studio · from our kitchen · kind words · little questions · closing · the cake log (folded) · footer. The design is in `docs/superpowers/specs/2026-09-27-berrybrown-lively-redesign-design.md`. The shop opens as overlays on top of it: the Six, a product sheet, the bag and a 3-step checkout. Customers **pay online with Stripe** or **send the order on WhatsApp** (+971 54 794 4882). Custom cakes go to WhatsApp through the stepper; gift boxes, workshops and events go to WhatsApp or email (connect@berrybrown.me) through their quote sheets.
 
 The design brief is `docs/Berry_Brown_Website_Brief_v2.md`. The brand rules are in `docs/brand/`. If they disagree, the brand book wins.
 
@@ -22,6 +22,7 @@ npm install
 npm run dev       # http://localhost:5173
 npm test          # pricing, cart, checkout, custom form, WhatsApp messages, upload helpers
 npm run build     # type-checks the app and the Worker, then builds to dist/
+node scripts/qa-shots.mjs http://localhost:5173/ qa-shots   # scroll-through screenshots at 390 / 768 / 1440 px (add --reduced for reduced motion)
 ```
 
 `npm run dev` does not run the Worker, so **Pay online** falls back to WhatsApp, photo upload falls back to "I'll send my photos here", and nothing is saved to Supabase. To test the full site with the API, copy `.dev.vars.example` to `.dev.vars` (git-ignored), fill in the keys, then run:
@@ -76,10 +77,10 @@ Project `ylrqmwfnelwqbychdpfb` (region Tokyo, free plan). Free projects pause af
 | `customers` | One row per customer, keyed by UAE mobile. Berry Brown customers only. | Worker |
 | `orders` | Every order of the Six. Stripe orders arrive `pending` and become `paid` through the webhook. WhatsApp orders arrive `pending` when the customer taps send; mark them `confirmed` by hand. Keeps `stripe_checkout_session_id` and `stripe_payment_intent_id` for reconciliation. | Worker |
 | `payments` | One row per Stripe payment event: `succeeded`, or `refunded` with a negative amount. Reconcile: order total → payments → Stripe payout. | Webhook |
-| `enquiries` | Custom-cake sends (answers, from-price, photo links, the WhatsApp text) and company enquiries | Worker |
+| `enquiries` | Custom-cake sends (answers, from-price, photo links, the WhatsApp text) and company quotes (`about` = `box`, `workshop`, `event`; `table` on rows before 27 Sep; answers in `answers`, since migration `20260927140000_enquiries_event.sql`) | Worker |
 | `uploads` | One row per inspiration photo, for the 10-per-IP-per-hour limit | Worker |
-| `cakes` | **The log.** A row per cake is created automatically when an order turns `paid`. Add a photo to the `cakes` bucket, put its path in `photo_path`, tick `published`, and it appears on the site (newest three). | Trigger + Safa |
-| `reviews` | Kind words. Tick `published` (with permission) and the site shows them instead of the samples. | Safa |
+| `cakes` | **The log.** A row per cake is created automatically when an order turns `paid`. Add a photo to the `cakes` bucket, put its path in `photo_path`, tick `published`, and it appears on the site (newest three). | Trigger + the studio |
+| `reviews` | Kind words. Tick `published` (with permission) and the site shows them instead of the samples. | The studio |
 
 Storage: `inspiration` (private; links are signed for 30 days) and `cakes` (public; log photos, keep them 4:5 and under 10 MB). Row Level Security is on everywhere; the publishable key can only read published cakes and reviews.
 
@@ -90,7 +91,7 @@ Photo upload limits: 3 files per send, 10 MB each, JPG/PNG/WebP/HEIC (checked by
 1. The browser posts the bag, delivery details and an order reference to `/api/checkout`.
 2. The Worker **re-prices everything from `src/data/products.ts`**, so prices sent from the browser are never trusted. It checks the date, phone number and so on, and creates a Stripe Checkout session in AED. Delivery (AED 20, free over AED 300) is its own line item. Order details are saved in the session and payment metadata, so they appear in the Stripe dashboard.
 3. Before creating the session, the Worker saves the customer and the order in Supabase as `pending`, so every Stripe object can carry the order id. When Stripe confirms payment it calls `/api/stripe/webhook`, which marks the order `paid` and adds a `payments` row; the database then gives every cake in it a number in the log. The success page never marks anything paid.
-4. After paying, the customer returns to `/?order=success&ref=…`, the bag clears, and a button sends the full order to Safa on WhatsApp.
+4. After paying, the customer returns to `/?order=success&ref=…`, the bag clears, and a button sends the full order to our team on WhatsApp.
 5. If the customer cancels, they return to `/?order=cancelled` and checkout reopens with the bag still there.
 
 ## Editing content
@@ -100,31 +101,37 @@ Photo upload limits: 3 files per send, 10 MB each, JPG/PNG/WebP/HEIC (checked by
 | The Six: names, one-liners, flavours, allergens | `src/data/products.ts` |
 | The price ladder (5" 150 · 6" 200 · 8" 280) | `PRICE_LADDER` in `src/data/products.ts` |
 | Delivery fee, free-delivery threshold, time slots | `src/data/zones.ts` |
-| Contact details, rating, stats, FAQ, company offers, deadlines | `src/data/content.ts` |
+| Contact details (WhatsApp, email, Instagram, Udora link), rating, stats, FAQ, how-it-works steps, kitchen photos | `src/data/content.ts` |
+| Gift boxes, workshops, company events, order-by dates | `src/data/companies.ts` |
+| Quote form rules (minimums, lead days) | `src/data/quote.ts` |
 | The log and reviews (live) | Supabase tables `cakes` and `reviews`; samples in `src/data/content.ts` show until real rows are published |
 | Supabase URL and publishable key | `src/data/supabase.ts` (page) and `wrangler.jsonc` (Worker) |
-| Custom-form options and from-prices | `src/data/custom.ts` |
-| **Every photo slot** (twelve, and that is the budget) | `src/data/media.ts` |
+| Custom-cake stepper: options, from-prices, one-week notice | `src/data/custom.ts` |
+| **Every photo slot** (31 AI photos) | `src/data/media.ts` |
 | WhatsApp message wording | `src/lib/order.ts` |
 | Colours, type scale, spacing | `src/index.css` |
 
-### Adding a real photo
+### Photos
 
-Every slot in `src/data/media.ts` renders the Rose placeholder until `placeholder` is `false`. Put the file in `public/images/` with the name the slot expects (for example `bb-the-six-01.jpg`), keep it 4:5 and about 1400 px on the long edge, then set `placeholder: false`. Rules from the brand book: phone camera, window light, same plate and angle for all six, hands in frame, no retouching.
+The 31 photos are AI-made stand-ins in the brand palette (`ai: true` in `src/data/media.ts`). They were generated in Canva from the prompts in `scripts/photo-slots.json`, placed in the Canva design "Berry Brown — website photos", exported at full size, then graded into one set by `scripts/grade-photos.py` (warm split-tone toward Cocoa and Butter, WebP at 640 and 1200 px in `public/images/ai/`). The script also rewrites `src/data/photos.generated.ts`; a slot without files shows the Rose placeholder. AI photos are never sent to Stripe (`stripeImage` in `src/lib/checkoutRequest.ts`), and the page says "Photos show the style."
+
+**Replacing one with a real photo:** name the file after its slot (for example `six-pistachio-kunafa.jpg`) in a folder, run `python3 scripts/grade-photos.py <folder> --real` (crops and resizes without the colour grade), then set `ai: false` for that slot in `src/data/media.ts`. Rules from the brand book: phone camera, window light, same plate and angle for all six, hands in frame, no retouching.
 
 ## ⚠️ Before launch — everything marked `sample: true`
 
 | Item | File | What to do |
 | --- | --- | --- |
-| Names of the Six | `src/data/products.ts` (`sample: true` on each cake) | Safa confirms the six; rename, then remove the flags |
+| Names of the Six | `src/data/products.ts` (`sample: true` on each cake) | The studio confirms the six; rename, then remove the flags |
 | The flat ladder 150 / 200 / 280 | `PRICE_LADDER` in `src/data/products.ts` | Saad confirms (it is a cut from the old 195/295/420) |
 | Rating 4.9 · 260+ | `RATING` in `src/data/content.ts` | Replace with the real figure |
 | Stats (12 years · 3,400+ cakes · 100% from scratch) | `STATS` in `src/data/content.ts` | Replace with real figures |
 | Five reviews | `REVIEWS` in `src/data/content.ts` | Publish real reviews in Supabase `reviews`; the samples disappear on their own |
 | The log (#041, #040, #039) | `LOG` in `src/data/content.ts` | Publish real cakes with photos in Supabase `cakes`; the samples disappear on their own |
-| Instagram handle | `CONTACT.instagram` in `src/data/content.ts` | Blank hides the Follow column; fill it in |
+| Instagram handle | `CONTACT.instagram` in `src/data/content.ts` | Blank shows "From the studio" under the footer photos; fill it in to link them |
+| Udora shop link | `CONTACT.udora` in `src/data/content.ts` | Blank shows "Coming soon to Udora" |
+| Workshop price 150 vs 100 (YAP Club) | `WORKSHOP` in `src/data/companies.ts` | Saad decides |
 | Studio / pickup wording | `CONTACT.location` in `src/data/content.ts` | "Dubai" is a placeholder |
-| Twelve photo slots | `src/data/media.ts` | All `placeholder: true` until Safa's photos exist |
+| 31 AI photos | `src/data/media.ts` (`ai: true`) | Replace with real photos from the shot list; until then the site says "Photos show the style." |
 | Share image | `public/og.png` | Generated from the logo; replace with a real photo when one exists |
 | "Written on" +50 | `WRITTEN_ON` in `src/data/products.ts` | Shown as a line under the Six; not yet an add-on in checkout |
 
@@ -142,8 +149,8 @@ src/
   data/                     products, zones, content, custom-form options, media slots
   lib/                      pricing, orders + WhatsApp messages, checkout validation, order rows, Stripe signature, live reads
   store/                    cart (localStorage) and UI overlay state
-  components/ui/            Button, Chip, Placeholder, Photo, Reveal, Sheet, Sprig…
-  components/layout/        Navbar, Footer, MobileBagBar, ToastLayer
-  components/sections/      Hero, CustomCake, TheSix, Companies, Safa, TheLog, Reviews, Faq, Closing
-  components/shop/          MenuOverlay, ProductCard, ProductSheet, CartDrawer, Checkout, SuccessOverlay
+  components/ui/            Button, Chip, Field, Frame, Heading, Photo, Placeholder, Rise, SplitWords, Parallax, Magnetic, CountUp, DriftRow, Sheet, Sprig…
+  components/layout/        DeadlineStrip, Navbar, WhatsAppFab, Footer, MobileBagBar, ToastLayer
+  components/sections/      Hero, TheSix, custom/ (the stepper), HowItWorks, GiftBoxes, Workshops, CompanyEvents, Udora, Studio, Kitchen, Reviews, Faq, Closing, CakeLog
+  components/shop/          MenuOverlay, ProductCard, ProductSheet, CartDrawer, Checkout, SuccessOverlay, QuoteSheet, Lightbox
 ```

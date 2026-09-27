@@ -12,7 +12,7 @@ export type Product = {
   sizes: Size[];
   flavours: Flavour[];
   allergens: string[];
-  /** Names are provisional until Safa confirms the real Six. */
+  /** Names are provisional until the studio confirms the real Six. */
   sample: boolean;
 };
 
