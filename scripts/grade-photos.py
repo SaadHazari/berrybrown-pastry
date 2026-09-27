@@ -23,6 +23,11 @@ MID = (170, 138, 124)
 WIDTHS = (640, 1200)
 
 
+def load(path):
+    """Open a photo upright: phones store rotation as EXIF data, not in the pixels."""
+    return ImageOps.exif_transpose(Image.open(path)).convert('RGB')
+
+
 def crop_to(im, ratio):
     rw, rh = (int(x) for x in ratio.split(':'))
     w, h = im.size
@@ -86,7 +91,7 @@ def main():
         src = next((p for p in (raw / f"{s['slot']}.jpg", raw / f"{s['slot']}.png") if p.exists()), None)
         if src is None:
             continue
-        im = crop_to(Image.open(src).convert('RGB'), s['ratio'])
+        im = crop_to(load(src), s['ratio'])
         export(s['slot'], im if real else grade(im))
         done.append(s['slot'])
     ready = write_manifest()
