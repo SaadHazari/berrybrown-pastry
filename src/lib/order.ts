@@ -4,6 +4,10 @@ import { TIME_SLOTS, getZone } from '../data/zones';
 import { aed, prettyDate } from './format';
 import { resolveLine, totals, type LineInput } from './pricing';
 
+/** Every message opens by greeting the studio, never a person. */
+export const GREETING = 'Hi Berry Brown,';
+export const GENERAL_MESSAGE = `${GREETING} I have a question about a cake.`;
+
 export type Customer = { name: string; phone: string; email: string; address: string; notes: string };
 
 export type OrderSummary = {
@@ -37,7 +41,7 @@ export function whatsappOrderText(o: OrderSummary): string {
     return `• ${l.qty} × ${product.name} — ${size.label}, ${flavour.name} — ${aed(size.price * l.qty)}${msg}`;
   });
   return tidy([
-    `Hi Safa, ${o.paid ? 'I just paid online for' : "I'd like to order"}:`,
+    `${GREETING} ${o.paid ? 'I just paid online for' : "I'd like to order"}:`,
     '',
     ...items,
     '',
@@ -63,7 +67,7 @@ export function customCakeMessage(f: CustomForm, photoUrls: string[] = [], unsen
   const serve = serveOption(f.serves);
   const value = (label: string) => rows.find((r) => r.label === label)?.value ?? '';
   return tidy([
-    "Hi Safa, I'd like a custom cake.",
+    `${GREETING} I'd like a custom cake.`,
     '',
     `Occasion: ${value('Occasion')}`,
     `People: ${value('People')}${serve?.note ? ' (quoted separately)' : ''}`,
@@ -82,7 +86,7 @@ export function customCakeMessage(f: CustomForm, photoUrls: string[] = [], unsen
 export function enquiryMessage(about: OfferId | null): string {
   const offer = about ? OFFERS.find((o) => o.id === about) : undefined;
   return tidy([
-    offer ? `Hi Safa, I'd like to ask about ${offer.title}.` : "Hi Safa, I'd like to ask about an order for my company.",
+    offer ? `${GREETING} I'd like to ask about ${offer.title}.` : `${GREETING} I'd like to ask about an order for my company.`,
     '',
     'Company:',
     'Date:',
@@ -92,4 +96,10 @@ export function enquiryMessage(about: OfferId | null): string {
 
 export function whatsappLink(text: string): string {
   return `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`;
+}
+
+/** A mailto link to the studio. */
+export function mailtoLink(subject: string, body = ''): string {
+  const query = [`subject=${encodeURIComponent(subject)}`, body ? `body=${encodeURIComponent(body)}` : ''].filter(Boolean).join('&');
+  return `mailto:${CONTACT.email}?${query}`;
 }

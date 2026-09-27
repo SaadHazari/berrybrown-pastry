@@ -12,7 +12,7 @@ export function SuccessOverlay() {
       {data && (
         <div className="px-md pb-lg pt-md md:px-lg">
           <p className="t-body max-w-[40ch]">
-            {data.paid ? 'Your payment went through. Safa will message you to confirm the details.' : 'Your order is ready in WhatsApp. Press send, and Safa will confirm and share payment details.'}
+            {data.paid ? 'Your payment went through. We will message you to confirm the details.' : 'Your order is ready in WhatsApp. Press send, and we will confirm and share payment details.'}
           </p>
           <p className="t-price mt-md">Ref {data.ref}</p>
 
@@ -20,7 +20,7 @@ export function SuccessOverlay() {
             {data.whatsappUrl && (
               <ButtonLink variant="claret" href={data.whatsappUrl} target="_blank" rel="noopener noreferrer">
                 <WhatsAppIcon className="size-[16px]" />
-                {data.paid ? 'Send order details to Safa' : 'Open WhatsApp again'}
+                {data.paid ? 'Send order details to our team' : 'Open WhatsApp again'}
               </ButtonLink>
             )}
             <Button variant="ghost" onClick={close}>

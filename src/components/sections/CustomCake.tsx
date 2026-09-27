@@ -160,7 +160,7 @@ export function CustomCake() {
   return (
     <section id="custom" className="section-more" aria-labelledby="custom-title">
       <Reveal className="container-x">
-        <SectionHeading id="custom-title" title="Design your cake" oneliner="Six questions. Safa replies on WhatsApp with the price." />
+        <SectionHeading id="custom-title" title="Design your cake" oneliner="Six questions. We reply on WhatsApp with the price." />
 
         <div className="mt-xl grid gap-xl lg:grid-cols-12 lg:gap-2xl">
           <form
@@ -306,9 +306,9 @@ export function CustomCake() {
                 ))}
               </dl>
               <p className="t-price mt-md">From {aed(price)}</p>
-              <p className="t-caption mt-2xs text-cocoa-70">Final price from Safa on WhatsApp. 50% deposit confirms the slot.</p>
+              <p className="t-caption mt-2xs text-cocoa-70">Final price on WhatsApp. 50% deposit confirms the slot.</p>
               <Button variant="claret" className="mt-md w-full" onClick={send} disabled={busy}>
-                {busy ? 'Uploading photos…' : 'Send to Safa'}
+                {busy ? 'Uploading photos…' : 'Send on WhatsApp'}
               </Button>
               {note && (
                 <p className="t-caption mt-sm text-cocoa-70" aria-live="polite">
@@ -324,7 +324,7 @@ export function CustomCake() {
           <div className="flex items-center gap-md">
             <p className={cn('t-price min-w-0 truncate', !form.serves && 'text-cocoa-70')}>{stripSummary}</p>
             <Button variant="claret" className="ml-auto shrink-0" onClick={send} disabled={busy}>
-              {busy ? 'Uploading…' : 'Send to Safa'}
+              {busy ? 'Uploading…' : 'Send on WhatsApp'}
             </Button>
           </div>
           {note && (

@@ -1,16 +1,21 @@
 import { media, type Media } from './media';
 
 export const CONTACT = {
-  whatsapp: '971509478943',
-  phoneDisplay: '+971 50 947 8943',
-  email: 'saad@berrybrown.me',
-  /** Saad to confirm the handle. Blank hides the Follow column in the footer. */
+  whatsapp: '971547944882',
+  phoneDisplay: '+971 54 794 4882',
+  email: 'connect@berrybrown.me',
+  /** Saad to confirm the handle. Blank shows "From the studio" with no links. */
   instagram: '',
+  /** The Udora shop link. Blank shows "Coming soon to Udora". */
+  udora: '',
   /** Saad to confirm the pickup / studio wording. */
   location: 'Dubai',
   hours: 'Every day · 9am – 9pm',
   legal: 'Berry Brown is a trading name of Dormers Restaurant L.L.C., Dubai. Trade licence 1433956. Not registered for VAT.',
 };
+
+/** Shown under the Six and in the footer while the photos are AI-made stand-ins. */
+export const PHOTO_NOTE = 'Photos show the style. Each cake is made by hand, so yours will look a little different.';
 
 /** SAMPLE rating — Saad swaps in the real one. */
 export const RATING = { score: 4.9, count: 260, sample: true };
@@ -36,7 +41,7 @@ export const REVIEWS: Review[] = [
   {
     name: 'Maya & Alex',
     area: 'Palm Jumeirah',
-    text: 'Safa made our wedding cake and it tasted even better than it looked. Every guest asked where it came from.',
+    text: 'They made our wedding cake and it tasted even better than it looked. Every guest asked where it came from.',
     cake: 'Custom wedding cake',
     sample: true,
   },
@@ -64,34 +69,15 @@ export const REVIEWS: Review[] = [
 ];
 
 export const FAQS = [
-  {
-    q: 'How early should I order?',
-    a: 'The Six need 24 hours. Custom cakes need 48 hours. Two tiers need a week.',
-  },
-  {
-    q: 'How do cakes survive the Dubai heat?',
-    a: 'Every cake travels with ice packs in an insulated box. Keep it in the fridge until about 15 minutes before serving.',
-  },
-  {
-    q: 'Is everything Halal?',
-    a: 'Yes. We never use gelatin. Creams are set with fruit pectin or agar instead.',
-  },
-  {
-    q: 'Can I add a message?',
-    a: 'Yes. Every cake can carry a hand-piped message of up to 35 characters.',
-  },
-  {
-    q: 'How do I pay?',
-    a: 'Pay online by card or Apple Pay, or send your order on WhatsApp and pay by bank transfer or cash on delivery.',
-  },
-  {
-    q: 'Do you do corporate orders?',
-    a: 'Yes. Gift boxes from 20, workshops for up to 12, and dessert tables for 40–60. Send the date and headcount and we reply with a quote and an invoice.',
-  },
-  {
-    q: 'How do deposits work?',
-    a: 'Custom cakes, boxes and events are confirmed with a 50% deposit. The rest is due on delivery.',
-  },
+  { q: 'How early should I order?', a: 'The Six need 24 hours. Custom cakes need a week. Gift boxes need 3–5 days, or 2–3 weeks with your logo.' },
+  { q: 'How do cakes survive the Dubai heat?', a: 'Every cake travels with ice packs in an insulated box. Keep it in the fridge until about 15 minutes before serving.' },
+  { q: 'Is everything Halal?', a: 'Yes. We never use gelatin. Creams are set with fruit pectin or agar instead.' },
+  { q: 'Can I add a message?', a: 'Yes. Every cake can carry a hand-piped message of up to 35 characters.' },
+  { q: 'How do I pay?', a: 'Pay online by card or Apple Pay, or send your order on WhatsApp and pay by bank transfer or cash on delivery.' },
+  { q: 'Do you deliver?', a: 'Yes, anywhere in Dubai for AED 20. Orders over AED 300 travel free. You can also collect from us.' },
+  { q: 'Do you do corporate orders?', a: 'Yes. Gift boxes from 20, workshops from 12 people, and events for up to 60 guests. Tap Get a quote and we reply with a price and an invoice.' },
+  { q: 'How do deposits work?', a: 'Custom cakes and gift boxes are confirmed with a 50% deposit. The rest is due before delivery. Workshops and events are paid in full to book.' },
+  { q: 'Can I cancel?', a: 'Yes, with 48 hours’ notice. After that we keep the deposit.' },
 ];
 
 export type LogEntry = { n: number; for: string; flavour: string; size: string; image: Media; sample: boolean };
@@ -118,7 +104,7 @@ export const OFFERS: Offer[] = [
   },
   {
     id: 'workshop',
-    title: 'Make one with Safa',
+    title: 'Make one with us',
     text: 'A 90-minute decorating workshop at your venue. Twelve seats, one cake each.',
     price: 'From 150 per seat · 12 seats',
     icon: '/brand/berrybrown-circle-rose.svg',

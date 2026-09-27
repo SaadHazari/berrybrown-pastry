@@ -318,7 +318,7 @@ export function Checkout() {
                   {(
                     [
                       { id: 'online', title: 'Pay online now', text: 'Card or Apple Pay. Secure Stripe checkout.' },
-                      { id: 'whatsapp', title: 'Order on WhatsApp', text: 'Safa confirms, then pay by transfer or cash.' },
+                      { id: 'whatsapp', title: 'Order on WhatsApp', text: 'We confirm, then you pay by transfer or cash.' },
                     ] as const
                   ).map((o) => {
                     const active = form.payment === o.id;

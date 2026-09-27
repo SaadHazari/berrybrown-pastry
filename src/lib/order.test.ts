@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EMPTY_CUSTOM } from '../data/custom';
-import { customCakeMessage, enquiryMessage, orderRef, whatsappLink, whatsappOrderText } from './order';
+import { GENERAL_MESSAGE, customCakeMessage, enquiryMessage, mailtoLink, orderRef, whatsappLink, whatsappOrderText } from './order';
 
 describe('order', () => {
   it('formats an order reference', () => {
@@ -8,7 +8,7 @@ describe('order', () => {
     expect(ref).toMatch(/^BB-260917-[A-Z0-9]{4}$/);
   });
 
-  it('builds a WhatsApp order message with everything Safa needs', () => {
+  it('builds a WhatsApp order message with everything the studio needs', () => {
     const text = whatsappOrderText({
       ref: 'BB-260917-AB12',
       lines: [{ productId: 'berry-chocolate-drip', sizeId: '6in', flavourId: 'dark', qty: 2, message: 'Happy 30th Sara' }],
@@ -18,6 +18,7 @@ describe('order', () => {
       customer: { name: 'Sara', phone: '0501234567', email: '', address: 'Burj Views T2, 1204', notes: '' },
       paid: false,
     });
+    expect(text.split('\n')[0]).toBe("Hi Berry Brown, I'd like to order:");
     expect(text).toContain('BB-260917-AB12');
     expect(text).toContain('2 × Berry Chocolate Drip');
     expect(text).toContain('Happy 30th Sara');
@@ -44,7 +45,16 @@ describe('order', () => {
   });
 
   it('encodes the WhatsApp link with the studio number', () => {
-    expect(whatsappLink('Hi & bye')).toBe('https://wa.me/971509478943?text=Hi%20%26%20bye');
+    expect(whatsappLink('Hi & bye')).toBe('https://wa.me/971547944882?text=Hi%20%26%20bye');
+  });
+
+  it('greets the team, never a person', () => {
+    expect(GENERAL_MESSAGE).toBe('Hi Berry Brown, I have a question about a cake.');
+  });
+
+  it('builds a mailto link to the studio email', () => {
+    expect(mailtoLink('Gift boxes', 'Hi & bye')).toBe('mailto:connect@berrybrown.me?subject=Gift%20boxes&body=Hi%20%26%20bye');
+    expect(mailtoLink('Workshop')).toBe('mailto:connect@berrybrown.me?subject=Workshop');
   });
 });
 
@@ -95,7 +105,7 @@ describe('customCakeMessage', () => {
 describe('enquiryMessage', () => {
   it('names the product the customer clicked', () => {
     expect(enquiryMessage('box')).toContain('ask about The Box');
-    expect(enquiryMessage('workshop')).toContain('Make one with Safa');
+    expect(enquiryMessage('workshop')).toContain('Make one with us');
     expect(enquiryMessage('table')).toContain('The Table');
     expect(enquiryMessage(null)).toContain('for my company');
     expect(enquiryMessage('box')).toContain('Headcount:');

@@ -1,7 +1,7 @@
 import { CONTACT } from '../../data/content';
 import { cn } from '../../lib/cn';
 import { useInView } from '../../lib/hooks';
-import { whatsappLink } from '../../lib/order';
+import { GENERAL_MESSAGE, whatsappLink } from '../../lib/order';
 import { HeartIcon } from '../ui/Icons';
 
 export function Footer() {
@@ -25,7 +25,7 @@ export function Footer() {
             <p className="t-label text-butter-60">Order</p>
             <ul className="mt-sm space-y-xs">
               <li>
-                <a href={whatsappLink('Hi Safa, I have a question about a cake.')} target="_blank" rel="noopener noreferrer" className="link">
+                <a href={whatsappLink(GENERAL_MESSAGE)} target="_blank" rel="noopener noreferrer" className="link">
                   WhatsApp {CONTACT.phoneDisplay}
                 </a>
               </li>
