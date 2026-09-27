@@ -23,6 +23,7 @@ npm run dev       # http://localhost:5173
 npm test          # pricing, cart, checkout, custom form, WhatsApp messages, upload helpers
 npm run build     # type-checks the app and the Worker, then builds to dist/
 node scripts/qa-shots.mjs http://localhost:5173/ qa-shots   # scroll-through screenshots at 390 / 768 / 1440 px (add --reduced for reduced motion)
+node scripts/qa-checks.mjs http://localhost:5173/            # footer never shows above the page (1440 × 790 / 850 / 900); How it works with reduced motion
 ```
 
 `npm run dev` does not run the Worker, so **Pay online** falls back to WhatsApp, photo upload falls back to "I'll send my photos here", and nothing is saved to Supabase. To test the full site with the API, copy `.dev.vars.example` to `.dev.vars` (git-ignored), fill in the keys, then run:
