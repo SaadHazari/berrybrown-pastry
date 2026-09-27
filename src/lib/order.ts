@@ -1,4 +1,6 @@
 import { CONTACT, OFFERS, type OfferId } from '../data/content';
+import { BOX, EVENTS, WORKSHOP, type QuoteAbout } from '../data/companies';
+import type { QuoteForm } from '../data/quote';
 import { customFromPrice, customSummary, serveOption, type CustomForm } from '../data/custom';
 import { TIME_SLOTS, getZone } from '../data/zones';
 import { aed, prettyDate } from './format';
@@ -102,4 +104,32 @@ export function whatsappLink(text: string): string {
 export function mailtoLink(subject: string, body = ''): string {
   const query = [`subject=${encodeURIComponent(subject)}`, body ? `body=${encodeURIComponent(body)}` : ''].filter(Boolean).join('&');
   return `mailto:${CONTACT.email}?${query}`;
+}
+
+/** The WhatsApp or email text behind "Get a quote". Optional lines are left out when empty. */
+export function quoteMessage(about: QuoteAbout, f: QuoteForm): string {
+  const when = f.date ? prettyDate(f.date) : '';
+  const company = f.company.trim();
+  const lines: string[] = [];
+  if (about === 'box') {
+    const size = BOX.sizes.find((s) => s.id === f.boxSize);
+    lines.push(`${GREETING} I'd like a quote for gift boxes.`, '', `Boxes: ${f.qty.trim()}`);
+    if (size) lines.push(`Box: ${size.pieces} pieces, AED ${size.price} each`);
+    lines.push(`Our logo on the sleeve: ${f.logo === 'yes' ? 'yes' : 'no'}`, `Deliver by: ${when}`);
+    if (company) lines.push(`Company: ${company}`);
+  } else if (about === 'workshop') {
+    const place = WORKSHOP.places.find((p) => p.id === f.where);
+    lines.push(`${GREETING} I'd like a quote for a workshop.`, '', `Date: ${when}`);
+    if (place) lines.push(`Where: ${place.label.toLowerCase()}`);
+    lines.push(`People: ${f.qty.trim()}`);
+    if (company) lines.push(`Group: ${company}`);
+  } else {
+    const fmt = EVENTS.formats.find((x) => x.id === f.format);
+    lines.push(`${GREETING} I'd like a quote for a company event.`, '');
+    if (fmt) lines.push(`Event: ${fmt.title}`);
+    lines.push(`Date: ${when}`, `People: ${f.qty.trim()}`, `Office area: ${f.area.trim()}`);
+    if (company) lines.push(`Company: ${company}`);
+  }
+  lines.push(`Name: ${f.name.trim()}`);
+  return lines.join('\n');
 }

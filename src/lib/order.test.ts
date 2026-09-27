@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { EMPTY_CUSTOM } from '../data/custom';
-import { GENERAL_MESSAGE, customCakeMessage, enquiryMessage, mailtoLink, orderRef, whatsappLink, whatsappOrderText } from './order';
+import { EMPTY_QUOTE } from '../data/quote';
+import { GENERAL_MESSAGE, customCakeMessage, enquiryMessage, mailtoLink, orderRef, quoteMessage, whatsappLink, whatsappOrderText } from './order';
 
 describe('order', () => {
   it('formats an order reference', () => {
@@ -109,5 +110,34 @@ describe('enquiryMessage', () => {
     expect(enquiryMessage('table')).toContain('The Table');
     expect(enquiryMessage(null)).toContain('for my company');
     expect(enquiryMessage('box')).toContain('Headcount:');
+  });
+});
+
+describe('quoteMessage', () => {
+  it('writes a gift-box quote', () => {
+    const text = quoteMessage('box', { ...EMPTY_QUOTE, qty: '60', boxSize: '8', logo: 'yes', date: '2026-10-20', company: 'Acme', name: 'Lina' });
+    expect(text.split('\n')[0]).toBe("Hi Berry Brown, I'd like a quote for gift boxes.");
+    expect(text).toContain('Boxes: 60');
+    expect(text).toContain('Box: 8 pieces, AED 90 each');
+    expect(text).toContain('Our logo on the sleeve: yes');
+    expect(text).toContain('Deliver by: Tue 20 Oct');
+    expect(text).toContain('Company: Acme');
+    expect(text).toContain('Name: Lina');
+  });
+
+  it('writes a workshop quote', () => {
+    const text = quoteMessage('workshop', { ...EMPTY_QUOTE, where: 'venue', qty: '14', date: '2026-10-10', company: 'Book club', name: 'Mira' });
+    expect(text.split('\n')[0]).toBe("Hi Berry Brown, I'd like a quote for a workshop.");
+    expect(text).toContain('Where: at your venue');
+    expect(text).toContain('People: 14');
+    expect(text).toContain('Group: Book club');
+  });
+
+  it('writes an event quote and leaves out empty optional lines', () => {
+    const text = quoteMessage('event', { ...EMPTY_QUOTE, format: 'table', qty: '45', date: '2026-10-10', area: 'DIFC', name: 'Omar' });
+    expect(text).toContain('Event: The Table');
+    expect(text).toContain('Office area: DIFC');
+    expect(text).not.toContain('Company:');
+    expect(text).not.toMatch(/[!\u{1F300}-\u{1FAFF}]/u);
   });
 });
