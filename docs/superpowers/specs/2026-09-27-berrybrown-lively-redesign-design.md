@@ -47,6 +47,8 @@ The two files are identical; edit both the same way.
 | "We", not "I" | "We", "us", "our team". Never "I", never "Chef Safa" or "Safa" on the site |
 | Read brief v2 first | Read this spec first; brief v2 §5 for tokens |
 
+28 Sep: the motion rule gained a second exception, the hero intro (§5.2).
+
 Unchanged: logo is always a file; Alegreya for sentences, Jost for labels/buttons/prices/numbers; four colours plus Cocoa 70 and Cocoa 15; one Claret element per section; 4 px corners on cards, buttons and chips (circles allowed for icon-only buttons, avatars and dots); no exclamation marks, no "indulge / delight / treat yourself", never "homemade"; golden-ratio spacing tokens only.
 
 ## 4. Page map
@@ -91,20 +93,20 @@ Headline pattern for every content section (the old `SectionHeading`, restyled):
 
 ### 5.2 Hero (`#top`)
 
-Desktop, 12 columns, `section-most` top padding:
+Desktop, 12 columns, a short top padding, so both buttons and the main photo fit the first screen from about 650 px tall (changed 28 Sep: the stacked logo pushed them off screen):
 
-- **Left (6/12).** The `<h1>` holds `berrybrown-logo-primary.svg` at 440 px wide (alt: "Berry Brown — made with heart, not haste"). Under it:
+- **Left (6/12).** The `<h1>` is the tagline on two lines in Alegreya display, "Made with heart," then "not haste." in italic Cocoa 70, with the screen-reader text "Berry Brown — made with heart, not haste." It uses `t-display1`, and from 1024 px `min(5.2vw, 4.236rem)`, so each line stays on one line. Under it:
   - title3: "A cake studio in Dubai."
   - body, max 40ch: "Six signature cakes, custom cakes for the days that matter, and gift boxes and workshops for your team. All made to order."
   - Buttons: **Order a cake** (Claret, opens the menu overlay, gentle magnetic pull on desktop) and **Design your cake** (ghost, to `#custom`).
   - Rating row: three 32 px round photo avatars, a Cocoa star, `4.9 · 260+ reviews` in Jost (`RATING`, sample).
 - **Right (6/12).** Photo stack on a Rose block (a Rose rectangle offset behind the photos):
-  - Main photo 4:5, about 460 px wide, Butter frame, Jost caption `THE SIX · BERRY CHOCOLATE DRIP`.
+  - Main photo 4:5, about 460 px wide (smaller on short laptop windows, so it fits the first screen), Butter frame, Jost caption `THE SIX · BERRY CHOCOLATE DRIP`.
   - Small photo 1:1, about 220 px, overlapping bottom-left (a slice).
   - Small photo 4:5, about 180 px, overlapping top-right (hands piping).
   - Each drifts at its own rate while the page scrolls (±40–60 px).
-- On first load: logo, text and photos rise in with a 60 ms stagger (once).
-- Phones: logo centred at 280 px, text left-aligned, buttons full width and stacked, then the main photo full width with one small photo overlapping. No scroll cue.
+- **Intro (Saad, 28 Sep), once per visit.** The wide logo (`berrybrown-logo-horizontal.svg`) sits big over the tagline's place for 0.45 s, then glides and shrinks onto the top bar's logo in 0.75 s (same artwork, so it lands exactly). The tagline types in from 0.95 s, 55 ms a letter with a 250 ms pause between the lines, and a caret that goes 0.6 s after the last letter: about 2.6 s in all. Text, buttons and photos show from the first frame; the photos slide up 24 px. Any scroll, key or tap ends the intro at once. It does not play with reduced motion, on a return in the same visit, in a background tab, or when the page opens at an anchor.
+- Phones: the tagline on top, text left-aligned, buttons full width and stacked, then the main photo full width with one small photo overlapping; the photo starts on the first screen. No scroll cue.
 
 ### 5.3 The Six (`#the-six`)
 
@@ -322,6 +324,7 @@ Library: `motion` (the old site's `motion/react`), wrapped in `<MotionConfig red
 | Sticky stacked cards | How it works, phones |
 | Page lifts off the footer | Footer, desktop |
 | Review rows drift, with pause | Kind words |
+| Hero intro: the logo glides into the top bar while the tagline types (once per visit, about 2.5 s) | Hero, top bar |
 
 Not allowed: smooth-scroll libraries, the marquee strip, video or GIF, a preloader, infinite pulses or pings, confetti, anything else that loops. With `prefers-reduced-motion: reduce`, every item above renders in its final state and the review rows stop.
 

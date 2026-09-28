@@ -16,7 +16,7 @@ Stack: React 19 · TypeScript · Vite · Tailwind v4 · Cloudflare Workers (see 
 - Four colours only: Butter `#F6EEDF`, Cocoa `#3E2A21`, Rose `#E7CFC6`, Claret `#7A2A3A`, plus Cocoa 70% `#726156` for second-level text and Cocoa 15% for hairlines.
 - **One** Claret element per section, besides the berry in the logo.
 - Corners 4 px on cards, buttons and chips. Circles only for icon-only buttons, avatars and dots. Never pill-shaped text buttons, never sharp. Hairlines, not boxes.
-- Motion happens only on scroll, pointer or tap. One exception: the review rows drift, with a pause button. No smooth-scroll library, no marquee strip, no video, no preloader. `prefers-reduced-motion` stops all of it.
+- Motion happens only on scroll, pointer or tap. Two exceptions: the review rows drift, with a pause button; and once per visit, the hero intro (the logo glides into the top bar while the tagline types in, about 2.5 s; any scroll, key or tap ends it). No smooth-scroll library, no marquee strip, no video, no preloader. `prefers-reduced-motion` stops all of it.
 - Copy: short sentences, no exclamation marks, no "indulge / delight / treat yourself". "We", "us", "our team" — never "I", never "Chef Safa" or "Safa" on the site. Never "homemade".
 - Photos are AI-made in the palette until real ones exist (`ai: true` in `src/data/media.ts`, files from `scripts/grade-photos.py`). Replace them one by one. The Rose placeholder is only the fallback for a missing file.
 - Spacing and type sizes follow the golden-ratio scale in the brief §5 (base 18 px; tokens 2xs…3xl).
