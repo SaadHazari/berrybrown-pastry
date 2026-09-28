@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CONTACT } from '../../data/content';
 import { cn } from '../../lib/cn';
 import { useScrollSpy, useTopBar } from '../../lib/hooks';
+import { useIntroPhase } from '../../lib/intro';
 import { ease, spring } from '../../lib/motion';
 import { GENERAL_MESSAGE, whatsappLink } from '../../lib/order';
 import { useCart } from '../../store/cart';
@@ -148,6 +149,8 @@ export function Navbar() {
   const [dropOpen, setDropOpen] = useState(false);
   const { condensed, hidden } = useTopBar(menuOpen || dropOpen || overlay !== null);
   const active = navFor(useScrollSpy(SPY));
+  const intro = useIntroPhase();
+  const introLogo = intro === 'hold' || intro === 'fly';
 
   const goFromMenu = (href: string) => {
     setMenuOpen(false);
@@ -162,7 +165,8 @@ export function Navbar() {
       <header className={cn('sticky top-0 z-50 border-b border-cocoa-15 bg-butter/92 backdrop-blur-[8px] transition-transform duration-500 ease-out', hidden && '-translate-y-full')}>
         <nav aria-label="Main" className={cn('container-x flex items-center gap-md transition-[height] duration-300', condensed ? 'h-[60px]' : 'h-[64px] lg:h-[76px]')}>
           <a href="#top" className="flex shrink-0 items-center" aria-label="Berry Brown, back to top">
-            <img src="/brand/berrybrown-logo-horizontal.svg" alt="" width={437} height={137} className={cn('w-auto transition-[height] duration-300', condensed ? 'h-[42px]' : 'h-[44px] lg:h-[56px]')} />
+            {/* Hidden while the hero's intro logo glides here; it shows the moment that logo lands on it. */}
+            <img id="bar-logo" src="/brand/berrybrown-logo-horizontal.svg" alt="" width={437} height={137} className={cn('w-auto transition-[height] duration-300', condensed ? 'h-[42px]' : 'h-[44px] lg:h-[56px]', introLogo && 'opacity-0')} />
           </a>
 
           <ul className="mx-auto hidden items-center gap-lg lg:flex">

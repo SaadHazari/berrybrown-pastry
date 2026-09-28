@@ -44,6 +44,7 @@
   --animate-*: initial;
   --animate-toast: toast-in 200ms ease-out;
   --animate-drift: drift var(--drift-duration, 60s) linear infinite;
+  --animate-caret: caret 1.06s steps(1, end) infinite;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   @keyframes toast-in {
@@ -53,6 +54,10 @@
   @keyframes drift {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
+  }
+
+  @keyframes caret {
+    50% { opacity: 0; }
   }
 }
 
