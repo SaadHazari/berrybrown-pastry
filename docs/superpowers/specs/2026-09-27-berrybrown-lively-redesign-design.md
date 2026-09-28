@@ -32,7 +32,7 @@ The brief-v2 build (live since 27 Sep, `main` d502078) reads as empty and static
 | Motion | Only on scroll, pointer or tap. The review rows are the one thing that moves on its own, with a pause button |
 | Voice | "We / us / our team". No "I", no "Chef Safa" |
 | Custom cakes | 1 week notice (revenue brief house terms). Sizes 6" from 300, 8" from 420, two tiers from 850 |
-| Udora | A small strip. Shows "Coming soon to Udora" until `CONTACT.udora` has a link |
+| Udora | Removed on 28 Sep (Saad). It was a small strip showing "Coming soon to Udora" |
 | Cake log | Last section before the footer, folded shut |
 | Delivery | Work on `redesign/lively`. Live site unchanged until Saad says "go live" |
 
@@ -63,7 +63,7 @@ Unchanged: logo is always a file; Alegreya for sentences, Jost for labels/button
 | 6 | Gift boxes (The Box) | `gift-boxes` | Cocoa | None (never Claret on Cocoa) |
 | 7 | Workshops | `workshops` | Butter | "Get a quote" button |
 | 8 | Company events | `events` | Rose | "Get a quote" button |
-| 9 | Udora strip | `udora` | Butter, hairlines | None |
+| 9 | Udora strip — removed 28 Sep | — | — | — |
 | 10 | Our studio | `studio` | Butter | Two words in the headline |
 | 11 | From our kitchen | `kitchen` | Butter | None |
 | 12 | Kind words | `reviews` | Butter | Rating number |
@@ -114,9 +114,9 @@ The old "Our favourites" carousel.
 
 - Header row: label `THE SIX`, headline "Our signature cakes.", one-liner "Six cakes. Three sizes. 24 hours' notice." Right side: prev/next square arrow buttons (desktop) and **See the full menu** (Cocoa, opens the menu overlay).
 - Row: horizontal scroll-snap, drag with the mouse, swipe on touch. Card width 360 px desktop, 78vw phone. Native scrolling only; `scrollBy` with `behavior: smooth` for the arrows is fine.
-- Card: 4:5 photo, 4 px corners, hover zoom 1.05 over 700 ms; on hover a Butter chip `CHOOSE SIZE & FLAVOUR` rises in bottom-left; a 44 px Cocoa square **+** button bottom-right adds the default size (6") and first flavour and shows the existing toast with "View bag". Jost `1 OF 6` top-left on a Butter chip. Under the photo: name (heading), one line (callout, Cocoa 70), the ladder `5" 150 · 6" 200 · 8" 280` in Jost. The whole card opens the existing `ProductSheet`.
+- Card: 4:5 photo, 4 px corners, hover zoom 1.05 over 700 ms; on hover a Butter chip `CHOOSE SIZE & FLAVOUR` rises in bottom-left; a 44 px Cocoa square **+** button bottom-right adds the chosen size (or the 6", which it then marks as chosen) with the first flavour, and shows the existing toast with "View bag". Jost `1 OF 6` top-left on a Butter chip. Under the photo: name (heading), one line (callout, Cocoa 70), then the three sizes as `Chip`s (`5" · 150`, `6" · 200`, `8" · 280`), each with a Jost caption and a people icon under it (`4–6`, `6–8`, `10–14`, from `serves` in `PRICE_LADDER`). No size is chosen at first; choosing one shows `SERVES 10–14` top-right on the photo, in the same Butter chip and `sm` inset as `1 OF 6` (Saad, 28 Sep). The photo opens the existing `ProductSheet` on the chosen size.
 - Under the row: a hairline track with a Claret fill that follows the scroll position.
-- Two label lines under it: "Written on — a hand-piped message and one decoration on any of the Six, +50." and "Photos show the style. Each cake is made by hand, so yours will look a little different."
+- One caption line under it: "Photos show the style. Each cake is made by hand, so yours will look a little different." (The "Written on … +50" line was removed on 28 Sep: the team talks about writing on WhatsApp.)
 
 ### 5.4 Design your cake (`#custom`)
 
@@ -194,9 +194,9 @@ Two cards side by side (stacked on phones), Butter, hairline, 3:2 photo on top:
 
 Facts: `PAID IN ADVANCE · FINAL HEADCOUNT 72 HOURS BEFORE · YOU PAY FOR THE NUMBER BOOKED`. One **Get a quote** (Claret) → quote sheet for `event`.
 
-### 5.9 Udora strip (`#udora`)
+### 5.9 Udora strip — removed (Saad, 28 Sep)
 
-A slim band between hairlines: a brand colour circle, the line "Sending a cake as a gift? Our bento cakes and 5-inch cakes are also on Udora.", and **Shop on Udora** (ghost button, new tab) when `CONTACT.udora` is set; otherwise the label `COMING SOON TO UDORA`.
+Company events now runs straight into Our studio.
 
 ### 5.10 Our studio (`#studio`)
 
@@ -344,7 +344,7 @@ Also add: `frame` utility (Butter padding `--spacing-xs`, hairline, 4 px corners
 
 | File | Change |
 |---|---|
-| `src/data/content.ts` | `CONTACT`: `whatsapp: '971547944882'`, `phoneDisplay: '+971 54 794 4882'`, `email: 'connect@berrybrown.me'`, new `udora: ''`. `STATS` become numbers for count-up (`{ value: 12, suffix: '', label: 'years' }` …, `sample: true`). `REVIEWS` edits. `FAQS` per §5.13. `STEPS` for How it works. `GALLERY` for the kitchen. Remove `OFFERS` |
+| `src/data/content.ts` | `CONTACT`: `whatsapp: '971547944882'`, `phoneDisplay: '+971 54 794 4882'`, `email: 'connect@berrybrown.me'` (a `udora` link was added on 27 Sep and removed on 28 Sep). `STATS` become numbers for count-up (`{ value: 12, suffix: '', label: 'years' }` …, `sample: true`). `REVIEWS` edits. `FAQS` per §5.13. `STEPS` for How it works. `GALLERY` for the kitchen. Remove `OFFERS` |
 | `src/data/companies.ts` (new) | Gift box sizes and facts, workshop prices and facts, the two event formats, `DEADLINES` with `{ label, branded?, plain?, date? }`, `upcomingDeadlines()`, `nextDeadline()` |
 | `src/data/custom.ts` | Rewrite for §5.4: `CUSTOMISED = 'customised'`, four option lists, `CUSTOM_LEAD_DAYS = 7`, from-prices 300/420/850, `CUSTOM_FLAVOUR_ADD = 60`, `validateCustom`, `customSummary`, `customFromPrice`, step order and `isStepDone(step, form)` |
 | `src/data/quote.ts` (new) | Field definitions, `validateQuote(about, form, today)`, `quoteMessage(about, form)` |
@@ -418,7 +418,6 @@ Not brought back from the old site: Lenis, `Preloader`, `TrustMarquee`, `LoopVid
 
 | Item | Where it goes |
 |---|---|
-| Udora shop link | `CONTACT.udora` |
 | Instagram handle | `CONTACT.instagram` |
 | Studio / pickup wording | `CONTACT.location` |
 | Real rating, stats, reviews | `content.ts` / Supabase `reviews` |

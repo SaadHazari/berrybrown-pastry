@@ -21,7 +21,7 @@ A fresh reviewer read the whole branch (`d502078..ec99eae`) and tested it in Chr
 - **Shadows.** Brief v2 §5.5 says "Shadows: None". The branch has soft shadows on photo frames, the lifted page and the WhatsApp button. They bring back the old site's printed-photo look. Keep them, or remove them (7 uses in 5 files).
 - **Lighthouse.** Mobile Performance is 74. The spec asks for 85. The live site scores 75 under the same test. Reaching 85 needs pre-rendering (a follow-up).
 - **Brand book.** It says "no AI-made cakes". The site uses AI photos until real ones exist.
-- **Missing facts.** The Udora link and the Instagram handle. Also the workshop price: the site says "from AED 150 a seat", but the YAP Club booking was AED 100 a kit. Is 100 a one-off, or the new price?
+- **Missing facts.** The Instagram handle (the Udora strip was removed on 28 Sep). Also the workshop price: the site says "from AED 150 a seat", but the YAP Club booking was AED 100 a kit. Is 100 a one-off, or the new price?
 
 ## Rulings made during the build
 

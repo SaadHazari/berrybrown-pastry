@@ -2,7 +2,7 @@
 
 The website for Berry Brown, a cake studio in Dubai. *Made with heart, not haste.*
 
-One page, sixteen parts: deadline strip and top bar · hero · the Six · design your cake · how it works · gift boxes · workshops · company events · Udora · our studio · from our kitchen · kind words · little questions · closing · the cake log (folded) · footer. The design is in `docs/superpowers/specs/2026-09-27-berrybrown-lively-redesign-design.md`. The shop opens as overlays on top of it: the Six, a product sheet, the bag and a 3-step checkout. Customers **pay online with Stripe** or **send the order on WhatsApp** (+971 54 794 4882). Custom cakes go to WhatsApp through the stepper; gift boxes, workshops and events go to WhatsApp or email (connect@berrybrown.me) through their quote sheets.
+One page, fifteen parts: deadline strip and top bar · hero · the Six · design your cake · how it works · gift boxes · workshops · company events · our studio · from our kitchen · kind words · little questions · closing · the cake log (folded) · footer. The design is in `docs/superpowers/specs/2026-09-27-berrybrown-lively-redesign-design.md`. The shop opens as overlays on top of it: the Six, a product sheet, the bag and a 3-step checkout. Customers **pay online with Stripe** or **send the order on WhatsApp** (+971 54 794 4882). Custom cakes go to WhatsApp through the stepper; gift boxes, workshops and events go to WhatsApp or email (connect@berrybrown.me) through their quote sheets.
 
 The design brief is `docs/Berry_Brown_Website_Brief_v2.md`. The brand rules are in `docs/brand/`. If they disagree, the brand book wins.
 
@@ -102,7 +102,7 @@ Photo upload limits: 3 files per send, 10 MB each, JPG/PNG/WebP/HEIC (checked by
 | The Six: names, one-liners, flavours, allergens | `src/data/products.ts` |
 | The price ladder (5" 150 · 6" 200 · 8" 280) | `PRICE_LADDER` in `src/data/products.ts` |
 | Delivery fee, free-delivery threshold, time slots | `src/data/zones.ts` |
-| Contact details (WhatsApp, email, Instagram, Udora link), rating, stats, FAQ, how-it-works steps, kitchen photos | `src/data/content.ts` |
+| Contact details (WhatsApp, email, Instagram), rating, stats, FAQ, how-it-works steps, kitchen photos | `src/data/content.ts` |
 | Gift boxes, workshops, company events, order-by dates | `src/data/companies.ts` |
 | Quote form rules (minimums, lead days) | `src/data/quote.ts` |
 | The log and reviews (live) | Supabase tables `cakes` and `reviews`; samples in `src/data/content.ts` show until real rows are published |
@@ -129,12 +129,10 @@ The 31 photos are AI-made stand-ins in the brand palette (`ai: true` in `src/dat
 | Five reviews | `REVIEWS` in `src/data/content.ts` | Publish real reviews in Supabase `reviews`; the samples disappear on their own |
 | The log (#041, #040, #039) | `LOG` in `src/data/content.ts` | Publish real cakes with photos in Supabase `cakes`; the samples disappear on their own |
 | Instagram handle | `CONTACT.instagram` in `src/data/content.ts` | Blank shows "From the studio" under the footer photos; fill it in to link them |
-| Udora shop link | `CONTACT.udora` in `src/data/content.ts` | Blank shows "Coming soon to Udora" |
 | Workshop price 150 vs 100 (YAP Club) | `WORKSHOP` in `src/data/companies.ts` | Saad decides |
 | Studio / pickup wording | `CONTACT.location` in `src/data/content.ts` | "Dubai" is a placeholder |
 | 31 AI photos | `src/data/media.ts` (`ai: true`) | Replace with real photos from the shot list; until then the site says "Photos show the style." |
 | Share image | `public/og.png` | Generated from the logo; replace with a real photo when one exists |
-| "Written on" +50 | `WRITTEN_ON` in `src/data/products.ts` | Shown as a line under the Six; not yet an add-on in checkout |
 
 ## Project layout
 
@@ -152,6 +150,6 @@ src/
   store/                    cart (localStorage) and UI overlay state
   components/ui/            Button, Chip, Field, Frame, Heading, Photo, Placeholder, Rise, SplitWords, Parallax, Magnetic, CountUp, DriftRow, Sheet, Sprig…
   components/layout/        DeadlineStrip, Navbar, WhatsAppFab, Footer, MobileBagBar, ToastLayer
-  components/sections/      Hero, TheSix, custom/ (the stepper), HowItWorks, GiftBoxes, Workshops, CompanyEvents, Udora, Studio, Kitchen, Reviews, Faq, Closing, CakeLog
+  components/sections/      Hero, TheSix, custom/ (the stepper), HowItWorks, GiftBoxes, Workshops, CompanyEvents, Studio, Kitchen, Reviews, Faq, Closing, CakeLog
   components/shop/          MenuOverlay, ProductCard, ProductSheet, CartDrawer, Checkout, SuccessOverlay, QuoteSheet, Lightbox
 ```
