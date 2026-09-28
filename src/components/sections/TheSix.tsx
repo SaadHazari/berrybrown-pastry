@@ -1,7 +1,7 @@
 import { motion, useReducedMotion, useScroll } from 'motion/react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { PHOTO_NOTE } from '../../data/content';
-import { PRODUCTS, WRITTEN_ON } from '../../data/products';
+import { PRODUCTS } from '../../data/products';
 import { useDragScroll } from '../../lib/useDragScroll';
 import { useUI } from '../../store/ui';
 import { ProductCard } from '../shop/ProductCard';
@@ -61,8 +61,7 @@ export function TheSix() {
         <div className="h-[2px] overflow-hidden rounded-full bg-cocoa-15">
           <motion.div className="h-full origin-left bg-claret" style={{ scaleX: scrollXProgress }} />
         </div>
-        <p className="t-label mt-lg text-cocoa-70">Written on — a hand-piped message and one decoration on any of the Six, +{WRITTEN_ON.price}.</p>
-        <p className="t-caption mt-xs text-cocoa-70">{PHOTO_NOTE}</p>
+        <p className="t-caption mt-lg text-cocoa-70">{PHOTO_NOTE}</p>
       </div>
     </section>
   );

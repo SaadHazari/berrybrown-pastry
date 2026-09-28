@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { defaultSize, getProduct, type Product } from '../../data/products';
+import { getProduct, sizeFor, type Product } from '../../data/products';
 import { cn } from '../../lib/cn';
 import { aed } from '../../lib/format';
 import { MESSAGE_MAX } from '../../lib/pricing';
@@ -10,10 +10,10 @@ import { Chip } from '../ui/Chip';
 import { QtyStepper } from '../ui/QtyStepper';
 import { Sheet } from '../ui/Sheet';
 
-function Details({ product, onAdded }: { product: Product; onAdded(): void }) {
+function Details({ product, sizeId: chosen, onAdded }: { product: Product; sizeId?: string; onAdded(): void }) {
   const { add } = useCart();
   const { notify } = useUI();
-  const [sizeId, setSizeId] = useState(defaultSize(product).id);
+  const [sizeId, setSizeId] = useState(sizeFor(product, chosen).id);
   const [flavourId, setFlavourId] = useState(product.flavours[0].id);
   const [message, setMessage] = useState('');
   const [qty, setQty] = useState(1);
@@ -87,14 +87,16 @@ export function ProductSheet() {
   const { overlay, close, open } = useUI();
   const back = overlay?.kind === 'product' ? overlay.back : undefined;
   const onClose = () => (back ? open({ kind: back }) : close());
-  const [lastId, setLastId] = useState<string | null>(null);
+  // Kept after closing, so the sheet's content stays put while it slides away.
+  const [last, setLast] = useState<{ id: string; size?: string } | null>(null);
   const id = overlay?.kind === 'product' ? overlay.id : null;
-  if (id && id !== lastId) setLastId(id);
-  const product = lastId ? getProduct(lastId) : undefined;
+  const size = overlay?.kind === 'product' ? overlay.size : undefined;
+  if (id && (id !== last?.id || size !== last?.size)) setLast({ id, size });
+  const product = last ? getProduct(last.id) : undefined;
 
   return (
     <Sheet open={!!id && !!product} onClose={onClose} title={product?.name ?? 'Cake'} hideTitle width="md:w-[520px]">
-      {product && <Details key={product.id} product={product} onAdded={onClose} />}
+      {product && <Details key={`${product.id}:${last?.size ?? ''}`} product={product} sizeId={last?.size} onAdded={onClose} />}
     </Sheet>
   );
 }

@@ -41,11 +41,11 @@ const MOBILE_LINKS = [
 ];
 
 /** Every section, so the dot clears when a section without a link (hero, how it works, reviews…) is in view. */
-const SPY = ['top', 'the-six', 'custom', 'how', 'gift-boxes', 'workshops', 'events', 'udora', 'studio', 'kitchen', 'reviews', 'faq', 'log'];
+const SPY = ['top', 'the-six', 'custom', 'how', 'gift-boxes', 'workshops', 'events', 'studio', 'kitchen', 'reviews', 'faq', 'log'];
 
 function navFor(section: string | null): NavId | null {
   if (section === 'the-six' || section === 'custom' || section === 'studio' || section === 'faq') return section;
-  if (section === 'gift-boxes' || section === 'workshops' || section === 'events' || section === 'udora') return 'companies';
+  if (section === 'gift-boxes' || section === 'workshops' || section === 'events') return 'companies';
   return null;
 }
 

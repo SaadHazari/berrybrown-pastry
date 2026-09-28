@@ -1,18 +1,28 @@
-import { Plus } from 'lucide-react';
-import { defaultSize, ladderLine, type Product } from '../../data/products';
+import { Plus, Users } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { useState } from 'react';
+import { sizeFor, type Product } from '../../data/products';
 import { aed } from '../../lib/format';
+import { spring } from '../../lib/motion';
 import { useCart } from '../../store/cart';
 import { useUI } from '../../store/ui';
+import { Chip } from '../ui/Chip';
 import { Photo } from '../ui/Photo';
 
-/** One of the Six: photo, name, one line, the price ladder. The photo opens the sheet; "+" adds the 6" straight to the bag. */
+/**
+ * One of the Six: photo, name, one line, and the three sizes with how many each serves. No size is chosen at first;
+ * picking one shows a "Serves" tag on the photo. "+" adds the chosen size (or the 6"), and the photo opens the sheet on it.
+ */
 export function ProductCard({ product, index }: { product: Product; index?: number }) {
   const { add } = useCart();
   const { open, notify, overlay } = useUI();
-  const size = defaultSize(product);
+  const reduce = useReducedMotion();
+  const [chosen, setChosen] = useState<string | null>(null);
+  const size = sizeFor(product, chosen);
 
   const quickAdd = () => {
     add({ productId: product.id, sizeId: size.id, flavourId: product.flavours[0].id, qty: 1 });
+    setChosen(size.id);
     notify(`${product.name} added`);
   };
 
@@ -21,7 +31,7 @@ export function ProductCard({ product, index }: { product: Product; index?: numb
       <div className="relative">
         <button
           type="button"
-          onClick={() => open({ kind: 'product', id: product.id, back: overlay?.kind === 'menu' ? 'menu' : undefined })}
+          onClick={() => open({ kind: 'product', id: product.id, size: chosen ?? undefined, back: overlay?.kind === 'menu' ? 'menu' : undefined })}
           className="relative block w-full overflow-hidden rounded text-left"
           aria-label={`${product.name}: choose size and flavour`}
         >
@@ -31,6 +41,23 @@ export function ProductCard({ product, index }: { product: Product; index?: numb
               {index + 1} of 6
             </span>
           )}
+          <AnimatePresence>
+            {chosen && (
+              <motion.span
+                key="serves"
+                data-serves
+                initial={reduce ? false : { opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduce ? undefined : { opacity: 0, y: -4 }}
+                transition={spring.snappy}
+                className="t-label absolute right-sm top-sm flex items-center gap-2xs rounded bg-butter/90 px-xs py-2xs text-cocoa"
+                aria-hidden
+              >
+                <Users className="size-[12px]" strokeWidth={1.75} aria-hidden />
+                Serves {size.serves}
+              </motion.span>
+            )}
+          </AnimatePresence>
           <span className="t-label absolute bottom-sm left-sm hidden translate-y-2 rounded bg-butter px-sm py-xs text-cocoa opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 md:block" aria-hidden>
             Choose size & flavour
           </span>
@@ -46,7 +73,20 @@ export function ProductCard({ product, index }: { product: Product; index?: numb
       </div>
       <h3 className="t-heading mt-md">{product.name}</h3>
       <p className="t-callout mt-2xs text-cocoa-70">{product.short}</p>
-      <p className="t-price mt-sm">{ladderLine(product)}</p>
+      <div role="radiogroup" aria-label={`Size, ${product.name}`} className="mt-sm grid grid-cols-3 gap-xs">
+        {product.sizes.map((s) => (
+          <div key={s.id} className="flex flex-col items-center gap-2xs">
+            <Chip selected={chosen === s.id} onSelect={() => setChosen(s.id)} className="w-full whitespace-nowrap px-xs!">
+              {s.label} · {s.price}
+              <span className="sr-only">, serves {s.serves}</span>
+            </Chip>
+            <span data-serves-caption className="t-price-sm flex items-center gap-2xs text-cocoa-70" aria-hidden>
+              <Users className="size-[12px]" strokeWidth={1.75} />
+              {s.serves}
+            </span>
+          </div>
+        ))}
+      </div>
     </article>
   );
 }

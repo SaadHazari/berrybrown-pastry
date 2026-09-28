@@ -158,6 +158,55 @@ const DONE = 'Made with heart,|not haste.';
   await page.close();
 }
 
+// 5. The Six: a card has no size chosen at first. Picking one shows a "Serves" tag at the photo's top-right,
+// 11 px (the LiftKit sm step) in from the corner. "+" adds that size, and the photo opens the sheet on it.
+{
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  await page.goto(`${url}#the-six`, { waitUntil: 'networkidle' });
+  const card = page.locator('#the-six article').first();
+  const at = async () => ({
+    tag: ((await card.locator('[data-serves]').count()) ? (await card.locator('[data-serves]').textContent()).trim() : null),
+    checked: await card.locator('[role="radio"][aria-checked="true"]').count(),
+  });
+  const first = await at();
+  const captions = (await card.locator('[data-serves-caption]').allTextContents()).map((t) => t.trim());
+  check(first.tag === null && first.checked === 0 && captions.join(' | ') === '4–6 | 6–8 | 10–14', `The Six: no size chosen at first; captions under the sizes read "${captions.join(' | ')}"`);
+  const radios = card.locator('[role="radio"]');
+  const eight = await radios.count() === 3 ? radios.nth(2) : null;
+  if (eight) await eight.click();
+  const picked = await at();
+  const box = await card.evaluate((el) => {
+    const photo = el.querySelector('button').getBoundingClientRect();
+    const tag = el.querySelector('[data-serves]')?.getBoundingClientRect();
+    return tag ? { top: Math.round(tag.top - photo.top), right: Math.round(photo.right - tag.right) } : null;
+  });
+  check(picked.tag === 'Serves 10–14' && box && Math.abs(box.top - 11) <= 1 && Math.abs(box.right - 11) <= 1, `The Six: picking 8" shows "${picked.tag}" at the photo's top-right (${box ? `${box.top} px down, ${box.right} px in` : 'no tag'})`);
+  const plus = await card.getByRole('button', { name: /Quick add/ }).getAttribute('aria-label');
+  check(/8"/.test(plus), `The Six: "+" adds the chosen size (${plus})`);
+  await card.locator('button').first().click();
+  await page.waitForSelector('[role="dialog"] [role="radio"][aria-checked="true"]');
+  const sheet = (await page.locator('[role="dialog"] [role="radio"][aria-checked="true"]').first().textContent()).trim();
+  check(sheet.startsWith('8"'), `The Six: the photo opens the cake's sheet with the same size chosen ("${sheet}")`);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(500);
+  const second = page.locator('#the-six article').nth(1);
+  await second.getByRole('button', { name: /Quick add/ }).click();
+  const text = async (loc) => ((await loc.count()) ? (await loc.first().textContent()).trim() : '');
+  const after = await text(second.locator('[data-serves]'));
+  const marked = await text(second.locator('[role="radio"][aria-checked="true"]'));
+  check(after === 'Serves 6–8' && marked.startsWith('6"'), `The Six: "+" with no size chosen adds the 6" and marks it ("${after}", "${marked}")`);
+  await page.close();
+}
+
+// 6. Removed on 28 Sep: the Udora strip, and the "Written on" line under the Six.
+{
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  await page.goto(url, { waitUntil: 'networkidle' });
+  const r = await page.evaluate(() => ({ udora: !!document.getElementById('udora') || /Udora/.test(document.body.textContent), written: /Written on/.test(document.getElementById('the-six').textContent) }));
+  check(!r.udora && !r.written, `Removed: the Udora strip (${r.udora ? 'still there' : 'gone'}) and the "Written on" line (${r.written ? 'still there' : 'gone'})`);
+  await page.close();
+}
+
 await browser.close();
 console.log(failed ? `${failed} check(s) failed` : 'All checks passed.');
 process.exit(failed ? 1 : 0);

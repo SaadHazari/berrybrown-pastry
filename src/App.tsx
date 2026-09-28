@@ -18,7 +18,6 @@ import { Kitchen } from './components/sections/Kitchen';
 import { Reviews } from './components/sections/Reviews';
 import { Studio } from './components/sections/Studio';
 import { TheSix } from './components/sections/TheSix';
-import { Udora } from './components/sections/Udora';
 import { Workshops } from './components/sections/Workshops';
 import { SprigDefs } from './components/ui/Sprig';
 import { CartProvider } from './store/cart';
@@ -45,7 +44,6 @@ export default function App() {
             <GiftBoxes />
             <Workshops />
             <CompanyEvents />
-            <Udora />
             <Studio />
             <Kitchen />
             <Reviews />

@@ -6,8 +6,6 @@ export const CONTACT = {
   email: 'connect@berrybrown.me',
   /** Saad to confirm the handle. Blank shows "From the studio" with no links. */
   instagram: '',
-  /** The Udora shop link. Blank shows "Coming soon to Udora". */
-  udora: '',
   /** Saad to confirm the pickup / studio wording. */
   location: 'Dubai',
   hours: 'Every day · 9am – 9pm',

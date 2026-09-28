@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { CONTACT, FAQS, LOG, REVIEWS, cakeNumber } from './content';
-import { PRODUCTS, ladderLine } from './products';
+import { PRICE_LADDER, PRODUCTS } from './products';
 
 describe('content', () => {
   it('has exactly six cakes on one flat ladder', () => {
     expect(PRODUCTS).toHaveLength(6);
-    for (const p of PRODUCTS) expect(ladderLine(p)).toBe('5" 150 · 6" 200 · 8" 280');
+    for (const p of PRODUCTS) expect(p.sizes.map((s) => `${s.label} ${s.price}`)).toEqual(['5" 150', '6" 200', '8" 280']);
+    for (const p of PRODUCTS) expect(p.sizes).toBe(PRICE_LADDER);
   });
 
   it('numbers cakes with three digits, newest first', () => {

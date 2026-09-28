@@ -4,7 +4,7 @@ import type { QuoteAbout } from '../data/companies';
 export type Overlay =
   | null
   | { kind: 'menu' }
-  | { kind: 'product'; id: string; back?: 'menu' }
+  | { kind: 'product'; id: string; size?: string; back?: 'menu' }
   | { kind: 'cart' }
   | { kind: 'checkout'; notice?: string }
   | { kind: 'success'; ref: string; paid: boolean; whatsappUrl?: string }

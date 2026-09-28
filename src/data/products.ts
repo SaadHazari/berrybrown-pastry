@@ -23,9 +23,6 @@ export const PRICE_LADDER: Size[] = [
   { id: '8in', label: '8"', serves: '10–14', price: 280 },
 ];
 
-/** "Written on" — a hand-piped message and one decoration on any of the Six. */
-export const WRITTEN_ON = { price: 50 };
-
 const cake = (
   id: string,
   name: string,
@@ -122,7 +119,7 @@ export function defaultSize(p: Product): Size {
   return p.sizes.find((s) => s.popular) ?? p.sizes[0];
 }
 
-/** `5" 150 · 6" 200 · 8" 280` — the price ladder as one Jost line. */
-export function ladderLine(p: Product): string {
-  return p.sizes.map((s) => `${s.label} ${s.price}`).join(' · ');
+/** The size a visitor chose on the card, or the popular 6" when they have not chosen one. */
+export function sizeFor(p: Product, id: string | null | undefined): Size {
+  return p.sizes.find((s) => s.id === id) ?? defaultSize(p);
 }
