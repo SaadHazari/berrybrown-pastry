@@ -56,9 +56,10 @@ describe('custom cake form', () => {
     expect(customSummary({ ...full, noWords: true })[4].value).toBe('No words');
   });
 
-  it('shows the photo of the chosen look', () => {
-    expect(ticketImage(EMPTY_CUSTOM)).toBe(media.looks.custom);
+  it('shows the photo of the chosen look, and no photo before one is picked', () => {
+    expect(ticketImage(EMPTY_CUSTOM)).toBeNull();
     expect(ticketImage({ ...EMPTY_CUSTOM, look: 'drip' })).toBe(media.looks.drip);
+    expect(ticketImage({ ...EMPTY_CUSTOM, look: CUSTOMISED })).toBe(media.looks.custom);
   });
 
   it('turns the answers into strings for the enquiry log', () => {

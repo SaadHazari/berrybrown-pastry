@@ -209,21 +209,23 @@ export function CustomCake() {
       <div className="container-x">
         <Heading id="custom-title" tone="rose" label="Custom cakes" title="Design your cake." oneliner="Six quick questions. We reply on WhatsApp with the price." />
 
-        <div className="mt-xl grid gap-xl lg:grid-cols-12 lg:gap-2xl">
-          <div className="rounded border border-cocoa-15 bg-butter p-md md:p-xl lg:col-span-7 lg:self-start">
+        {/* One ticket: the questions and "Your cake" are two halves of one card, split by a dashed line like a tear-off
+            stub. They share both edges, so nothing pins or slides, and Next and Send sit on one bottom line. */}
+        <div className="mt-xl rounded border border-cocoa-15 bg-butter lg:grid lg:grid-cols-12">
+          <div data-pane="steps" className="flex flex-col p-md md:p-xl lg:col-span-7">
             <Progress step={step} form={form} earliest={earliest} onJump={go} />
             <p className="sr-only" aria-live="polite">
               Step {step + 1} of {CUSTOM_STEPS.length}
             </p>
             <AnimatePresence mode="wait" custom={dir} initial={false}>
-              <motion.div key={current.id} custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3, ease: ease.out }}>
+              <motion.div key={current.id} custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3, ease: ease.out }} className="pb-xl">
                 <h3 ref={focusQuestion} tabIndex={-1} className="t-title2 mt-lg outline-none">
                   {current.question}
                 </h3>
                 <div className="mt-lg">{body()}</div>
               </motion.div>
             </AnimatePresence>
-            <div className="mt-xl flex items-center justify-between gap-md border-t border-cocoa-15 pt-md">
+            <div className="mt-auto flex items-center justify-between gap-md border-t border-cocoa-15 pt-md">
               <button type="button" onClick={() => go(step - 1)} className={cn('t-label link py-sm', step === 0 && 'invisible')}>
                 ← Back
               </button>
@@ -237,10 +239,8 @@ export function CustomCake() {
             </div>
           </div>
 
-          <aside className="hidden lg:col-span-5 lg:block" aria-label="Your cake">
-            <div className="sticky top-[calc(76px+var(--spacing-lg))]">
-              <Ticket form={form} price={price} left={left} busy={busy} note={note} emailHref={mailtoLink('Custom cake', customCakeMessage(form))} onSend={send} onEdit={edit} />
-            </div>
+          <aside data-pane="ticket" className="hidden border-l border-dashed border-cocoa-15 p-xl lg:col-span-5 lg:flex lg:flex-col" aria-label="Your cake">
+            <Ticket form={form} price={price} left={left} busy={busy} note={note} emailHref={mailtoLink('Custom cake', customCakeMessage(form))} onSend={send} onEdit={edit} />
           </aside>
         </div>
 

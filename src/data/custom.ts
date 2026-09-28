@@ -147,8 +147,9 @@ export function customSummary(f: CustomForm): SummaryRow[] {
 }
 
 /** The ticket photo: the chosen look, or the custom-cake sketch before a look is picked. */
-export function ticketImage(f: CustomForm): Media {
-  return LOOKS.find((l) => l.id === f.look)?.image ?? media.looks.custom;
+/** The chosen look's photo for "Your cake", or null before a look is picked. */
+export function ticketImage(f: CustomForm): Media | null {
+  return LOOKS.find((l) => l.id === f.look)?.image ?? null;
 }
 
 /** The answers as plain strings, for the enquiry log. */

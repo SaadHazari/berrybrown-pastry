@@ -207,6 +207,67 @@ const DONE = 'Made with heart,|not haste.';
   await page.close();
 }
 
+// 7. Design your cake, desktop: one ticket. The questions and "Your cake" are two halves of one card — same top, same
+// bottom, nothing pinned — and Next and Send share one bottom line. Send stays on screen at 1280 × 720 (except on the
+// tall "look" step), stays quiet until all six are answered, then turns Claret. No photo shows before a look is picked.
+for (const [width, height] of [[1440, 900], [1280, 720]]) {
+  const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'reduce' });
+  await page.goto(`${url}#custom`, { waitUntil: 'networkidle' });
+  const place = () => page.evaluate(() => {
+    const pane = document.querySelector('#custom [data-pane="steps"]') ?? document.querySelector('#custom h3[tabindex="-1"]');
+    window.scrollBy({ top: pane.getBoundingClientRect().top - 130, behavior: 'instant' });
+  });
+  const read = () => page.evaluate(() => {
+    const steps = document.querySelector('#custom [data-pane="steps"]')?.getBoundingClientRect();
+    const ticket = document.querySelector('#custom [data-pane="ticket"]')?.getBoundingClientRect();
+    if (!steps || !ticket) return null;
+    const next = [...document.querySelectorAll('#custom [data-pane="steps"] button')].find((b) => b.textContent.trim() === 'Next')?.getBoundingClientRect();
+    const sendEl = document.querySelector('#custom [data-pane="ticket"] [data-send]');
+    const send = sendEl?.getBoundingClientRect();
+    return {
+      edges: Math.max(Math.abs(steps.top - ticket.top), Math.abs(steps.bottom - ticket.bottom)),
+      line: next && send ? Math.abs(next.top - send.top) : null,
+      sendBottom: send ? Math.round(send.bottom) : null,
+      claret: sendEl ? getComputedStyle(sendEl).backgroundColor === 'rgb(122, 42, 58)' : null,
+      sketch: !!document.querySelector('#custom [data-pane="ticket"] img[src*="look-custom"]'),
+    };
+  });
+  const seen = [];
+  for (let i = 0; i < 6; i++) {
+    await place();
+    await page.waitForTimeout(200);
+    const r = await read();
+    seen.push(r);
+    if (i === 2 && r) {
+      await page.evaluate(() => window.scrollBy({ top: 250, behavior: 'instant' }));
+      await page.waitForTimeout(200);
+      const moved = await read();
+      check(moved && moved.edges <= 1, `${width}×${height}: scrolling the tall "look" step moves both halves together (edges off by ${moved ? moved.edges.toFixed(1) : '—'} px)`);
+      await place();
+    }
+    if (i < 4) await page.locator('#custom [role="group"] button').first().click();
+    else if (i === 4) {
+      await page.getByRole('button', { name: /No words/ }).click();
+      const next = page.getByRole('button', { name: 'Next', exact: true });
+      if (await next.isEnabled()) await next.click();
+    }
+    await page.waitForTimeout(700);
+  }
+  const ok = seen.every(Boolean);
+  const worstEdge = ok ? Math.max(...seen.map((s) => s.edges)) : null;
+  const worstLine = ok ? Math.max(...seen.filter((s) => s.line !== null).map((s) => s.line)) : null;
+  check(ok && worstEdge <= 1, `${width}×${height}: on all six steps the two halves share their top and bottom edges (worst ${worstEdge === null ? '—' : worstEdge.toFixed(1)} px)`);
+  check(ok && worstLine <= 1, `${width}×${height}: Next and Send sit on one line (worst ${worstLine === null ? '—' : worstLine.toFixed(1)} px)`);
+  const offScreen = ok ? seen.filter((s, i) => i !== 2 && s.sendBottom > height).length : 6;
+  check(offScreen === 0, `${width}×${height}: Send is on screen on every step but the tall "look" step (${offScreen} off screen)`);
+  check(ok && seen.every((s) => s.claret === false) && !seen[0].sketch, `${width}×${height}: Send stays quiet while answers are missing, and no photo shows before a look is picked`);
+  await page.locator('#custom input[type="date"]').fill(new Date(Date.now() + 12 * 864e5).toISOString().slice(0, 10));
+  await page.waitForTimeout(400);
+  const done = await read();
+  check(done && done.claret === true, `${width}×${height}: Send turns Claret once all six are answered`);
+  await page.close();
+}
+
 await browser.close();
 console.log(failed ? `${failed} check(s) failed` : 'All checks passed.');
 process.exit(failed ? 1 : 0);
