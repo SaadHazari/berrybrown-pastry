@@ -122,7 +122,7 @@ The old "Our favourites" carousel.
 
 Full-width Rose section. Label `CUSTOM CAKES`, headline "Design your cake.", one-liner "Six quick questions. We reply on WhatsApp with the price."
 
-**Layout.** Desktop: stepper card left (7/12), "Your cake" ticket right (5/12, sticky inside the section). Phones: stepper full width; the ticket becomes a bar pinned to the bottom of the section.
+**Layout.** Desktop: one ticket (Saad, 28 Sep) — a single Butter card split by a dashed hairline like a tear-off stub, the stepper on the left (7/12) and "Your cake" on the right (5/12). Both halves share their top and bottom edges; nothing is sticky. Back/Next and Send sit on one bottom line under the same hairline. It replaced two separate cards whose heights never matched (the pinned ticket slid against the stepper and pushed Send below a 720 px screen). Phones: stepper full width; the ticket becomes a bar pinned to the bottom of the section.
 
 **Stepper.** Butter card, hairline border.
 
@@ -141,7 +141,7 @@ Full-width Rose section. Label `CUSTOM CAKES`, headline "Design your cake.", one
 | 5 | Any words on the cake? | Text box (≤ 35, counter) or the **No words** option | — | Optional; Next is always enabled |
 | 6 | When is it? | Date input, min today + 7 days | — | "We need a week for custom cakes. We make only two a week, so book early." |
 
-**Ticket ("Your cake").** Butter card: an AI photo that matches the chosen look (crossfades on change; a neutral custom-cake photo before a look is picked), then six rows — Occasion, People, Look, Flavour, Words, Date — each row a button that jumps back to its step. Then the from-price in large Jost (`From AED 300`; +60 with a custom flavour), the caption "Final price on WhatsApp. A 50% deposit books your date.", the Claret **Send on WhatsApp** button (disabled with "Answer 3 more" until steps 1–4 and 6 are answered) and the text link "or email connect@berrybrown.me".
+**Ticket ("Your cake").** The right half: a 123 px (`3xl`) square photo of the chosen look (crossfades on change; the brand sprig on Rose before a look is picked) beside "Your cake" and "It fills in as you answer.", then six compact rows — Occasion, People, Look, Flavour, Words, Date — each a button that jumps back to its step and glows Rose for a moment when its answer changes. At the bottom: the from-price in large Jost (`From AED 300`; +60 with a custom flavour), the caption "Final price on WhatsApp. A 50% deposit books your date.", the link "or email connect@berrybrown.me", and **Send on WhatsApp** — a quiet outline, disabled, until steps 1–4 and 6 are answered, then Claret. The half fits a 1280 × 720 window with the card at the top.
 
 **Phone bar.** `From AED 300 · Birthday · 6"` in Jost and the Send button once complete; before that, `STEP 2 OF 6`.
 
