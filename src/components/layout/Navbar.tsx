@@ -26,7 +26,7 @@ const LINKS: { id: NavId; label: string; href: string }[] = [
 
 export const COMPANY_LINKS = [
   { href: '#gift-boxes', label: 'Gift boxes', price: 'From AED 65 a box', icon: '/brand/berrybrown-circle-cocoa.svg' },
-  { href: '#workshops', label: 'Workshops', price: 'From AED 150 a seat', icon: '/brand/berrybrown-circle-rose.svg' },
+  { href: '#workshops', label: 'Workshops', price: 'From AED 120 a seat', icon: '/brand/berrybrown-circle-rose.svg' },
   { href: '#events', label: 'Company events', price: 'From AED 35 a guest', icon: '/brand/berrybrown-circle-claret.svg' },
 ];
 

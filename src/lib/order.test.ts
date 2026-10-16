@@ -60,15 +60,15 @@ describe('order', () => {
 });
 
 describe('customCakeMessage', () => {
-  const form = { ...EMPTY_CUSTOM, occasion: 'birthday', serves: '6in', look: 'flowers', flavour: 'pistachio', words: 'Happy 60th, Dad', date: '2026-10-03' };
+  const form = { ...EMPTY_CUSTOM, occasion: 'birthday', serves: '6in', look: 'floral', flavour: 'chocolate', words: 'Happy 60th, Dad', date: '2026-10-03' };
 
   it('lists every answer and the from-price', () => {
     const text = customCakeMessage(form);
     expect(text.split('\n')[0]).toBe("Hi Berry Brown, I'd like a custom cake.");
     expect(text).toContain('Occasion: Birthday');
     expect(text).toContain('People: 6–8 people · 6 inch');
-    expect(text).toContain('Look: Fresh flowers');
-    expect(text).toContain('Flavour: Pistachio & kunafa');
+    expect(text).toContain('Look: Floral whimsy');
+    expect(text).toContain('Flavour: Classic chocolate');
     expect(text).toContain('Words on the cake: "Happy 60th, Dad"');
     expect(text).toContain('Date: Sat 3 Oct');
     expect(text).toContain('From AED 300 on the site');

@@ -100,7 +100,7 @@ Photo upload limits: 3 files per send, 10 MB each, JPG/PNG/WebP/HEIC (checked by
 | What | Where |
 | --- | --- |
 | The Six: names, one-liners, flavours, allergens | `src/data/products.ts` |
-| The price ladder (5" 150 · 6" 200 · 8" 280) | `PRICE_LADDER` in `src/data/products.ts` |
+| The price ladder (5" 150 · 6" 200 · 7" 280) | `PRICE_LADDER` in `src/data/products.ts` |
 | Delivery fee, free-delivery threshold, time slots | `src/data/zones.ts` |
 | Contact details (WhatsApp, email, Instagram), rating, stats, FAQ, how-it-works steps, kitchen photos | `src/data/content.ts` |
 | Gift boxes, workshops, company events, order-by dates | `src/data/companies.ts` |

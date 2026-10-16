@@ -198,7 +198,7 @@ export function Checkout() {
                 </div>
                 <p className="t-caption mt-xs text-cocoa-70">
                   {form.fulfilment === 'delivery'
-                    ? `Across Dubai, ${aed(DELIVERY_ZONE.fee)}. Free over ${aed(DELIVERY_ZONE.freeOver)}. Chilled, with ice packs.`
+                    ? `Across Dubai, ${aed(DELIVERY_ZONE.fee)}. Free over ${aed(DELIVERY_ZONE.freeOver)}. Chilled, in an air-conditioned van.`
                     : 'Pickup from the studio. We send the pin on WhatsApp.'}
                 </p>
               </Field>

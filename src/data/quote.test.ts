@@ -44,11 +44,11 @@ describe('quote validation', () => {
     expect(validateQuote('box', f, new Date(2026, 9, 20, 18))).toEqual({});
   });
 
-  it('needs 12 people and a place for a workshop', () => {
-    const f = { ...EMPTY_QUOTE, where: 'venue' as const, qty: '11', date: '2026-10-10', name: 'Mira' };
-    expect(validateQuote('workshop', f, now).qty).toBe('The minimum is 12 people');
-    expect(validateQuote('workshop', { ...f, qty: '12' }, now)).toEqual({});
-    expect(validateQuote('workshop', { ...f, qty: '12', date: '2026-10-01' }, now).date).toBe('The earliest date is 4 Oct');
+  it('needs 5 people and a place for a workshop', () => {
+    const f = { ...EMPTY_QUOTE, where: 'venue' as const, qty: '4', date: '2026-10-10', name: 'Mira' };
+    expect(validateQuote('workshop', f, now).qty).toBe('The minimum is 5 people');
+    expect(validateQuote('workshop', { ...f, qty: '5' }, now)).toEqual({});
+    expect(validateQuote('workshop', { ...f, qty: '5', date: '2026-10-01' }, now).date).toBe('The earliest date is 4 Oct');
   });
 
   it('keeps each event format inside its headcount', () => {

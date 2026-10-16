@@ -70,12 +70,12 @@ export const REVIEWS: Review[] = [
 
 export const FAQS = [
   { q: 'How early should I order?', a: 'The Six need 24 hours. Custom cakes need a week. Gift boxes need 3–5 days, or 2–3 weeks with your logo.' },
-  { q: 'How do cakes survive the Dubai heat?', a: 'Every cake travels with ice packs in an insulated box. Keep it in the fridge until about 15 minutes before serving.' },
-  { q: 'Is everything Halal?', a: 'Yes. We never use gelatin. Creams are set with fruit pectin or agar instead.' },
+  { q: 'How do cakes survive the Dubai heat?', a: 'Every cake travels in an air-conditioned van, so it arrives cool and set.' },
+  { q: 'Is everything Halal?', a: 'Yes. We only use halal gelatin, fruit pectin and agar agar.' },
   { q: 'Can I add a message?', a: 'Yes. Every cake can carry a hand-piped message of up to 35 characters.' },
   { q: 'How do I pay?', a: 'Pay online by card or Apple Pay, or send your order on WhatsApp and pay by bank transfer or cash on delivery.' },
   { q: 'Do you deliver?', a: 'Yes, anywhere in Dubai for AED 20. Orders over AED 300 travel free. You can also collect from us.' },
-  { q: 'Do you do corporate orders?', a: 'Yes. Gift boxes from 20, workshops from 12 people, and events for up to 60 guests. Tap Get a quote and we reply with a price and an invoice.' },
+  { q: 'Do you do corporate orders?', a: 'Yes. Gift boxes from 20, workshops from 5 people, and events for up to 60 guests. Tap Get a quote and we reply with a price and an invoice.' },
   { q: 'How do deposits work?', a: 'Custom cakes and gift boxes are confirmed with a 50% deposit. The rest is due before delivery. Workshops and events are paid in full to book.' },
   { q: 'Can I cancel?', a: 'Yes, with 48 hours’ notice. After that we keep the deposit.' },
 ];
@@ -84,9 +84,9 @@ export type LogEntry = { n: number; for: string; flavour: string; size: string; 
 
 /** The log — numbered real cakes, newest first. SAMPLE entries until real cakes exist. */
 export const LOG: LogEntry[] = [
-  { n: 41, for: "for Ayesha's dad, 60th", flavour: 'Classic chocolate', size: '8"', image: LOG_MEDIA[0], sample: true },
+  { n: 41, for: "for Ayesha's dad, 60th", flavour: 'Classic chocolate', size: '7"', image: LOG_MEDIA[0], sample: true },
   { n: 40, for: 'for a baby shower in Jumeirah', flavour: 'Berry cream sponge', size: '6"', image: LOG_MEDIA[1], sample: true },
-  { n: 39, for: "for Lina and Omar's engagement", flavour: 'Pistachio kunafa', size: '8"', image: LOG_MEDIA[2], sample: true },
+  { n: 39, for: "for Lina and Omar's engagement", flavour: 'Pistachio kunafa', size: '7"', image: LOG_MEDIA[2], sample: true },
 ];
 
 export const cakeNumber = (n: number) => `#${String(n).padStart(3, '0')}`;
@@ -97,7 +97,7 @@ export type Step = { n: string; title: string; text: string; image: Media };
 export const STEPS: Step[] = [
   { n: '01', title: 'Pick your cake', text: 'Choose one of the Six, or design your own.', image: media.how[0] },
   { n: '02', title: 'Choose a day', text: 'We bake to order. The Six need 24 hours, custom cakes a week.', image: media.how[1] },
-  { n: '03', title: 'We bring it chilled', text: 'In an insulated box, anywhere in Dubai. Or collect it from us.', image: media.how[2] },
+  { n: '03', title: 'We bring it chilled', text: 'Delivered in a chilled, air-conditioned vehicle to keep your cake cool and secure.', image: media.how[2] },
 ];
 
 export type GalleryItem = { image: Media; caption: string; tall: boolean };

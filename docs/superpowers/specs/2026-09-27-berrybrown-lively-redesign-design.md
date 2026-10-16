@@ -31,7 +31,7 @@ The brief-v2 build (live since 27 Sep, `main` d502078) reads as empty and static
 | Photos | AI-made photos in the brand palette, about 30. They stand in until real photos exist. This overrides the brand book's "no AI-made cakes" line for now |
 | Motion | Only on scroll, pointer or tap. The review rows are the one thing that moves on its own, with a pause button |
 | Voice | "We / us / our team". No "I", no "Chef Safa" |
-| Custom cakes | 1 week notice (revenue brief house terms). Sizes 6" from 300, 8" from 420, two tiers from 850 |
+| Custom cakes | 1 week notice (revenue brief house terms). Sizes 6" from 300, 7" from 420, two tiers from 850 |
 | Udora | Removed on 28 Sep (Saad). It was a small strip showing "Coming soon to Udora" |
 | Cake log | Last section before the footer, folded shut |
 | Delivery | Work on `redesign/lively`. Live site unchanged until Saad says "go live" |
@@ -87,7 +87,7 @@ Headline pattern for every content section (the old `SectionHeading`, restyled):
 - Height 76 px at the top of the page, 60 px after 80 px of scroll (animated). Logo `berrybrown-logo-horizontal.svg`: 56 px tall at the top, 42 px condensed; 44 px on phones.
 - Hides when the user scrolls down past 400 px; comes back on any scroll up. Never hides while a dropdown or overlay is open.
 - Desktop links (≥ 1024 px), Jost label style: **The Six · Custom cakes · For companies ▾ · Our studio · FAQ**. The link for the section in view gets a small Claret dot under it; the dot slides between links (scroll spy).
-- **For companies ▾** opens a panel under the bar with three rows, each with a brand colour circle icon, a name and a Jost price line: Gift boxes — from AED 65 a box; Workshops — from AED 150 a seat; Company events — from AED 35 a guest. Opens on click, Enter, Space or ArrowDown; closes on Esc, outside click or choosing a row; focus returns to the trigger.
+- **For companies ▾** opens a panel under the bar with three rows, each with a brand colour circle icon, a name and a Jost price line: Gift boxes — from AED 65 a box; Workshops — from AED 120 a seat; Company events — from AED 35 a guest. Opens on click, Enter, Space or ArrowDown; closes on Esc, outside click or choosing a row; focus returns to the trigger.
 - Right side: WhatsApp icon button (desktop), bag button with a Jost count (always on desktop; on phones only when the bag has items), **Order** button in Cocoa (opens the menu overlay). The bag gives one small bump when the count goes up.
 - Phones: logo · bag · Order · menu button. The menu is a full-screen Butter sheet: links in title2 with Jost numbers `01`–`07` (The Six, Custom cakes, Gift boxes, Workshops, Company events, Our studio, FAQ), then WhatsApp and email, then an **Order a cake** button, with the sprig at the foot. Links rise in with a short stagger when the sheet opens.
 
@@ -96,8 +96,8 @@ Headline pattern for every content section (the old `SectionHeading`, restyled):
 Desktop, 12 columns, a short top padding, so both buttons and the main photo fit the first screen from about 650 px tall (changed 28 Sep: the stacked logo pushed them off screen):
 
 - **Left (6/12).** The `<h1>` is the tagline on two lines in Alegreya display, "Made with heart," then "not haste." in italic Cocoa 70, with the screen-reader text "Berry Brown — made with heart, not haste." It uses `t-display1`, and from 1024 px `min(5.2vw, 4.236rem)`, so each line stays on one line. Under it:
-  - title3: "A cake studio in Dubai."
-  - body, max 40ch: "Six signature cakes, custom cakes for the days that matter, and gift boxes and workshops for your team. All made to order."
+  - title3: "Cake Studio, Dubai" (a name line, not a sentence: Title Case, no full stop; chosen over "Cake Studio in Dubai" on 16 Oct — shorter, reads like a maker's mark; the search phrase "cake studio in Dubai" stays in the page title and description).
+  - body, two lines, max 58ch, `xs` gap between, both Cocoa 70, no bold or italic: "Signature cakes to custom orders for your celebrations." / "Gift boxes, workshops, and more for your team, all thoughtfully curated to order." First line for people, second for companies.
   - Buttons: **Order a cake** (Claret, opens the menu overlay, gentle magnetic pull on desktop) and **Design your cake** (ghost, to `#custom`).
   - Rating row: three 32 px round photo avatars, a Cocoa star, `4.9 · 260+ reviews` in Jost (`RATING`, sample).
 - **Right (6/12).** Photo stack on a Rose block (a Rose rectangle offset behind the photos):
@@ -114,7 +114,7 @@ The old "Our favourites" carousel.
 
 - Header row: label `THE SIX`, headline "Our signature cakes.", one-liner "Six cakes. Three sizes. 24 hours' notice." Right side: prev/next square arrow buttons (desktop) and **See the full menu** (Cocoa, opens the menu overlay).
 - Row: horizontal scroll-snap, drag with the mouse, swipe on touch. Card width 360 px desktop, 78vw phone. Native scrolling only; `scrollBy` with `behavior: smooth` for the arrows is fine.
-- Card: 4:5 photo, 4 px corners, hover zoom 1.05 over 700 ms; on hover a Butter chip `CHOOSE SIZE & FLAVOUR` rises in bottom-left; a 44 px Cocoa square **+** button bottom-right adds the chosen size (or the 6", which it then marks as chosen) with the first flavour, and shows the existing toast with "View bag". Jost `1 OF 6` top-left on a Butter chip. Under the photo: name (heading), one line (callout, Cocoa 70), then the three sizes as `Chip`s (`5" · 150`, `6" · 200`, `8" · 280`), each with a Jost caption and a people icon under it (`4–6`, `6–8`, `10–14`, from `serves` in `PRICE_LADDER`). No size is chosen at first; choosing one shows `SERVES 10–14` top-right on the photo, in the same Butter chip and `sm` inset as `1 OF 6` (Saad, 28 Sep). The photo opens the existing `ProductSheet` on the chosen size.
+- Card: 4:5 photo, 4 px corners, hover zoom 1.05 over 700 ms; on hover a Butter chip `CHOOSE SIZE & FLAVOUR` rises in bottom-left; a 44 px Cocoa square **+** button bottom-right adds the chosen size (or the 6", which it then marks as chosen) with the first flavour, and shows the existing toast with "View bag". Jost `1 OF 6` top-left on a Butter chip. Under the photo: name (heading), one line (callout, Cocoa 70), then the three sizes as `Chip`s (`5" · 150`, `6" · 200`, `7" · 280`), each with a Jost caption and a people icon under it (`4–6`, `6–8`, `10–12`, from `serves` in `PRICE_LADDER`). No size is chosen at first; choosing one shows `SERVES 10–12` top-right on the photo, in the same Butter chip and `sm` inset as `1 OF 6` (Saad, 28 Sep). The photo opens the existing `ProductSheet` on the chosen size.
 - Under the row: a hairline track with a Claret fill that follows the scroll position.
 - One caption line under it: "Photos show the style. Each cake is made by hand, so yours will look a little different." (The "Written on … +50" line was removed on 28 Sep: the team talks about writing on WhatsApp.)
 
@@ -135,9 +135,9 @@ Full-width Rose section. Label `CUSTOM CAKES`, headline "Design your cake.", one
 | # | Question | Options (3 + Customised) | Customised asks | Notes |
 |---|---|---|---|---|
 | 1 | What are we celebrating? | Birthday · Wedding · Baby shower | "Tell us the occasion" (≤ 60) | — |
-| 2 | How many people? | 6–8 people · 6 inch · from AED 300 — 10–14 people · 8 inch · from AED 420 — 20–30 people · two tiers · from AED 850 | "Tell us how many people" (≤ 60) | Customised size shows "Quoted by our team" and keeps the from-price at 300 |
-| 3 | Pick a look. | Soft buttercream · Fresh flowers · Drip & berries — each option card shows a small AI photo | "Describe your idea" (≤ 120) | Under the options: "Add up to 3 inspiration photos" (existing upload: JPG/PNG/HEIC, ≤ 10 MB, thumbnails with remove) |
-| 4 | Pick a flavour. | Chocolate & berry · Pistachio & kunafa · Vanilla & berries | "Tell us the flavour" (≤ 60) | "A custom flavour adds AED 60" |
+| 2 | How many people? | 6–8 people · 6 inch · from AED 300 — 10–12 people · 7 inch · from AED 420 — 20–30 people · two tiers · from AED 850 | "Tell us how many people" (≤ 60) | Customised size shows "Quoted by our team" and keeps the from-price at 300 |
+| 3 | Pick a look. | Vintage piping · Floral whimsy · Bedazzled — each option card shows a small AI photo (piping and bedazzled borrow the buttercream and drip photos until their own exist) | "Describe your idea" (≤ 120) | Under the options: "Add up to 3 inspiration photos" (existing upload: JPG/PNG/HEIC, ≤ 10 MB, thumbnails with remove) |
+| 4 | Pick a flavour. | The six signature flavours from the studio price list: Brown butter, cinnamon & salted caramel · Vanilla raspberry · Lemon & cream cheese · Classic chocolate · Earl Grey & honey · Strawberry & mascarpone | "Tell us the flavour" (≤ 60) | "A custom flavour adds AED 60" |
 | 5 | Any words on the cake? | Text box (≤ 35, counter) or the **No words** option | — | Optional; Next is always enabled |
 | 6 | When is it? | Date input, min today + 7 days | — | "We need a week for custom cakes. We make only two a week, so book early." |
 
@@ -155,7 +155,7 @@ The old three steps. Label `HOW IT WORKS`, headline "How ordering works."
 |---|---|---|
 | 01 | Pick your cake | Choose one of the Six, or design your own. |
 | 02 | Choose a day | We bake to order. The Six need 24 hours, custom cakes a week. |
-| 03 | We bring it chilled | In an insulated box, anywhere in Dubai. Or collect it from us. |
+| 03 | We bring it chilled | Delivered in a chilled, air-conditioned vehicle to keep your cake cool and secure. |
 
 Desktop: three columns. Each step has a photo in a Butter frame with a Jost caption `STEP 1`, turned −2°, 1.5° and −1°. The step number is large Jost in Claret, then the title (heading) and text (callout). A hand-drawn Cocoa 70 arrow between steps draws itself when it scrolls into view. Phones: the old sticky stack — each step card sticks under the top bar and the next one slides over it.
 
@@ -176,8 +176,8 @@ Cocoa section, Butter text, Butter 60 for second-level text. Label `FOR COMPANIE
 Butter section, mirrored layout (text left, photos right). Label `FOR GROUPS · 2 OF 3`, headline "Make one with us.", one-liner "A 90-minute cake decorating workshop for your group."
 
 - Body: "We bring the cakes, the tools and the know-how. Everyone decorates their own cake and takes it home. For clubs, community groups, co-working spaces and parties."
-- Price rows: `AT YOUR VENUE — FROM AED 150 A SEAT` · `AT A KITCHEN WE BOOK — FROM AED 200 A SEAT`.
-- Facts: `12 SEATS MINIMUM · ONE CAKE EACH · 90 MINUTES · PAID IN FULL TO BOOK`.
+- Price rows: `AT YOUR VENUE — FROM AED 120 A SEAT` · `AT A CAFÉ WE BOOK — FROM AED 200 A SEAT`.
+- Facts: `5 SEATS MINIMUM · ONE CAKE EACH · 90 MINUTES · PAID IN FULL TO BOOK`.
 - **Get a quote** (Claret) → quote sheet for `workshop`.
 - Photos: hands decorating small cakes on turntables at a long table (4:5); piping bags and bowls of berries (1:1).
 
@@ -190,9 +190,9 @@ Two cards side by side (stacked on phones), Butter, hairline, 3:2 photo on top:
 | Card | Text | Price line |
 |---|---|---|
 | The decorating session | 90 minutes in your office. Each person decorates a cake and takes it home. | AED 175–250 a person · 12–20 people |
-| The Table | Minis of the Six for 40–60 guests. We set up, serve and clear. | AED 35–70 a guest · 40–60 guests |
+| The Table | A special mini dessert menu, curated to order. We set up, serve and clear. | AED 35–70 a guest · 40–60 guests |
 
-Facts: `PAID IN ADVANCE · FINAL HEADCOUNT 72 HOURS BEFORE · YOU PAY FOR THE NUMBER BOOKED`. One **Get a quote** (Claret) → quote sheet for `event`.
+Facts: `PAID IN ADVANCE · BOOK AT LEAST A WEEK AHEAD · YOU PAY FOR THE NUMBER BOOKED`. One **Get a quote** (Claret) → quote sheet for `event`.
 
 ### 5.9 Udora strip — removed (Saad, 28 Sep)
 
@@ -229,12 +229,12 @@ The old FAQ. Left: label `GOOD TO KNOW`, headline "Little questions.", and one A
 | Q | A |
 |---|---|
 | How early should I order? | The Six need 24 hours. Custom cakes need a week. Gift boxes need 3–5 days, or 2–3 weeks with your logo. |
-| How do cakes survive the Dubai heat? | Every cake travels with ice packs in an insulated box. Keep it in the fridge until about 15 minutes before serving. |
-| Is everything Halal? | Yes. We never use gelatin. Creams are set with fruit pectin or agar instead. |
+| How do cakes survive the Dubai heat? | Every cake travels in an air-conditioned van, so it arrives cool and set. |
+| Is everything Halal? | Yes. We only use halal gelatin, fruit pectin and agar agar. |
 | Can I add a message? | Yes. Every cake can carry a hand-piped message of up to 35 characters. |
 | How do I pay? | Pay online by card or Apple Pay, or send your order on WhatsApp and pay by bank transfer or cash on delivery. |
 | Do you deliver? | Yes, anywhere in Dubai for AED 20. Orders over AED 300 travel free. You can also collect from us. |
-| Do you do corporate orders? | Yes. Gift boxes from 20, workshops from 12 people, and events for up to 60 guests. Tap Get a quote and we reply with a price and an invoice. |
+| Do you do corporate orders? | Yes. Gift boxes from 20, workshops from 5 people, and events for up to 60 guests. Tap Get a quote and we reply with a price and an invoice. |
 | How do deposits work? | Custom cakes and gift boxes are confirmed with a 50% deposit. The rest is due before delivery. Workshops and events are paid in full to book. |
 | Can I cancel? | Yes, with 48 hours' notice. After that we keep the deposit. |
 
@@ -244,7 +244,7 @@ The old closing. Centred: label `YOUR NEXT CELEBRATION STARTS HERE`, display1 he
 
 ### 5.15 The cake log, folded (`#log`)
 
-A single row between hairlines, directly above the footer: label `THE CAKE LOG`, the line "Every cake we make gets a number. The latest is #041." (number from the newest entry, Jost Claret), and a button **Open the log ▾** (`aria-expanded`, `aria-controls`). Open: the row grows (height animation) to show the three newest entries — 4:5 photo, Claret Jost number, caption `for Ayesha's dad, 60th · Classic chocolate, 8"`. Button becomes **Close the log ▴**. Data: `useLog()` (Supabase first, samples until real cakes exist).
+A single row between hairlines, directly above the footer: label `THE CAKE LOG`, the line "Every cake we make gets a number. The latest is #041." (number from the newest entry, Jost Claret), and a button **Open the log ▾** (`aria-expanded`, `aria-controls`). Open: the row grows (height animation) to show the three newest entries — 4:5 photo, Claret Jost number, caption `for Ayesha's dad, 60th · Classic chocolate, 7"`. Button becomes **Close the log ▴**. Data: `useLog()` (Supabase first, samples until real cakes exist).
 
 ### 5.16 Footer
 
@@ -267,7 +267,7 @@ One component, `QuoteSheet`, on the existing `Sheet` (from the right on desktop,
 | `about` | Fields | Rules |
 |---|---|---|
 | `box` | How many boxes (number) · Box size (6 / 8 / 10 pieces) · Your logo on the sleeve? (Yes / No) · Deliver by (date) · Company · Your name | Min 20 boxes; logo needs ≥ 50; date ≥ today + 5 days plain, + 21 days with logo |
-| `workshop` | Date · Where (Your venue / A kitchen you book) · How many people (number) · Group name · Your name | Min 12 people; date ≥ today + 7 days |
+| `workshop` | Date · Where (Your venue / A café we book) · How many people (number) · Group name · Your name | Min 5 people; date ≥ today + 7 days |
 | `event` | Which (Decorating session / The Table) · Date · How many people (number) · Office area · Company · Your name | Session 12–20 people; Table 40–60 guests; date ≥ today + 7 days |
 
 - Header: the channel name, its price line, and the facts line from its section.
@@ -361,7 +361,7 @@ Stays as is: checkout, Stripe webhook, orders, zones, pricing, cart, inspiration
 ## 11. Copy, contact and SEO
 
 - Replace every "Safa" on the site: button labels, WhatsApp texts, section copy, sample reviews, `index.html`. Search `src/`, `index.html` and `worker/` for `Safa` — none may remain outside code comments about history.
-- `index.html`: title "Berry Brown · Cake studio in Dubai — signature cakes, custom cakes, gift boxes and workshops"; description "A cake studio in Dubai. Six signature cakes, custom cakes, gift boxes, workshops and dessert tables. Made to order."; JSON-LD `telephone: +971547944882`, `email: connect@berrybrown.me`, no `founder`, `priceRange: "AED 35 – AED 1,100"`; `<noscript>` with the new number; preload the hero photo.
+- `index.html`: title "Berry Brown · Cake studio in Dubai — signature cakes, custom cakes, gift boxes and workshops"; description "Cake studio in Dubai. Signature cakes, custom cakes, gift boxes, workshops and dessert tables. Made to order."; JSON-LD `telephone: +971547944882`, `email: connect@berrybrown.me`, no `founder`, `priceRange: "AED 35 – AED 1,100"`; `<noscript>` with the new number; preload the hero photo.
 - `README.md`: new contact details, the `Before launch` table (AI photos, Udora link, Instagram handle), the quote sheet and the migration.
 
 ## 12. Removed

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { deliveryFee, earliestDate, maxLeadHours, subtotal, unitPrice } from './pricing';
 
 const drip = { productId: 'berry-chocolate-drip', sizeId: '6in', flavourId: 'dark', qty: 1 };
-const kunafa = { productId: 'pistachio-kunafa', sizeId: '8in', flavourId: 'classic', qty: 1 };
+const kunafa = { productId: 'pistachio-kunafa', sizeId: '7in', flavourId: 'classic', qty: 1 };
 
 describe('pricing', () => {
   it('prices from the flat ladder', () => {

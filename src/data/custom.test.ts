@@ -3,14 +3,14 @@ import { CUSTOMISED, CUSTOM_STEPS, EMPTY_CUSTOM, FLAVOURS, LOOKS, OCCASIONS, SIZ
 import { media } from './media';
 
 const earliest = '2026-10-04';
-const full = { ...EMPTY_CUSTOM, occasion: 'birthday', serves: '6in', look: 'flowers', flavour: 'pistachio', date: '2026-10-05' };
+const full = { ...EMPTY_CUSTOM, occasion: 'birthday', serves: '6in', look: 'floral', flavour: 'chocolate', date: '2026-10-05' };
 
 describe('custom cake form', () => {
-  it('offers three choices plus Customised in every group', () => {
-    for (const list of [OCCASIONS, SIZES, LOOKS, FLAVOURS]) {
-      expect(list).toHaveLength(4);
-      expect(list.at(-1)?.id).toBe(CUSTOMISED);
-    }
+  it('offers three choices plus Customised in every group, and the six signature flavours', () => {
+    for (const list of [OCCASIONS, SIZES, LOOKS, FLAVOURS]) expect(list.at(-1)?.id).toBe(CUSTOMISED);
+    for (const list of [OCCASIONS, SIZES]) expect(list).toHaveLength(4);
+    expect(LOOKS.map((l) => l.label)).toEqual(['Vintage piping', 'Floral whimsy', 'Bedazzled', 'Customised']);
+    expect(FLAVOURS).toHaveLength(7);
   });
 
   it('asks six questions in order', () => {
@@ -23,10 +23,10 @@ describe('custom cake form', () => {
 
   it('prices from the size, plus 60 for a custom flavour', () => {
     expect(customFromPrice(EMPTY_CUSTOM)).toBe(300);
-    expect(customFromPrice({ ...EMPTY_CUSTOM, serves: '8in' })).toBe(420);
+    expect(customFromPrice({ ...EMPTY_CUSTOM, serves: '7in' })).toBe(420);
     expect(customFromPrice({ ...EMPTY_CUSTOM, serves: 'tiers' })).toBe(850);
     expect(customFromPrice({ ...EMPTY_CUSTOM, serves: CUSTOMISED })).toBe(300);
-    expect(customFromPrice({ ...EMPTY_CUSTOM, serves: '8in', flavour: CUSTOMISED })).toBe(480);
+    expect(customFromPrice({ ...EMPTY_CUSTOM, serves: '7in', flavour: CUSTOMISED })).toBe(480);
   });
 
   it('marks a step done only when answered, and Customised only with its text', () => {
@@ -51,14 +51,14 @@ describe('custom cake form', () => {
   it('summarises the answers, using Customised text only when Customised is picked', () => {
     const rows = customSummary({ ...full, occasion: CUSTOMISED, occasionOther: 'Graduation', words: ' Well done ' });
     expect(rows.map((r) => r.label)).toEqual(['Occasion', 'People', 'Look', 'Flavour', 'Words', 'Date']);
-    expect(rows.map((r) => r.value)).toEqual(['Graduation', '6–8 people · 6 inch', 'Fresh flowers', 'Pistachio & kunafa', 'Well done', '2026-10-05']);
+    expect(rows.map((r) => r.value)).toEqual(['Graduation', '6–8 people · 6 inch', 'Floral whimsy', 'Classic chocolate', 'Well done', '2026-10-05']);
     expect(customSummary({ ...full, occasionOther: 'Stale text' })[0].value).toBe('Birthday');
     expect(customSummary({ ...full, noWords: true })[4].value).toBe('No words');
   });
 
   it('shows the photo of the chosen look, and no photo before one is picked', () => {
     expect(ticketImage(EMPTY_CUSTOM)).toBeNull();
-    expect(ticketImage({ ...EMPTY_CUSTOM, look: 'drip' })).toBe(media.looks.drip);
+    expect(ticketImage({ ...EMPTY_CUSTOM, look: 'bedazzled' })).toBe(media.looks.drip);
     expect(ticketImage({ ...EMPTY_CUSTOM, look: CUSTOMISED })).toBe(media.looks.custom);
   });
 

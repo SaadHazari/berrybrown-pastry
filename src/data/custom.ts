@@ -15,22 +15,26 @@ export const OCCASIONS: Option[] = [
 
 export const SIZES: SizeOption[] = [
   { id: '6in', label: '6–8 people', size: '6 inch', from: 300, sub: '6 inch · from AED 300' },
-  { id: '8in', label: '10–14 people', size: '8 inch', from: 420, sub: '8 inch · from AED 420' },
+  { id: '7in', label: '10–12 people', size: '7 inch', from: 420, sub: '7 inch · from AED 420' },
   { id: 'tiers', label: '20–30 people', size: 'Two tiers', from: 850, sub: 'Two tiers · from AED 850' },
   { id: CUSTOMISED, label: 'Customised', size: 'Quoted by our team', from: 300, sub: 'Quoted by our team' },
 ];
 
 export const LOOKS: Option[] = [
-  { id: 'buttercream', label: 'Soft buttercream', image: media.looks.buttercream },
-  { id: 'flowers', label: 'Fresh flowers', image: media.looks.flowers },
-  { id: 'drip', label: 'Drip & berries', image: media.looks.drip },
+  // Piping and bedazzled borrow the nearest photo until their own are made.
+  { id: 'piping', label: 'Vintage piping', image: media.looks.buttercream },
+  { id: 'floral', label: 'Floral whimsy', image: media.looks.flowers },
+  { id: 'bedazzled', label: 'Bedazzled', image: media.looks.drip },
   { id: CUSTOMISED, label: 'Customised', image: media.looks.custom },
 ];
 
 export const FLAVOURS: Option[] = [
-  { id: 'chocolate-berry', label: 'Chocolate & berry' },
-  { id: 'pistachio', label: 'Pistachio & kunafa' },
-  { id: 'vanilla-berry', label: 'Vanilla & berries' },
+  { id: 'brown-butter', label: 'Brown butter, cinnamon & salted caramel' },
+  { id: 'vanilla-raspberry', label: 'Vanilla raspberry' },
+  { id: 'lemon', label: 'Lemon & cream cheese' },
+  { id: 'chocolate', label: 'Classic chocolate' },
+  { id: 'earl-grey', label: 'Earl Grey & honey' },
+  { id: 'strawberry', label: 'Strawberry & mascarpone' },
   { id: CUSTOMISED, label: 'Customised', sub: '+ AED 60' },
 ];
 

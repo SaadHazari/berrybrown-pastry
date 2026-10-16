@@ -33,10 +33,10 @@ export function Hero() {
             <Tagline />
           </h1>
           <IntroLogo slot={slot} />
-          <p className="t-title3 mt-xl">A cake studio in Dubai.</p>
-          <p className="t-body mt-sm max-w-[40ch] text-cocoa-70">
-            Six signature cakes, custom cakes for the days that matter, and gift boxes and workshops for your team. All made to order.
-          </p>
+          <p className="t-title3 mt-xl">Cake Studio, Dubai</p>
+          {/* Two lines, two readers: you and your family first, then your team. */}
+          <p className="t-body mt-sm max-w-[58ch] text-cocoa-70">Signature cakes to custom orders for your celebrations.</p>
+          <p className="t-body mt-xs max-w-[58ch] text-cocoa-70">Gift boxes, workshops, and more for your team, all thoughtfully curated to order.</p>
           <div className="mt-xl flex flex-col gap-sm sm:flex-row sm:items-center">
             <Magnetic className="block sm:inline-block">
               <Button variant="claret" onClick={() => open({ kind: 'menu' })} className="w-full sm:w-auto">

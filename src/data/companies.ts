@@ -27,34 +27,34 @@ export const BOX = {
 
 export type WorkshopPlace = { id: 'venue' | 'kitchen'; label: string; from: number };
 const PLACES: WorkshopPlace[] = [
-  { id: 'venue', label: 'At your venue', from: 150 },
-  { id: 'kitchen', label: 'At a kitchen we book', from: 200 },
+  { id: 'venue', label: 'At your venue', from: 120 },
+  { id: 'kitchen', label: 'At a café we book', from: 200 },
 ];
 
 /** Make one with us — revenue brief channel 3. */
 export const WORKSHOP = {
   places: PLACES,
-  minSeats: 12,
+  minSeats: 5,
   leadDays: 7,
-  facts: ['12 seats minimum', 'One cake each', '90 minutes', 'Paid in full to book'],
+  facts: ['5 seats minimum', 'One cake each', '90 minutes', 'Paid in full to book'],
 };
 
 export type EventFormat = { id: 'session' | 'table'; title: string; text: string; price: string; min: number; max: number; unit: string; image: Media };
 const FORMATS: EventFormat[] = [
   { id: 'session', title: 'The decorating session', text: '90 minutes in your office. Each person decorates a cake and takes it home.', price: 'AED 175–250 a person · 12–20 people', min: 12, max: 20, unit: 'people', image: media.events.session },
-  { id: 'table', title: 'The Table', text: 'Minis of the Six for 40–60 guests. We set up, serve and clear.', price: 'AED 35–70 a guest · 40–60 guests', min: 40, max: 60, unit: 'guests', image: media.events.table },
+  { id: 'table', title: 'The Table', text: 'A special mini dessert menu, curated to order. We set up, serve and clear.', price: 'AED 35–70 a guest · 40–60 guests', min: 40, max: 60, unit: 'guests', image: media.events.table },
 ];
 
 /** Corporate events — revenue brief channel 5. */
 export const EVENTS = {
   formats: FORMATS,
   leadDays: 7,
-  facts: ['Paid in advance', 'Final headcount 72 hours before', 'You pay for the number booked'],
+  facts: ['Paid in advance', 'Book at least a week ahead', 'You pay for the number booked'],
 };
 
 export const QUOTE_INFO: Record<QuoteAbout, { name: string; price: string; facts: string[]; subject: string }> = {
   box: { name: 'Gift boxes', price: 'From AED 65 a box · min 20', facts: BOX.facts, subject: 'Gift boxes' },
-  workshop: { name: 'Workshops', price: 'From AED 150 a seat · 12 seats', facts: WORKSHOP.facts, subject: 'Workshop' },
+  workshop: { name: 'Workshops', price: 'From AED 120 a seat · 5 seats', facts: WORKSHOP.facts, subject: 'Workshop' },
   event: { name: 'Company events', price: 'From AED 35 a guest', facts: EVENTS.facts, subject: 'Company event' },
 };
 

@@ -16,11 +16,11 @@ export type Product = {
   sample: boolean;
 };
 
-/** One flat ladder for all six. 150 / 200 / 280 — agreed 21 Sep, Saad to confirm before merge. */
+/** One flat ladder for all six. 150 / 200 / 280 — agreed 21 Sep. Sizes 5" / 6" / 7" from the studio price list, 16 Oct. */
 export const PRICE_LADDER: Size[] = [
   { id: '5in', label: '5"', serves: '4–6', price: 150 },
   { id: '6in', label: '6"', serves: '6–8', price: 200, popular: true },
-  { id: '8in', label: '8"', serves: '10–14', price: 280 },
+  { id: '7in', label: '7"', serves: '10–12', price: 280 },
 ];
 
 const cake = (
