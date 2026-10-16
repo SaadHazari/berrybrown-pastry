@@ -1,6 +1,7 @@
 import { CONTACT } from '../data/content';
 import { BOX, EVENTS, WORKSHOP, type QuoteAbout } from '../data/companies';
 import type { QuoteForm } from '../data/quote';
+import { flavourNote } from '../data/products';
 import { CUSTOMISED, CUSTOM_FLAVOUR_ADD, customFromPrice, customSummary, type CustomForm } from '../data/custom';
 import { TIME_SLOTS, getZone } from '../data/zones';
 import { aed, prettyDate } from './format';
@@ -40,7 +41,7 @@ export function whatsappOrderText(o: OrderSummary): string {
   const items = o.lines.map((l) => {
     const { product, size, flavour } = resolveLine(l);
     const msg = l.message ? `\n   Message: "${l.message}"` : '';
-    return `• ${l.qty} × ${product.name} — ${size.label}, ${flavour.name} — ${aed(size.price * l.qty)}${msg}`;
+    return `• ${l.qty} × ${product.name} — ${[size.label, flavourNote(product, flavour)].filter(Boolean).join(', ')} — ${aed(size.price * l.qty)}${msg}`;
   });
   return tidy([
     `${GREETING} ${o.paid ? 'I just paid online for' : "I'd like to order"}:`,

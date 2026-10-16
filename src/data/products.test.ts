@@ -1,15 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { PRICE_LADDER, PRODUCTS, sizeFor } from './products';
+import { PRODUCTS, sizeFor } from './products';
 
 describe('products', () => {
   const cake = PRODUCTS[0];
 
   it('gives every size a "serves" range for the tag on the card', () => {
-    expect(PRICE_LADDER.map((s) => [s.label, s.serves])).toEqual([
+    for (const p of PRODUCTS) expect(p.sizes.map((s) => [s.label, s.serves])).toEqual([
       ['5"', '4–6'],
       ['6"', '6–8'],
       ['7"', '10–12'],
     ]);
+  });
+
+  it('gives each cake one flavour, named like the cake', () => {
+    for (const p of PRODUCTS) expect(p.flavours).toEqual([{ id: p.id, name: p.name }]);
   });
 
   it('uses the chosen size, or the 6" when none is chosen', () => {

@@ -42,17 +42,17 @@ export function aiPhoto(slot: string, ratio: Ratio, alt: string, label: string):
 
 export const media = {
   hero: {
-    cake: aiPhoto('hero-cake', '4:5', 'A chocolate drip cake with fresh raspberries on a cream cake stand', 'The Six · Berry Chocolate Drip'),
+    cake: aiPhoto('hero-cake', '4:5', 'A chocolate drip cake with fresh raspberries on a cream cake stand', 'The Six · Classic Chocolate'),
     slice: aiPhoto('hero-slice', '1:1', 'A slice of berry layer cake on a small plate', 'A slice'),
     hands: aiPhoto('hero-hands', '4:5', 'Hands piping cream onto a berry cake', 'Piping by hand'),
   },
   six: [
-    aiPhoto('six-berry-chocolate-drip', '4:5', 'Berry Chocolate Drip cake', 'The Six · 1 of 6'),
-    aiPhoto('six-pistachio-kunafa', '4:5', 'Pistachio Kunafa cake', 'The Six · 2 of 6'),
-    aiPhoto('six-berry-cream-sponge', '4:5', 'Berry Cream Sponge cake', 'The Six · 3 of 6'),
-    aiPhoto('six-salted-caramel-chocolate', '4:5', 'Salted Caramel Chocolate cake', 'The Six · 4 of 6'),
-    aiPhoto('six-blueberry-cheesecake', '4:5', 'Blueberry Cheesecake', 'The Six · 5 of 6'),
-    aiPhoto('six-vanilla-berry-charlotte', '4:5', 'Vanilla Berry Charlotte cake', 'The Six · 6 of 6'),
+    aiPhoto('six-brown-butter', '4:5', 'Brown butter and cinnamon cake with a salted caramel drip', 'The Six · 1 of 6'),
+    aiPhoto('six-vanilla-raspberry', '4:5', 'Vanilla cake topped with fresh raspberries', 'The Six · 2 of 6'),
+    aiPhoto('six-lemon', '4:5', 'Lemon cake with cream cheese frosting and candied lemon', 'The Six · 3 of 6'),
+    aiPhoto('six-chocolate', '4:5', 'Classic chocolate cake with chocolate frosting', 'The Six · 4 of 6'),
+    aiPhoto('six-earl-grey', '4:5', 'Earl Grey cake with honey', 'The Six · 5 of 6'),
+    aiPhoto('six-strawberry', '4:5', 'Strawberry and mascarpone cake', 'The Six · 6 of 6'),
   ],
   looks: {
     buttercream: aiPhoto('look-buttercream', '4:5', 'A cake finished in soft buttercream', 'Soft buttercream'),

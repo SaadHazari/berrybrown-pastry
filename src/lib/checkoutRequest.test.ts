@@ -4,7 +4,7 @@ import { buildStripeForm, parseCheckoutRequest, stripeImage } from './checkoutRe
 const now = new Date(Date.UTC(2026, 8, 17, 8, 0)); // 12:00 in Dubai
 const valid = {
   ref: 'BB-260917-AB12',
-  lines: [{ productId: 'berry-chocolate-drip', sizeId: '6in', flavourId: 'dark', qty: 1, message: 'Hi' }],
+  lines: [{ productId: 'chocolate', sizeId: '6in', flavourId: 'chocolate', qty: 1, message: 'Hi' }],
   zoneId: 'dubai',
   date: '2026-09-18',
   slotId: 'evening',
@@ -67,8 +67,10 @@ describe('buildStripeForm', () => {
   it('keeps Berry Brown separate from Dormers on the shared Stripe account (spec §4–5)', () => {
     const f = form();
     // Product naming convention
-    expect(f.get('line_items[0][price_data][product_data][name]')).toBe('BB | Berry Chocolate Drip | 6"');
+    expect(f.get('line_items[0][price_data][product_data][name]')).toBe('BB | Classic Chocolate | 6"');
     expect(f.get('line_items[1][price_data][product_data][name]')).toBe('BB | Delivery | Dubai');
+    // One flavour per cake: the description carries only the message, never the cake name again
+    expect(f.get('line_items[0][price_data][product_data][description]')).toBe('Message: "Hi"');
     expect(f.get('line_items[0][price_data][product_data][metadata][brand]')).toBe('berry_brown');
     // Session metadata namespace
     expect(f.get('metadata[brand]')).toBe('berry_brown');

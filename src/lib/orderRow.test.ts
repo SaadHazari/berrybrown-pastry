@@ -4,8 +4,8 @@ import { customerRow, orderRow } from './orderRow';
 const order = {
   ref: 'BB-260927-AB12',
   lines: [
-    { productId: 'berry-chocolate-drip', sizeId: '6in', flavourId: 'dark', qty: 2, message: 'Happy 30th' },
-    { productId: 'pistachio-kunafa', sizeId: '5in', flavourId: 'rose', qty: 1 },
+    { productId: 'chocolate', sizeId: '6in', flavourId: 'chocolate', qty: 2, message: 'Happy 30th' },
+    { productId: 'strawberry', sizeId: '5in', flavourId: 'strawberry', qty: 1 },
   ],
   zoneId: 'dubai',
   date: '2026-09-29',
@@ -25,11 +25,11 @@ describe('orderRow', () => {
     expect(row.customer_id).toBeNull();
     expect(row.customer_email).toBeNull();
     expect(row.address).toBe('Burj Views T2, 1204');
-    expect(row.lines[0]).toMatchObject({ product: 'Berry Chocolate Drip', size: '6"', flavour: 'Dark chocolate & raspberry', unit: 200, qty: 2, message: 'Happy 30th' });
-    expect(row.subtotal).toBe(550);
+    expect(row.lines[0]).toMatchObject({ product: 'Classic Chocolate', size: '6"', flavour: 'Classic Chocolate', unit: 200, qty: 2, message: 'Happy 30th' });
+    expect(row.subtotal).toBe(575);
     expect(row.delivery).toBe(0);
     expect(row.tax).toBe(0);
-    expect(row.total).toBe(550);
+    expect(row.total).toBe(575);
     expect(row.currency).toBe('AED');
     expect(row.stripe_checkout_session_id).toBeNull();
   });
@@ -39,7 +39,7 @@ describe('orderRow', () => {
     expect(row.fulfilment).toBe('pickup');
     expect(row.address).toBeNull();
     expect(row.customer_id).toBe('cust-1');
-    expect(row.total).toBe(150);
+    expect(row.total).toBe(175);
   });
 
   it('builds the customer row keyed by phone', () => {

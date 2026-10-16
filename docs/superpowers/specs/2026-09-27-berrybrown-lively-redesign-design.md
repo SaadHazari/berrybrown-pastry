@@ -101,7 +101,7 @@ Desktop, 12 columns, a short top padding, so both buttons and the main photo fit
   - Buttons: **Order a cake** (Claret, opens the menu overlay, gentle magnetic pull on desktop) and **Design your cake** (ghost, to `#custom`).
   - Rating row: three 32 px round photo avatars, a Cocoa star, `4.9 · 260+ reviews` in Jost (`RATING`, sample).
 - **Right (6/12).** Photo stack on a Rose block (a Rose rectangle offset behind the photos):
-  - Main photo 4:5, about 460 px wide (smaller on short laptop windows, so it fits the first screen), Butter frame, Jost caption `THE SIX · BERRY CHOCOLATE DRIP`.
+  - Main photo 4:5, about 460 px wide (smaller on short laptop windows, so it fits the first screen), Butter frame, Jost caption `THE SIX · CLASSIC CHOCOLATE`.
   - Small photo 1:1, about 220 px, overlapping bottom-left (a slice).
   - Small photo 4:5, about 180 px, overlapping top-right (hands piping).
   - Each drifts at its own rate while the page scrolls (±40–60 px).
@@ -114,7 +114,7 @@ The old "Our favourites" carousel.
 
 - Header row: label `THE SIX`, headline "Our signature cakes.", one-liner "Six cakes. Three sizes. 24 hours' notice." Right side: prev/next square arrow buttons (desktop) and **See the full menu** (Cocoa, opens the menu overlay).
 - Row: horizontal scroll-snap, drag with the mouse, swipe on touch. Card width 360 px desktop, 78vw phone. Native scrolling only; `scrollBy` with `behavior: smooth` for the arrows is fine.
-- Card: 4:5 photo, 4 px corners, hover zoom 1.05 over 700 ms; on hover a Butter chip `CHOOSE SIZE & FLAVOUR` rises in bottom-left; a 44 px Cocoa square **+** button bottom-right adds the chosen size (or the 6", which it then marks as chosen) with the first flavour, and shows the existing toast with "View bag". Jost `1 OF 6` top-left on a Butter chip. Under the photo: name (heading), one line (callout, Cocoa 70), then the three sizes as `Chip`s (`5" · 150`, `6" · 200`, `7" · 280`), each with a Jost caption and a people icon under it (`4–6`, `6–8`, `10–12`, from `serves` in `PRICE_LADDER`). No size is chosen at first; choosing one shows `SERVES 10–12` top-right on the photo, in the same Butter chip and `sm` inset as `1 OF 6` (Saad, 28 Sep). The photo opens the existing `ProductSheet` on the chosen size.
+- Card: 4:5 photo, 4 px corners, hover zoom 1.05 over 700 ms; on hover a Butter chip `CHOOSE A SIZE` rises in bottom-left; a 44 px Cocoa square **+** button bottom-right adds the chosen size (or the 6", which it then marks as chosen), and shows the existing toast with "View bag". Jost `1 OF 6` top-left on a Butter chip. Under the photo: name (heading), one line (callout, Cocoa 70), then the three sizes as `Chip`s with that cake's own prices (`5" · 145`, `6" · 180`, `7" · 245` for brown butter), each with a Jost caption and a people icon under it (`4–6`, `6–8`, `10–12`). Each of the Six is one flavour (studio price list, 16 Oct 2026), so there is no flavour choice. The row scrolls sideways only (`overflow-y: hidden`, bottom padding `lg`): cards waiting to rise sit 24 px low, and a row that could scroll up and down took the mouse wheel from the page. No size is chosen at first; choosing one shows `SERVES 10–12` top-right on the photo, in the same Butter chip and `sm` inset as `1 OF 6` (Saad, 28 Sep). The photo opens the existing `ProductSheet` on the chosen size.
 - Under the row: a hairline track with a Claret fill that follows the scroll position.
 - One caption line under it: "Photos show the style. Each cake is made by hand, so yours will look a little different." (The "Written on … +50" line was removed on 28 Sep: the team talks about writing on WhatsApp.)
 
@@ -211,7 +211,7 @@ The old story section in the team's voice.
 The old gallery.
 
 - Left column, sticky on desktop: label `FROM OUR KITCHEN`, headline "Real butter, real fruit, nothing rushed.", and one tall photo (`kitchen-piping`).
-- Right: two columns of six photos — the other five kitchen slots and `six-pistachio-kunafa` (mixed 3:4 and 4:3). Column A drifts up, column B drifts down while scrolling. Hover: zoom 1.05 and a Jost caption on a Butter chip. Click: the lightbox (old `Lightbox`, restyled: Cocoa 90% backdrop, 4 px corners, Jost caption `BERRY LAYERS · 1 / 6`, arrow keys, swipe, Esc, focus return).
+- Right: two columns of six photos — the other five kitchen slots and `six-vanilla-raspberry` (mixed 3:4 and 4:3). Column A drifts up, column B drifts down while scrolling. Hover: zoom 1.05 and a Jost caption on a Butter chip. Click: the lightbox (old `Lightbox`, restyled: Cocoa 90% backdrop, 4 px corners, Jost caption `BERRY LAYERS · 1 / 6`, arrow keys, swipe, Esc, focus return).
 
 ### 5.12 Kind words (`#reviews`)
 
@@ -292,7 +292,7 @@ The Six share one set-up: the same plate, a 45° angle from the left, the same b
 | Group | Slots (ratio) |
 |---|---|
 | Hero | `hero-cake` 4:5 · `hero-slice` 1:1 · `hero-hands` 4:5 |
-| The Six | `six-berry-chocolate-drip`, `six-pistachio-kunafa`, `six-berry-cream-sponge`, `six-salted-caramel-chocolate`, `six-blueberry-cheesecake`, `six-vanilla-berry-charlotte` — all 4:5 |
+| The Six | `six-brown-butter`, `six-vanilla-raspberry`, `six-lemon`, `six-chocolate`, `six-earl-grey`, `six-strawberry` — all 4:5 |
 | Custom looks | `look-buttercream`, `look-flowers`, `look-drip`, `look-custom` (sketchbook, swatches, a pencil) — all 4:5 |
 | How it works | `how-pick`, `how-bake`, `how-deliver` — 4:3 |
 | Gift boxes | `box-open` 4:5 · `box-stack` 1:1 |
@@ -313,7 +313,7 @@ Library: `motion` (the old site's `motion/react`), wrapped in `<MotionConfig red
 | Allowed | Where |
 |---|---|
 | Headline words rise from a mask (0.9 s, 70 ms stagger, once in view) | Section headlines, closing, footer |
-| Rise-in with stagger (opacity + 24 px, once) | Cards, rows, steps |
+| Rise-in with stagger (opacity + 24 px, 0.5 s, once) | Cards, rows, steps |
 | Parallax, ±80 px max | Hero photos, gift-box photos, studio photos, kitchen columns, closing cards |
 | Hover zoom 1.04–1.05, card lift, button 6% darker | Photos, cards, buttons |
 | Magnetic pull (fine pointer only) | Hero and closing "Order a cake" |

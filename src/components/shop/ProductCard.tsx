@@ -33,7 +33,7 @@ export function ProductCard({ product, index }: { product: Product; index?: numb
           type="button"
           onClick={() => open({ kind: 'product', id: product.id, size: chosen ?? undefined, back: overlay?.kind === 'menu' ? 'menu' : undefined })}
           className="relative block w-full overflow-hidden rounded text-left"
-          aria-label={`${product.name}: choose size and flavour`}
+          aria-label={`${product.name}: choose a size`}
         >
           <Photo media={product.image} zoom sizes="(min-width: 1024px) 360px, (min-width: 640px) 44vw, 78vw" />
           {index !== undefined && (
@@ -59,7 +59,7 @@ export function ProductCard({ product, index }: { product: Product; index?: numb
             )}
           </AnimatePresence>
           <span className="t-label absolute bottom-sm left-sm hidden translate-y-2 rounded bg-butter px-sm py-xs text-cocoa opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 md:block" aria-hidden>
-            Choose size & flavour
+            Choose a size
           </span>
         </button>
         <button

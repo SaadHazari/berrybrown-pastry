@@ -100,7 +100,7 @@ Photo upload limits: 3 files per send, 10 MB each, JPG/PNG/WebP/HEIC (checked by
 | What | Where |
 | --- | --- |
 | The Six: names, one-liners, flavours, allergens | `src/data/products.ts` |
-| The price ladder (5" 150 · 6" 200 · 7" 280) | `PRICE_LADDER` in `src/data/products.ts` |
+| The Six and their prices (each cake has its own; studio price list, 16 Oct 2026) | `PRODUCTS` in `src/data/products.ts` |
 | Delivery fee, free-delivery threshold, time slots | `src/data/zones.ts` |
 | Contact details (WhatsApp, email, Instagram), rating, stats, FAQ, how-it-works steps, kitchen photos | `src/data/content.ts` |
 | Gift boxes, workshops, company events, order-by dates | `src/data/companies.ts` |
@@ -116,14 +116,12 @@ Photo upload limits: 3 files per send, 10 MB each, JPG/PNG/WebP/HEIC (checked by
 
 The 31 photos are AI-made stand-ins in the brand palette (`ai: true` in `src/data/media.ts`). They were generated in Canva from the prompts in `scripts/photo-slots.json`, placed in the Canva design "Berry Brown — website photos", exported at full size, then graded into one set by `scripts/grade-photos.py` (warm split-tone toward Cocoa and Butter, WebP at 640 and 1200 px in `public/images/ai/`). The script also rewrites `src/data/photos.generated.ts`; a slot without files shows the Rose placeholder. AI photos are never sent to Stripe (`stripeImage` in `src/lib/checkoutRequest.ts`), and the page says "Photos show the style."
 
-**Replacing one with a real photo:** name the file after its slot (for example `six-pistachio-kunafa.jpg`) in a folder, run `python3 scripts/grade-photos.py <folder> --real` (crops and resizes without the colour grade), then set `ai: false` for that slot in `src/data/media.ts`. Rules from the brand book: phone camera, window light, same plate and angle for all six, hands in frame, no retouching.
+**Replacing one with a real photo:** name the file after its slot (for example `six-lemon.jpg`) in a folder, run `python3 scripts/grade-photos.py <folder> --real` (crops and resizes without the colour grade), then set `ai: false` for that slot in `src/data/media.ts`. Rules from the brand book: phone camera, window light, same plate and angle for all six, hands in frame, no retouching.
 
 ## ⚠️ Before launch — everything marked `sample: true`
 
 | Item | File | What to do |
 | --- | --- | --- |
-| Names of the Six | `src/data/products.ts` (`sample: true` on each cake) | The studio confirms the six; rename, then remove the flags |
-| The flat ladder 150 / 200 / 280 | `PRICE_LADDER` in `src/data/products.ts` | Saad confirms (it is a cut from the old 195/295/420) |
 | Rating 4.9 · 260+ | `RATING` in `src/data/content.ts` | Replace with the real figure |
 | Stats (12 years · 3,400+ cakes · 100% from scratch) | `STATS` in `src/data/content.ts` | Replace with real figures |
 | Five reviews | `REVIEWS` in `src/data/content.ts` | Publish real reviews in Supabase `reviews`; the samples disappear on their own |

@@ -12,7 +12,7 @@ describe('order', () => {
   it('builds a WhatsApp order message with everything the studio needs', () => {
     const text = whatsappOrderText({
       ref: 'BB-260917-AB12',
-      lines: [{ productId: 'berry-chocolate-drip', sizeId: '6in', flavourId: 'dark', qty: 2, message: 'Happy 30th Sara' }],
+      lines: [{ productId: 'chocolate', sizeId: '6in', flavourId: 'chocolate', qty: 2, message: 'Happy 30th Sara' }],
       zoneId: 'dubai',
       date: '2026-09-19',
       slotId: 'evening',
@@ -21,7 +21,7 @@ describe('order', () => {
     });
     expect(text.split('\n')[0]).toBe("Hi Berry Brown, I'd like to order:");
     expect(text).toContain('BB-260917-AB12');
-    expect(text).toContain('2 × Berry Chocolate Drip');
+    expect(text).toContain('• 2 × Classic Chocolate — 6" — AED 400');
     expect(text).toContain('Happy 30th Sara');
     expect(text).toContain('AED 400');
     expect(text).toContain('Delivery: Free'); // free delivery over 300
@@ -34,7 +34,7 @@ describe('order', () => {
   it('charges delivery under 300', () => {
     const text = whatsappOrderText({
       ref: 'BB-260917-AB12',
-      lines: [{ productId: 'berry-chocolate-drip', sizeId: '5in', flavourId: 'dark', qty: 1 }],
+      lines: [{ productId: 'chocolate', sizeId: '5in', flavourId: 'chocolate', qty: 1 }],
       zoneId: 'dubai',
       date: '2026-09-19',
       slotId: 'morning',
@@ -42,7 +42,7 @@ describe('order', () => {
       paid: true,
     });
     expect(text).toContain('Delivery: AED 20');
-    expect(text).toContain('Total: AED 170 (paid)');
+    expect(text).toContain('Total: AED 180 (paid)');
   });
 
   it('encodes the WhatsApp link with the studio number', () => {

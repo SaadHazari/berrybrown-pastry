@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { aed } from '../../lib/format';
+import { flavourNote } from '../../data/products';
 import { resolveLine } from '../../lib/pricing';
 import { useCart } from '../../store/cart';
 import { useUI } from '../../store/ui';
@@ -55,7 +56,7 @@ export function CartDrawer() {
                       <div className="min-w-0">
                         <p className="t-heading">{product.name}</p>
                         <p className="t-caption mt-2xs text-cocoa-70">
-                          {size.label} · {flavour.name}
+                          {[size.label, flavourNote(product, flavour)].filter(Boolean).join(' · ')}
                         </p>
                         {l.message && <p className="t-caption mt-2xs text-cocoa-70">“{l.message}”</p>}
                       </div>

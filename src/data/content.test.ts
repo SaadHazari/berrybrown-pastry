@@ -1,12 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { CONTACT, FAQS, LOG, REVIEWS, cakeNumber } from './content';
-import { PRICE_LADDER, PRODUCTS } from './products';
+import { PRODUCTS } from './products';
 
 describe('content', () => {
-  it('has exactly six cakes on one flat ladder', () => {
-    expect(PRODUCTS).toHaveLength(6);
-    for (const p of PRODUCTS) expect(p.sizes.map((s) => `${s.label} ${s.price}`)).toEqual(['5" 150', '6" 200', '7" 280']);
-    for (const p of PRODUCTS) expect(p.sizes).toBe(PRICE_LADDER);
+  it('has the six cakes from the studio price list, each with its own prices', () => {
+    expect(PRODUCTS.map((p) => [p.name, p.sizes.map((s) => `${s.label} ${s.price}`).join(' / ')])).toEqual([
+      ['Brown Butter & Cinnamon', '5" 145 / 6" 180 / 7" 245'],
+      ['Vanilla Raspberry', '5" 145 / 6" 180 / 7" 245'],
+      ['Lemon & Cream Cheese', '5" 155 / 6" 195 / 7" 265'],
+      ['Classic Chocolate', '5" 160 / 6" 200 / 7" 270'],
+      ['Earl Grey & Honey', '5" 155 / 6" 190 / 7" 255'],
+      ['Strawberry & Mascarpone', '5" 175 / 6" 210 / 7" 280'],
+    ]);
+    for (const p of PRODUCTS) expect(p.sample).toBe(false);
   });
 
   it('numbers cakes with three digits, newest first', () => {

@@ -5,6 +5,7 @@ import { EMPTY_FORM, loadForm, normalisePhone, saveForm, savePending, validateDe
 import { cn } from '../../lib/cn';
 import { aed, prettyDate } from '../../lib/format';
 import { orderRef, whatsappLink, whatsappOrderText } from '../../lib/order';
+import { flavourNote } from '../../data/products';
 import { earliestDate, resolveLine, totals } from '../../lib/pricing';
 import { useCart } from '../../store/cart';
 import { useUI } from '../../store/ui';
@@ -282,7 +283,7 @@ export function Checkout() {
                             {l.qty} × {product.name}
                           </span>
                           <span className="t-caption block text-cocoa-70">
-                            {size.label} · {flavour.name}
+                            {[size.label, flavourNote(product, flavour)].filter(Boolean).join(' · ')}
                             {l.message && ` · “${l.message}”`}
                           </span>
                         </span>

@@ -34,8 +34,8 @@ export const REVIEWS: Review[] = [
   {
     name: 'Reem A.',
     area: 'Emirates Hills',
-    text: 'The drip cake was gone in ten minutes. Not too sweet, just right. The kids are still talking about it.',
-    cake: 'Berry Chocolate Drip',
+    text: 'The chocolate cake was gone in ten minutes. Not too sweet, just right. The kids are still talking about it.',
+    cake: 'Classic Chocolate',
     sample: true,
   },
   {
@@ -48,22 +48,22 @@ export const REVIEWS: Review[] = [
   {
     name: 'Fatima H.',
     area: 'Downtown',
-    text: 'The pistachio kunafa is a dream. It arrived cold and perfect in the middle of August.',
-    cake: 'Pistachio Kunafa',
+    text: 'The Earl Grey and honey cake is a dream. It arrived cold and perfect in the middle of August.',
+    cake: 'Earl Grey & Honey',
     sample: true,
   },
   {
     name: 'Omar K.',
     area: 'Dubai Hills',
     text: 'Ordered at night, cake at the door the next evening. Easy, friendly and very good.',
-    cake: 'Blueberry Cheesecake',
+    cake: 'Lemon & Cream Cheese',
     sample: true,
   },
   {
     name: 'Sara M.',
     area: 'JVC',
     text: 'Like a cake your favourite aunt would make, but prettier. We order every birthday now.',
-    cake: 'Berry Cream Sponge',
+    cake: 'Strawberry & Mascarpone',
     sample: true,
   },
 ];
@@ -85,8 +85,8 @@ export type LogEntry = { n: number; for: string; flavour: string; size: string; 
 /** The log — numbered real cakes, newest first. SAMPLE entries until real cakes exist. */
 export const LOG: LogEntry[] = [
   { n: 41, for: "for Ayesha's dad, 60th", flavour: 'Classic chocolate', size: '7"', image: LOG_MEDIA[0], sample: true },
-  { n: 40, for: 'for a baby shower in Jumeirah', flavour: 'Berry cream sponge', size: '6"', image: LOG_MEDIA[1], sample: true },
-  { n: 39, for: "for Lina and Omar's engagement", flavour: 'Pistachio kunafa', size: '7"', image: LOG_MEDIA[2], sample: true },
+  { n: 40, for: 'for a baby shower in Jumeirah', flavour: 'Strawberry & mascarpone', size: '6"', image: LOG_MEDIA[1], sample: true },
+  { n: 39, for: "for Lina and Omar's engagement", flavour: 'Vanilla raspberry', size: '7"', image: LOG_MEDIA[2], sample: true },
 ];
 
 export const cakeNumber = (n: number) => `#${String(n).padStart(3, '0')}`;
@@ -106,7 +106,7 @@ export const GALLERY: GalleryItem[] = [
   { image: media.kitchen.layers, caption: 'Berry layers', tall: true },
   { image: media.kitchen.crumb, caption: 'The crumb', tall: false },
   { image: media.kitchen.cocoa, caption: 'Cocoa', tall: true },
-  { image: media.six[1], caption: 'Pistachio kunafa', tall: true },
+  { image: media.six[1], caption: 'Vanilla raspberry', tall: true },
   { image: media.kitchen.packing, caption: 'Packed by hand', tall: false },
   { image: media.kitchen.flowers, caption: 'Fresh flowers', tall: true },
 ];

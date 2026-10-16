@@ -12,104 +12,43 @@ export type Product = {
   sizes: Size[];
   flavours: Flavour[];
   allergens: string[];
-  /** Names are provisional until the studio confirms the real Six. */
+  /** True while the name or price is a placeholder. */
   sample: boolean;
 };
 
-/** One flat ladder for all six. 150 / 200 / 280 — agreed 21 Sep. Sizes 5" / 6" / 7" from the studio price list, 16 Oct. */
-export const PRICE_LADDER: Size[] = [
-  { id: '5in', label: '5"', serves: '4–6', price: 150 },
-  { id: '6in', label: '6"', serves: '6–8', price: 200, popular: true },
-  { id: '7in', label: '7"', serves: '10–12', price: 280 },
+/** Sizes 5" / 6" / 7". Each cake has its own prices, from the studio price list of 16 Oct 2026. */
+const ladder = (p5: number, p6: number, p7: number): Size[] => [
+  { id: '5in', label: '5"', serves: '4–6', price: p5 },
+  { id: '6in', label: '6"', serves: '6–8', price: p6, popular: true },
+  { id: '7in', label: '7"', serves: '10–12', price: p7 },
 ];
 
-const cake = (
-  id: string,
-  name: string,
-  short: string,
-  image: Media,
-  flavours: Flavour[],
-  allergens: string[],
-): Product => ({
+/** Each of the Six is one flavour, so the cake's only flavour has the same name. */
+const cake = (id: string, name: string, short: string, image: Media, prices: [number, number, number], allergens: string[]): Product => ({
   id,
   name,
   short,
   image,
   leadTimeHours: 24,
-  sizes: PRICE_LADDER,
-  flavours,
+  sizes: ladder(...prices),
+  flavours: [{ id, name }],
   allergens,
-  sample: true,
+  sample: false,
 });
 
 export const PRODUCTS: Product[] = [
-  cake(
-    'berry-chocolate-drip',
-    'Berry Chocolate Drip',
-    'Dark chocolate sponge, berry jam and a glossy ganache drip.',
-    media.six[0],
-    [
-      { id: 'dark', name: 'Dark chocolate & raspberry' },
-      { id: 'milk', name: 'Milk chocolate & strawberry' },
-    ],
-    ['Dairy', 'Gluten', 'Eggs'],
-  ),
-  cake(
-    'pistachio-kunafa',
-    'Pistachio Kunafa',
-    'Pistachio cream, crisp golden kunafa and a little orange blossom.',
-    media.six[1],
-    [
-      { id: 'classic', name: 'Pistachio & kunafa' },
-      { id: 'rose', name: 'Pistachio, rose & raspberry' },
-    ],
-    ['Dairy', 'Pistachio', 'Gluten', 'Eggs'],
-  ),
-  cake(
-    'berry-cream-sponge',
-    'Berry Cream Sponge',
-    'Light vanilla sponge, whipped cream and fresh berries.',
-    media.six[2],
-    [
-      { id: 'vanilla', name: 'Vanilla & mixed berries' },
-      { id: 'lemon', name: 'Lemon & raspberry' },
-    ],
-    ['Dairy', 'Gluten', 'Eggs'],
-  ),
-  cake(
-    'salted-caramel-chocolate',
-    'Salted Caramel Chocolate',
-    'Chocolate mousse over a soft caramel centre and hazelnut crunch.',
-    media.six[3],
-    [
-      { id: 'caramel', name: 'Dark chocolate & salted caramel' },
-      { id: 'praline', name: 'Double hazelnut praline' },
-    ],
-    ['Dairy', 'Hazelnut', 'Gluten', 'Eggs'],
-  ),
-  cake(
-    'blueberry-cheesecake',
-    'Blueberry Cheesecake',
-    'Baked cheesecake on a butter biscuit base, topped with blueberries.',
-    media.six[4],
-    [
-      { id: 'blueberry', name: 'Vanilla & blueberry' },
-      { id: 'lotus', name: 'Lotus biscoff' },
-    ],
-    ['Dairy', 'Gluten', 'Eggs'],
-  ),
-  cake(
-    'berry-charlotte',
-    'Vanilla Berry Charlotte',
-    'Ladyfingers tied with ribbon around vanilla cream and berries.',
-    media.six[5],
-    [
-      { id: 'vanilla', name: 'Vanilla & wild berries' },
-      { id: 'lemon', name: 'Lemon & raspberry' },
-    ],
-    ['Dairy', 'Gluten', 'Eggs'],
-  ),
+  cake('brown-butter', 'Brown Butter & Cinnamon', 'Brown butter and cinnamon sponge with salted caramel.', media.six[0], [145, 180, 245], ['Dairy', 'Gluten', 'Eggs']),
+  cake('vanilla-raspberry', 'Vanilla Raspberry', 'Vanilla sponge with raspberry.', media.six[1], [145, 180, 245], ['Dairy', 'Gluten', 'Eggs']),
+  cake('lemon', 'Lemon & Cream Cheese', 'Lemon sponge with cream cheese frosting.', media.six[2], [155, 195, 265], ['Dairy', 'Gluten', 'Eggs']),
+  cake('chocolate', 'Classic Chocolate', 'Our classic chocolate cake.', media.six[3], [160, 200, 270], ['Dairy', 'Gluten', 'Eggs']),
+  cake('earl-grey', 'Earl Grey & Honey', 'Earl Grey sponge with honey.', media.six[4], [155, 190, 255], ['Dairy', 'Gluten', 'Eggs']),
+  cake('strawberry', 'Strawberry & Mascarpone', 'Fresh strawberries and mascarpone cream.', media.six[5], [175, 210, 280], ['Dairy', 'Gluten', 'Eggs']),
 ];
+
+/** The flavour, worth showing only when the cake offers more than one. Each of the Six has one, named like the cake. */
+export function flavourNote(p: Product, f: Flavour): string | null {
+  return p.flavours.length > 1 ? f.name : null;
+}
 
 export function getProduct(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);

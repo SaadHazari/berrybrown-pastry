@@ -7,6 +7,7 @@
  * reconcile, and the webhook can ignore Dormers events.
  */
 import type { Media } from '../data/media';
+import { flavourNote } from '../data/products';
 import { TIME_SLOTS, getZone } from '../data/zones';
 import { isValidEmail, isValidPhone, normalisePhone } from './validation';
 import type { Customer } from './order';
@@ -142,7 +143,8 @@ export function buildStripeForm(order: ValidOrder, origin: string, opts: StripeF
     f.set(`${p}[price_data][currency]`, 'aed');
     f.set(`${p}[price_data][unit_amount]`, String(size.price * 100));
     f.set(`${p}[price_data][product_data][name]`, `BB | ${product.name} | ${size.label}`);
-    f.set(`${p}[price_data][product_data][description]`, `${flavour.name}${l.message ? ` · Message: "${l.message}"` : ''}`);
+    const description = [flavourNote(product, flavour), l.message && `Message: "${l.message}"`].filter(Boolean).join(' · ');
+    if (description) f.set(`${p}[price_data][product_data][description]`, description);
     f.set(`${p}[price_data][product_data][metadata][brand]`, BRAND);
     f.set(`${p}[price_data][product_data][metadata][product_id]`, product.id);
     f.set(`${p}[price_data][product_data][metadata][size_id]`, size.id);
