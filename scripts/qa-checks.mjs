@@ -3,6 +3,7 @@
 // 2. With reduced motion, How it works still faded its phone cards in and drew its arrows.
 // 3. The big hero logo pushed the hero buttons and photo below the first screen.
 // 4. The hero intro: the logo glides into the top bar while the tagline types in, once per visit.
+// 7. A mouse wheel over a cake photo in the Six did not scroll the page: the row could scroll 7 px up and down.
 // Usage: node scripts/qa-checks.mjs [url]
 import { chromium } from 'playwright-core';
 
@@ -170,7 +171,7 @@ const DONE = 'Made with heart,|not haste.';
   });
   const first = await at();
   const captions = (await card.locator('[data-serves-caption]').allTextContents()).map((t) => t.trim());
-  check(first.tag === null && first.checked === 0 && captions.join(' | ') === '4–6 | 6–8 | 10–14', `The Six: no size chosen at first; captions under the sizes read "${captions.join(' | ')}"`);
+  check(first.tag === null && first.checked === 0 && captions.join(' | ') === '4–6 | 6–8 | 10–12', `The Six: no size chosen at first; captions under the sizes read "${captions.join(' | ')}"`);
   const radios = card.locator('[role="radio"]');
   const eight = await radios.count() === 3 ? radios.nth(2) : null;
   if (eight) await eight.click();
@@ -180,13 +181,13 @@ const DONE = 'Made with heart,|not haste.';
     const tag = el.querySelector('[data-serves]')?.getBoundingClientRect();
     return tag ? { top: Math.round(tag.top - photo.top), right: Math.round(photo.right - tag.right) } : null;
   });
-  check(picked.tag === 'Serves 10–14' && box && Math.abs(box.top - 11) <= 1 && Math.abs(box.right - 11) <= 1, `The Six: picking 8" shows "${picked.tag}" at the photo's top-right (${box ? `${box.top} px down, ${box.right} px in` : 'no tag'})`);
+  check(picked.tag === 'Serves 10–12' && box && Math.abs(box.top - 11) <= 1 && Math.abs(box.right - 11) <= 1, `The Six: picking 7" shows "${picked.tag}" at the photo's top-right (${box ? `${box.top} px down, ${box.right} px in` : 'no tag'})`);
   const plus = await card.getByRole('button', { name: /Quick add/ }).getAttribute('aria-label');
-  check(/8"/.test(plus), `The Six: "+" adds the chosen size (${plus})`);
+  check(/7"/.test(plus), `The Six: "+" adds the chosen size (${plus})`);
   await card.locator('button').first().click();
   await page.waitForSelector('[role="dialog"] [role="radio"][aria-checked="true"]');
   const sheet = (await page.locator('[role="dialog"] [role="radio"][aria-checked="true"]').first().textContent()).trim();
-  check(sheet.startsWith('8"'), `The Six: the photo opens the cake's sheet with the same size chosen ("${sheet}")`);
+  check(sheet.startsWith('7"'), `The Six: the photo opens the cake's sheet with the same size chosen ("${sheet}")`);
   await page.keyboard.press('Escape');
   await page.waitForTimeout(500);
   const second = page.locator('#the-six article').nth(1);
@@ -265,6 +266,32 @@ for (const [width, height] of [[1440, 900], [1280, 720]]) {
   await page.waitForTimeout(400);
   const done = await read();
   check(done && done.claret === true, `${width}×${height}: Send turns Claret once all six are answered`);
+  await page.close();
+}
+
+// 7. The Six row scrolls sideways only. Cards not yet in view wait 24 px low (Rise), which made the row 7 px taller
+// than itself; Chrome then held the wheel on the row, not the page, while the pointer was over a cake. The bottom
+// padding (lg, 29 px) now covers the 24 px, and overflow-y is hidden.
+{
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await page.goto(`${url}#the-six`, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(1500);
+  const box = await page.locator('#the-six article img').first().boundingBox();
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  for (let i = 0; i < 3; i++) {
+    await page.mouse.wheel(0, 120);
+    await page.waitForTimeout(150);
+  }
+  await page.waitForTimeout(400);
+  const r = await page.evaluate(() => {
+    const ul = document.querySelector('#the-six ul');
+    const s = getComputedStyle(ul);
+    return { y: scrollY, row: ul.scrollTop, over: ul.scrollHeight - ul.clientHeight, oy: s.overflowY };
+  });
+  // Headless Chrome hands the wheel on to the page anyway, so also check the cause: the row has no vertical scroll.
+  check(r.oy === 'hidden' && r.over <= 0, `The Six: the row cannot scroll up and down (overflow-y ${r.oy}, ${r.over} px taller than itself)`);
+  check(r.y - before > 200 && r.row === 0, `1440×900: the wheel over a cake photo scrolls the page (page moved ${Math.round(r.y - before)} px, row ${r.row} px)`);
   await page.close();
 }
 

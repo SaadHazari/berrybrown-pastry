@@ -14,7 +14,7 @@ export function Rise({ children, className, delay = 0, as = 'div' }: { children:
       initial={reduce ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-      transition={{ duration: 0.8, delay, ease: ease.out }}
+      transition={{ duration: 0.5, delay, ease: ease.out }}
     >
       {children}
     </Tag>

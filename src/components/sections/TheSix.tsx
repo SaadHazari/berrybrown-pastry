@@ -46,7 +46,7 @@ export function TheSix() {
         </div>
       </div>
 
-      <ul ref={ref} {...handlers} className="no-scrollbar carousel-pad mt-xl flex snap-x snap-mandatory gap-lg overflow-x-auto pb-md md:cursor-grab md:active:cursor-grabbing" aria-label="The Six">
+      <ul ref={ref} {...handlers} className="no-scrollbar carousel-pad mt-xl flex snap-x snap-mandatory gap-lg overflow-x-auto overflow-y-hidden pb-lg md:cursor-grab md:active:cursor-grabbing" aria-label="The Six">
         {PRODUCTS.map((p, i) => (
           <li key={p.id} className="w-[78vw] shrink-0 snap-start sm:w-[44vw] md:w-[340px] lg:w-[360px]">
             <Rise delay={i * 0.06} className="h-full">
