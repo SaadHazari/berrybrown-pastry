@@ -4,8 +4,8 @@ export const CONTACT = {
   whatsapp: '971547944882',
   phoneDisplay: '+971 54 794 4882',
   email: 'connect@berrybrown.me',
-  /** Saad to confirm the handle. Blank shows "From the studio" with no links. */
-  instagram: '',
+  /** Handle only, no @. Blank shows "From the studio" with no links. */
+  instagram: 'berrybrown.ae',
   /** Saad to confirm the pickup / studio wording. */
   location: 'Dubai',
   hours: 'Every day · 9am – 9pm',

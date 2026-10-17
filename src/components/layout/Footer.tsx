@@ -76,7 +76,7 @@ export function Footer() {
         <div className="mt-2xl grid gap-2xl lg:grid-cols-[1fr_1.25fr] lg:items-start">
           <div>
             {ig ? (
-              <a href={`https://instagram.com/${ig}`} target="_blank" rel="noopener noreferrer" className="t-label link inline-flex items-center gap-xs text-butter-60 hover:text-butter">
+              <a href={`https://www.instagram.com/${ig}/`} target="_blank" rel="noopener noreferrer" className="t-label link inline-flex items-center gap-xs text-butter-60 hover:text-butter">
                 <InstagramIcon className="size-[16px]" /> @{ig} →
               </a>
             ) : (
@@ -85,7 +85,7 @@ export function Footer() {
             <div className="mt-md grid grid-cols-3 gap-xs sm:grid-cols-6">
               {TILES.map((m, i) =>
                 ig ? (
-                  <a key={m.src} href={`https://instagram.com/${ig}`} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded" aria-label={`Instagram post ${i + 1}`}>
+                  <a key={m.src} href={`https://www.instagram.com/${ig}/`} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded" aria-label={`Instagram post ${i + 1}`}>
                     <Photo media={m} ratio="1 / 1" zoom sizes="120px" />
                   </a>
                 ) : (
