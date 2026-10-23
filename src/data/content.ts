@@ -15,9 +15,6 @@ export const CONTACT = {
 /** Shown under the Six and in the footer while the photos are AI-made stand-ins. */
 export const PHOTO_NOTE = 'Photos show the style. Each cake is made by hand, so yours will look a little different.';
 
-/** SAMPLE rating — Saad swaps in the real one. */
-export const RATING = { score: 4.9, count: 260, sample: true };
-
 export type Stat = { value: number; suffix: string; label: string; sample: boolean };
 
 /** SAMPLE stats — they count up once in view. Saad swaps in the real ones. */
@@ -29,44 +26,27 @@ export const STATS: Stat[] = [
 
 export type Review = { name: string; area: string; text: string; cake: string; sample: boolean };
 
-/** SAMPLE reviews — replace with real ones (with permission) when Saad sends them. */
+/**
+ * Real reviews Saad has ticked ✅ in docs/Berry_Brown_Testimonials.md (the customer said yes).
+ * The fallback when Supabase is down. Keep it the same as the published rows in the reviews table.
+ * Strongest first. Customers' own words: copy them exactly (see the doc's §2).
+ * Empty: the Reviews section and the hero quote stay hidden.
+ */
 export const REVIEWS: Review[] = [
-  {
-    name: 'Reem A.',
-    area: 'Emirates Hills',
-    text: 'The chocolate cake was gone in ten minutes. Not too sweet, just right. The kids are still talking about it.',
-    cake: 'Classic Chocolate',
-    sample: true,
-  },
-  {
-    name: 'Maya & Alex',
-    area: 'Palm Jumeirah',
-    text: 'They made our wedding cake and it tasted even better than it looked. Every guest asked where it came from.',
-    cake: 'Custom wedding cake',
-    sample: true,
-  },
-  {
-    name: 'Fatima H.',
-    area: 'Downtown',
-    text: 'The Earl Grey and honey cake is a dream. It arrived cold and perfect in the middle of August.',
-    cake: 'Earl Grey & Honey',
-    sample: true,
-  },
-  {
-    name: 'Omar K.',
-    area: 'Dubai Hills',
-    text: 'Ordered at night, cake at the door the next evening. Easy, friendly and very good.',
-    cake: 'Lemon & Cream Cheese',
-    sample: true,
-  },
-  {
-    name: 'Sara M.',
-    area: 'JVC',
-    text: 'Like a cake your favourite aunt would make, but prettier. We order every birthday now.',
-    cake: 'Strawberry & Mascarpone',
-    sample: true,
-  },
+  { name: 'Kseniia', area: 'Wedding', cake: 'Custom wedding cake', text: 'Best cake ever, it was delicious. Thank you so much, you completed our wedding perfect.', sample: false },
+  { name: 'Cialymar', area: 'Event guest', cake: 'Buttercream cake', text: 'I had a slice earlier and it was so good! Perfect sweetness and the buttercream was heaven!', sample: false },
+  { name: 'Joanna', area: 'Event cake', cake: 'Raspberry cake', text: 'Omg, I just tried the cake finally. The raspberry, wow. It looked so beautiful.', sample: false },
+  { name: 'Joumana', area: 'Cake order', cake: 'Earl Grey & Honey', text: 'Thank you for the Earl Grey tea and honey cake, it was so delicious.', sample: false },
+  { name: 'Afaf', area: 'Cake order', cake: 'Custom cake', text: 'Gurl, the cake was AMAZING. It was TOO TASTY.', sample: false },
+  { name: 'Mou', area: 'Dubailand', cake: 'Brownies', text: 'Amazing brownie. We liked the taste and texture.', sample: false },
+  { name: 'Claudia', area: 'Custom cake', cake: 'Heart cake', text: 'So cute, thank you!', sample: false },
+  { name: 'Noora', area: 'Gift', cake: 'Cake', text: 'Thank you so much for the thoughtful gesture and the lovely cake. It truly meant a lot to us.', sample: false },
+  { name: 'Tasneem', area: 'Fellow baker', cake: 'Cake', text: 'I tried the cake, it was delicious.', sample: false },
+  { name: 'Akshata', area: 'Friend', cake: 'Cake', text: 'Super cake. Nice, fluffy and spongy. A different kind of flavour, a little tangy too. Someone here ate 4 pieces in one sitting.', sample: false },
 ];
+
+/** The one short quote in the hero. Shown only while a review from this name is published. */
+export const HERO_QUOTE = { text: 'Best cake ever.', name: 'Kseniia' };
 
 export const FAQS = [
   { q: 'How early should I order?', a: 'The Six need 24 hours. Custom cakes need a week. Gift boxes need 3–5 days, or 2–3 weeks with your logo.' },

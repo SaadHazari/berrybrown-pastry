@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CONTACT, FAQS, LOG, REVIEWS, cakeNumber } from './content';
+import { CONTACT, FAQS, HERO_QUOTE, LOG, REVIEWS, cakeNumber } from './content';
 import { PRODUCTS } from './products';
 
 describe('content', () => {
@@ -30,7 +30,14 @@ describe('content', () => {
     expect(JSON.stringify({ REVIEWS, FAQS })).not.toMatch(/Safa/);
   });
 
-  it('has no exclamation marks in sample reviews', () => {
-    for (const r of REVIEWS) expect(r.text).not.toContain('!');
+  it('carries only real reviews, first name only', () => {
+    for (const r of REVIEWS) {
+      expect(r.sample).toBe(false);
+      expect(r.name).not.toMatch(/\s/);
+    }
+  });
+
+  it('quotes in the hero only a name that has a review', () => {
+    expect(REVIEWS.some((r) => r.name === HERO_QUOTE.name)).toBe(true);
   });
 });

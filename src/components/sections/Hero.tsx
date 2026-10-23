@@ -1,13 +1,13 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { useRef } from 'react';
-import { RATING } from '../../data/content';
+import { HERO_QUOTE } from '../../data/content';
 import { media } from '../../data/media';
+import { useReviews } from '../../lib/live';
 import { ease } from '../../lib/motion';
 import { useUI } from '../../store/ui';
 import { Button, ButtonLink } from '../ui/Button';
 import { Frame } from '../ui/Frame';
-import { StarIcon } from '../ui/Icons';
 import { Magnetic } from '../ui/Magnetic';
 import { Parallax } from '../ui/Parallax';
 import { Photo } from '../ui/Photo';
@@ -20,6 +20,8 @@ export function Hero() {
   const reduce = useReducedMotion();
   const slot = useRef<HTMLHeadingElement>(null);
   useIntroTimeline();
+  // The quote shows only while her review is published.
+  const quote = useReviews().some((r) => r.name === HERO_QUOTE.name) ? HERO_QUOTE : null;
   // The photos are the largest things on first load: they never start invisible, so the page paints them at once.
   const slide = (i: number) => (reduce ? {} : { initial: { y: 24 }, animate: { y: 0 }, transition: { duration: 0.9, delay: 0.1 + i * 0.06, ease: ease.out } });
 
@@ -47,17 +49,17 @@ export function Hero() {
               Design your cake
             </ButtonLink>
           </div>
-          <div className="mt-lg flex items-center gap-sm">
-            <span className="flex -space-x-2" aria-hidden>
-              {AVATARS.filter((m) => !m.placeholder).map((m) => (
-                <img key={m.src} src={m.srcSet ? m.src.replace('-1200.', '-640.') : m.src} alt="" className="size-[32px] rounded-full object-cover ring-2 ring-butter" />
-              ))}
-            </span>
-            <StarIcon className="size-[14px] text-cocoa" />
-            <span className="t-price">
-              {RATING.score} · {RATING.count}+ reviews
-            </span>
-          </div>
+          {quote && (
+            <figure className="mt-lg flex items-center gap-sm">
+              <span className="flex -space-x-2" aria-hidden>
+                {AVATARS.filter((m) => !m.placeholder).map((m) => (
+                  <img key={m.src} src={m.srcSet ? m.src.replace('-1200.', '-640.') : m.src} alt="" className="size-[32px] rounded-full object-cover ring-2 ring-butter" />
+                ))}
+              </span>
+              <blockquote className="t-callout">“{quote.text}”</blockquote>
+              <figcaption className="t-price text-cocoa-70">— {quote.name}</figcaption>
+            </figure>
+          )}
         </div>
 
         <motion.div {...slide(3)} className="relative lg:col-span-6">
