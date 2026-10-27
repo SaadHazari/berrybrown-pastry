@@ -55,7 +55,7 @@ export function GiftBoxes() {
             <Button variant="butter" onClick={() => open({ kind: 'quote', about: 'box' })}>
               Get a quote
             </Button>
-            <a href={mailtoLink('Gift boxes quote')} className="t-body link text-butter">
+            <a href={mailtoLink('Gift boxes quote')} className="t-body link py-sm text-butter">
               or email {CONTACT.email}
             </a>
           </div>

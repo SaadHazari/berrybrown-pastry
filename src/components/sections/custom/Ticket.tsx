@@ -66,7 +66,7 @@ export function Ticket({ form, price, left, busy, note, emailHref, onSend, onEdi
       <div className="mt-auto pt-md">
         <p className="t-price text-[1.2rem]">From {aed(price)}</p>
         <p className="t-caption mt-2xs text-cocoa-70">Final price on WhatsApp. A 50% deposit books your date.</p>
-        <a href={emailHref} className="t-callout link mt-xs inline-block">
+        <a href={emailHref} className="t-callout link inline-block py-xs">
           or email {CONTACT.email}
         </a>
         {note && (

@@ -4,6 +4,7 @@ import { CONTACT, PHOTO_NOTE } from '../../data/content';
 import { media } from '../../data/media';
 import { cn } from '../../lib/cn';
 import { useNearPageEnd } from '../../lib/hooks';
+import { useCart } from '../../store/cart';
 import { ease } from '../../lib/motion';
 import { GENERAL_MESSAGE, whatsappLink } from '../../lib/order';
 import { HeartIcon, InstagramIcon, WhatsAppIcon } from '../ui/Icons';
@@ -36,7 +37,7 @@ function Column({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
       <p className="t-label text-butter-60">{title}</p>
-      <div className="mt-sm flex flex-col gap-xs">{children}</div>
+      <div className="mt-2xs flex flex-col [&>*]:py-sm md:mt-sm md:gap-xs md:[&>*]:py-0">{children}</div>
     </div>
   );
 }
@@ -49,11 +50,13 @@ export function Footer() {
   const nearEnd = useNearPageEnd(1);
   const reduce = useReducedMotion();
   const ig = CONTACT.instagram;
+  // On phones the bag bar sits over the page bottom; leave room so it never hides the logo.
+  const { count } = useCart();
 
   return (
-    <footer ref={ref} className={cn('relative z-0 bg-cocoa pt-2xl text-butter', fits && nearEnd && 'md:sticky md:bottom-0')}>
+    <footer ref={ref} className={cn('relative z-0 bg-cocoa pt-2xl text-butter', fits && nearEnd && 'md:sticky md:bottom-0', count > 0 && 'max-md:pb-[calc(80px+env(safe-area-inset-bottom))]')}>
       <div className="container-x pb-[max(var(--spacing-xl),env(safe-area-inset-bottom))]">
-        <h2 className="t-giant">
+        <h2 className="t-giant max-sm:text-[clamp(2.058rem,calc(14vw-6px),3.33rem)]">
           <span className="block">
             {LINE1.map((w, i) => (
               <motion.span key={w} className="mr-[0.22em] inline-block" initial={reduce ? false : { y: 60, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true, margin: '-5%' }} transition={{ type: 'spring', stiffness: 120, damping: 16, delay: i * 0.08 }}>
@@ -76,7 +79,7 @@ export function Footer() {
         <div className="mt-2xl grid gap-2xl lg:grid-cols-[1fr_1.25fr] lg:items-start">
           <div>
             {ig ? (
-              <a href={`https://www.instagram.com/${ig}/`} target="_blank" rel="noopener noreferrer" className="t-label link inline-flex items-center gap-xs text-butter-60 hover:text-butter">
+              <a href={`https://www.instagram.com/${ig}/`} target="_blank" rel="noopener noreferrer" className="t-label link -my-sm inline-flex items-center gap-xs py-sm text-butter-60 hover:text-butter">
                 <InstagramIcon className="size-[16px]" /> @{ig} →
               </a>
             ) : (

@@ -14,7 +14,7 @@ export function DeadlineStrip() {
   return (
     <div className="bg-cocoa text-butter">
       <div className="container-x flex min-h-[44px] items-center gap-md">
-        <a href="#gift-boxes" className="t-label min-w-0 flex-1 truncate">
+        <a href="#gift-boxes" className="t-label min-w-0 flex-1 self-stretch content-center truncate">
           {next.label} gift boxes · order by {shortDate(next.date)}
         </a>
         <a href="#gift-boxes" className="t-label link hidden shrink-0 sm:inline">

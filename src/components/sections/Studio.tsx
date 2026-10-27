@@ -29,9 +29,9 @@ export function Studio() {
           </p>
           <dl className="mt-xl grid grid-cols-3 gap-md border-t border-cocoa-15 pt-lg">
             {STATS.map((s) => (
-              <div key={s.label} className="flex flex-col-reverse">
+              <div key={s.label} className="flex flex-col-reverse justify-end">
                 <dt className="t-label mt-sm text-cocoa-70">{s.label}</dt>
-                <dd className="font-label text-[2.058rem] leading-none md:text-[2.618rem]">
+                <dd className="font-label text-[1.618rem] leading-none sm:text-[2.058rem] md:text-[2.618rem]">
                   <CountUp to={s.value} suffix={s.suffix} />
                 </dd>
               </div>

@@ -32,7 +32,7 @@ export function CompanyEvents() {
           <Button variant="claret" onClick={() => open({ kind: 'quote', about: 'event' })}>
             Get a quote
           </Button>
-          <a href={mailtoLink('Company event quote')} className="t-body link">
+          <a href={mailtoLink('Company event quote')} className="t-body link py-sm">
             or email {CONTACT.email}
           </a>
         </div>

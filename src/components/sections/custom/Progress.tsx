@@ -10,7 +10,7 @@ export function Progress({ step, form, earliest, onJump }: { step: number; form:
           const done = i !== step && isStepDone(s.id, form, earliest) && (s.id !== 'words' || i < step);
           return (
             <li key={s.id} className="flex-1">
-              <button type="button" onClick={() => onJump(i)} className="block w-full py-sm" aria-label={`Step ${i + 1}: ${s.question}`} aria-current={i === step ? 'step' : undefined}>
+              <button type="button" onClick={() => onJump(i)} className="-my-[9px] block w-full py-[20px]" aria-label={`Step ${i + 1}: ${s.question}`} aria-current={i === step ? 'step' : undefined}>
                 <span className={cn('block h-[3px] rounded-full transition-colors duration-300', i === step ? 'bg-cocoa-70' : done ? 'bg-cocoa' : 'bg-cocoa-15')} />
               </button>
             </li>
