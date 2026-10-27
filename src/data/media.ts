@@ -47,12 +47,12 @@ export const media = {
     hands: aiPhoto('hero-hands', '4:5', 'Hands piping cream onto a berry cake', 'Piping by hand'),
   },
   six: [
-    aiPhoto('six-brown-butter', '4:5', 'Brown butter and cinnamon cake with a salted caramel drip', 'The Six · 1 of 6'),
-    aiPhoto('six-vanilla-raspberry', '4:5', 'Vanilla cake topped with fresh raspberries', 'The Six · 2 of 6'),
-    aiPhoto('six-lemon', '4:5', 'Lemon cake with cream cheese frosting and candied lemon', 'The Six · 3 of 6'),
-    aiPhoto('six-chocolate', '4:5', 'Classic chocolate cake with chocolate frosting', 'The Six · 4 of 6'),
-    aiPhoto('six-earl-grey', '4:5', 'Earl Grey cake with honey', 'The Six · 5 of 6'),
-    aiPhoto('six-strawberry', '4:5', 'Strawberry and mascarpone cake', 'The Six · 6 of 6'),
+    aiPhoto('six-brown-butter', '4:5', 'A slice of brown butter and cinnamon cake with salted caramel, on a bed of cinnamon sticks', 'The Six · 1 of 6'),
+    aiPhoto('six-vanilla-raspberry', '4:5', 'A slice of vanilla cake with raspberry layers, on a bed of fresh raspberries', 'The Six · 2 of 6'),
+    aiPhoto('six-lemon', '4:5', 'A slice of lemon cake with cream cheese frosting, on a bed of lemon halves and mint', 'The Six · 3 of 6'),
+    aiPhoto('six-chocolate', '4:5', 'A slice of chocolate cake with chocolate frosting, on a bed of dark chocolate pieces', 'The Six · 4 of 6'),
+    aiPhoto('six-earl-grey', '4:5', 'A slice of Earl Grey cake with honey cream, on a bed of honeycomb and tea leaves', 'The Six · 5 of 6'),
+    aiPhoto('six-strawberry', '4:5', 'A slice of strawberry and mascarpone cake, on a bed of fresh strawberries', 'The Six · 6 of 6'),
   ],
   looks: {
     buttercream: aiPhoto('look-buttercream', '4:5', 'A cake finished in soft buttercream', 'Soft buttercream'),
